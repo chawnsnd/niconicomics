@@ -1,4 +1,4 @@
-package com.niconicomics.api;
+package com.niconicomics.core;
 
 import java.text.DateFormat;
 import java.util.Date;
