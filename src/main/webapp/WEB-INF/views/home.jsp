@@ -32,6 +32,6 @@ function test(){
 <body>
 <h1>니코니코믹스 API 서버</h1>
 <p> 현재시간 :  ${serverTime} </p>
-<button onclick="test()">API 테스트</button>
+<button onclick="test()">API 테스트ㅎ</button>
 </body>
 </html>
