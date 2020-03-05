@@ -8,7 +8,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 var str = "pingpong";
-var host = "http://localhost:8888";
+var host = "http://localhost:80";
 function test(){
 	$.ajax({
 		url: host+"/test",
@@ -33,6 +33,5 @@ function test(){
 <h1>니코니코믹스 API 서버</h1>
 <p> 현재시간 :  ${serverTime} </p>
 <button onclick="test()">API 테스트</button>
-<h1>ㅇㅇㅇ</h1>
 </body>
 </html>
