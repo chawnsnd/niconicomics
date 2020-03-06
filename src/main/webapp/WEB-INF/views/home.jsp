@@ -76,7 +76,7 @@ img{
 <button onclick="test()">API 테스트</button>
 <br>
 <br>
-<h1>이미지 업로드</h1>
+<h1>이미지 업로드 테스트</h1>
 <div>
 	<input id="file1" type="file" />
 	<input type="button" onclick="uploadButton()" value="업로드"/>
