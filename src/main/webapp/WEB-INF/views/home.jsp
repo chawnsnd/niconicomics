@@ -127,7 +127,7 @@ function modifyButton(key){
 }
 </script>
 <style>
-img{
+#output img{
 	width: 300px;
 }
 </style>
@@ -145,5 +145,101 @@ img{
 </div>
 <hr>
 <div id="output"></div>
+
+
+
+<br>
+<br>
+
+
+
+<!-- 채팅 -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script>
+var sock = new SockJS("/chat"); //소켓연결
+sock.onmessage = onMessage; //소켓에서 메시지 받음
+sock.onclose = onclose; //연결 끊음
+var me = null;
+$(function(){
+	$("#message, #me").on("keyup", function(e){
+		if(e.keyCode == 13){
+			sendMessage();
+			$("#message").val("");
+		}
+	})
+// 	$("#me").on("keyup", function(e){
+// 		if(e.keyCode == 13){
+// 			sendMessage();
+// 			$(this).val("");
+// 		}
+// 	})
+	$("#send_btn").on("click", function(){
+		sendMessage();
+	})
+})
+function sendMessage(){
+	me = $("#me").val();
+	message = $("#message").val();
+	if(me==""||message==""){
+		return;
+	}else{
+		sock.send(me+"|"+message) //소켓에다 메시지 보냄
+		$("#message").val("");
+	}
+}
+function onMessage(evt){
+	var data = evt.data;
+	var strArray = data.split("|");
+	var sender = strArray[0];
+	var message = strArray[1];
+	if(sender == me){
+		$("#chat_room").append(
+			"<p style='text-align: right;'><b>"+sender+"</b><br>"+message+"</p>"
+		);
+	}else{
+		$("#chat_room").append(
+			"<p><b>"+sender+"</b><br>"+message+"</p>"
+		);
+	}
+	scrollDown();
+}
+function scrollDown(){
+	$("#chat_room").scrollTop($("#chat_room")[0].scrollHeight);
+}
+</script>
+<style>
+#chat_room{
+	width: 500px;
+	height: 300px;
+	border: 1px solid gray;	
+   	overflow-y: auto;
+   	padding: 0 10px;
+}
+#chat_input{
+	border: 1px solid gray;
+	width: 520px;
+	display: flex;
+}
+#me{
+	min-width: 0px;	
+	flex: 2;
+}
+#message{
+	min-width: 0px;	
+	flex: 5;
+}
+#send_btn{
+	min-width: 0px;
+	flex: 1;
+}
+</style>
+<h1>채팅</h1>
+<div id="chat_room">
+</div>
+<div id="chat_input">
+	<input id="me" type="text" placeholder="이름">
+	<input id="message" type="text" placeholder="메시지">
+	<button id="send_btn">전송</button>
+</div>
 </body>
 </html>
