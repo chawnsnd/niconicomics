@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,7 @@
 var str = "pingpong";
 function test(){
 	$.ajax({
-		url: "/test",
+		url: "<c:url value='/test' />",
 		type: "get",
 		data: {
 			str: str
@@ -58,12 +59,12 @@ function uploadButton(){
     .then(data => {
         console.log(data);
         $("#output").html(
-            `<div data-key="${data.Key}">
-            <img src="${data.Location}">
-            <input type="file">
-            <button onclick='modifyButton("${data.Key}")'>수정</button>
-            <button onclick='deleteButton("${data.Key}")'>삭제</button>
-            </div>`
+            "<div data-key='"+data.Key+"'>"+
+            "<img src='"+data.Location+"'>"+
+            "<input type='file'>"+
+            "<button onclick='modifyButton(`"+data.Key+"`)'>수정</button>"+
+            "<button onclick='deleteButton(`"+data.Key+"`)'>삭제</button>"+
+            "</div>"
         );
     }).catch(err => {
         console.log(err);
@@ -82,12 +83,12 @@ function uploadsButton(){
         $("#output").html("");
         data.forEach(img => {
             $("#output").append(
-                `<div data-key="${img.Key}">
-                <img src="${img.Location}">
-                <input type="file">
-                <button onclick='modifyButton("${img.Key}")'>수정</button>
-                <button onclick='deleteButton("${img.Key}")'>삭제</button>
-                </div>`
+        		"<div data-key='"+img.Key+"'>"+
+                "<img src='"+img.Location+"'>"+
+                "<input type='file'>"+
+                "<button onclick='modifyButton(`"+img.Key+"`)'>수정</button>"+
+                "<button onclick='deleteButton(`"+img.Key+"`)'>삭제</button>"+
+                "</div>"
             ); 
         });
     }).catch(err =>{
@@ -100,7 +101,7 @@ function deleteButton(key){
     deleteImage(key)
     .then(data => {
         console.log(data);
-        $(`div[data-key="${key}"]`).remove();
+        $("div[data-key='"+key+"']").remove();
     }).catch(err => {
         console.log(err);
     })
@@ -108,17 +109,17 @@ function deleteButton(key){
 
 //이미지 수정
 function modifyButton(key){
-    var file = $(`div[data-key="${key}"]`).find("input[type='file']");
+    var file = $("div[data-key='"+key+"']").find("input[type='file']");
     modifyImage(key, file)
     .then(data => {
         console.log(data);
-        $(`div[data-key="${key}"]`).attr("data-key", `${key}`);
-        $(`div[data-key="${key}"]`).html(
-            `<img src="${data.Location}">
-            <input type="file">
-            <button onclick='modifyButton("${data.Key}")'>수정</button>
-            <button onclick='deleteButton("${data.Key}")'>삭제</button>
-            </div>`
+        $("div[data-key='"+key+"']").replaceWith(
+       		"<div data-key='"+data.Key+"'>"+
+    		"<img src='"+data.Location+"'>"+
+            "<input type='file'>"+
+            "<button onclick='modifyButton(`"+data.Key+"`)'>수정</button>"+
+            "<button onclick='deleteButton(`"+data.Key+"`)'>삭제</button>"+
+            "</div>"
         )
     }).catch(err => {
         console.log(err);
@@ -156,7 +157,7 @@ function modifyButton(key){
 <!-- 채팅 -->
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script>
-var sock = new SockJS("/chat"); //소켓연결
+var sock = new SockJS('<c:url value="/chat" />'); //소켓연결
 sock.onmessage = onMessage; //소켓에서 메시지 받음
 sock.onclose = onclose; //연결 끊음
 var me = null;
@@ -209,28 +210,36 @@ function scrollDown(){
 </script>
 <style>
 #chat_room{
-	width: 500px;
-	height: 300px;
-	border: 1px solid gray;	
+	width: 92vw;
+	height: 60vh;
+	border: 3px solid gray;	
    	overflow-y: auto;
-   	padding: 0 10px;
+   	padding: 0 3vw;
+   	font-size: 2vh;
 }
 #chat_input{
-	border: 1px solid gray;
-	width: 520px;
-	display: flex;
+	border: 3px solid gray;
+	width: 98vw;
+	height: 5vh;
+	display: inline-flex;
 }
 #me{
 	min-width: 0px;	
+	height: 5vh;
 	flex: 2;
+	font-size: 2vh;
 }
 #message{
 	min-width: 0px;	
+	height: 5vh;
 	flex: 5;
+	font-size: 2vh;
 }
 #send_btn{
 	min-width: 0px;
+	height: 5vh;
 	flex: 1;
+	font-size: 2vh;
 }
 </style>
 <h1>채팅</h1>
