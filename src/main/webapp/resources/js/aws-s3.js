@@ -28,11 +28,12 @@ function uploadImage(path, file) {
 function uploadImages(path, files) {
     return new Promise((resolve, reject) => {
     	path = path.substr(1, path.length-1);
+    	var currentTime = getCurrentTime();
         Promise
         .all(files.map((idx,file) =>{
             file = file.files[0];
             var fileExt = file.name.substr(file.name.lastIndexOf('.')+1);
-            var key = path+"/"+getCurrentTime()+"_"+(idx+1)+"."+fileExt;
+            var key = path+"/"+currentTime+"_"+(idx+1)+"."+fileExt;
             return uploadS3(key, file);
         }))
         .then(resolve)
