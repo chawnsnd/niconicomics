@@ -215,31 +215,31 @@ function scrollDown(){
 	border: 3px solid gray;	
    	overflow-y: auto;
    	padding: 0 3vw;
-   	font-size: 2vh;
+   	font-size: 4vw;
 }
 #chat_input{
 	border: 3px solid gray;
 	width: 98vw;
-	height: 5vh;
+	height: 8vw;
 	display: inline-flex;
 }
 #me{
 	min-width: 0px;	
-	height: 5vh;
+	height: 8vw;
 	flex: 2;
-	font-size: 2vh;
+	font-size: 4vw;
 }
 #message{
 	min-width: 0px;	
-	height: 5vh;
+	height: 8vw;
 	flex: 5;
-	font-size: 2vh;
+	font-size: 4vw;
 }
 #send_btn{
 	min-width: 0px;
-	height: 5vh;
+	height: 8vw;
 	flex: 1;
-	font-size: 2vh;
+	font-size: 4vw;
 }
 </style>
 <h1>채팅</h1>
