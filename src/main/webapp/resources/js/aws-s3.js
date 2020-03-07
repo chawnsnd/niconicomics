@@ -14,26 +14,43 @@ var s3 = new AWS.S3({
   params: {Bucket: albumBucketName}
 });
 
+var imageType = ['image/png', 'image/gif', 'image/jpeg', 'image/bmp', 'image/x-icon'];
+
+function getCurrentTime() {
+    function pad2(n) {
+        return n < 10 ? '0' + n : n
+    }
+    var now = new Date();
+    return now.getFullYear().toString() + pad2(now.getMonth() + 1) + pad2(now.getDate()) + pad2(now.getHours()) + pad2(now.getMinutes()) + pad2(now.getSeconds()) + pad2(now.getMilliseconds());
+}
+
 function uploadImage(path, file) {
     return new Promise((resolve, reject) => {
-        path = path.substr(1, path.length-1);
         file = file[0].files[0];
+        if(imageType.indexOf(file.type)==-1){
+            reject('It is not image file');
+        }
         var fileExt = file.name.substr(file.name.lastIndexOf('.')+1);
-        var key = path+"/"+getCurrentTime()+"."+fileExt;
+        var key = `${path}/${getCurrentTime()}.${fileExt}`;
         uploadS3(key, file)
         .then(resolve)
         .catch(reject);
     });
 }
+
 function uploadImages(path, files) {
     return new Promise((resolve, reject) => {
-    	path = path.substr(1, path.length-1);
-    	var currentTime = getCurrentTime();
+        files.map((idx, file) => {
+            file = file.files[0];
+            if(imageType.indexOf(file.type)==-1){
+                reject('There is no image file');
+            }
+        });
         Promise
-        .all(files.map((idx,file) =>{
+        .all(files.map((idx, file) => {
             file = file.files[0];
             var fileExt = file.name.substr(file.name.lastIndexOf('.')+1);
-            var key = path+"/"+currentTime+"_"+(idx+1)+"."+fileExt;
+            var key = `${path}/${getCurrentTime()}.${fileExt}`;
             return uploadS3(key, file);
         }))
         .then(resolve)
@@ -56,10 +73,26 @@ function uploadS3(key ,file){
         });
     })
 }
-function getCurrentTime() {
-    function pad2(n) {
-        return n < 10 ? '0' + n : n
-    }
-    var now = new Date();
-    return now.getFullYear().toString() + pad2(now.getMonth() + 1) + pad2(now.getDate()) + pad2(now.getHours()) + pad2(now.getMinutes()) + pad2(now.getSeconds()) + pad2(now.getMilliseconds());
+
+function deleteImage(key) {
+    return new Promise((resolve, reject) => {
+        s3.deleteObject({Key: key}, function(err, data) {
+            if (err) {
+                reject('There was an error deleting your image: '+err.message);
+            }else{
+                resolve('Successfully deleted image: ' + data);
+            }
+        });
+    })
+}
+
+function modifyImage(key, file){
+    var path = key.substr(0, key.lastIndexOf("/"));
+    return new Promise((resolve, reject) => {
+        deleteImage(key)
+        .catch(reject);
+        uploadImage(path, file)
+        .then(resolve)
+        .catch(reject);
+    })
 }
