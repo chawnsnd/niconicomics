@@ -220,26 +220,22 @@ function scrollDown(){
 #chat_input{
 	border: 3px solid gray;
 	width: 98vw;
-	height: 8vw;
 	display: inline-flex;
 }
 #me{
 	min-width: 0px;	
-	height: 8vw;
 	flex: 2;
-	font-size: 4vw;
+	font-size: 4vmin;
 }
 #message{
 	min-width: 0px;	
-	height: 8vw;
 	flex: 5;
-	font-size: 4vw;
+	font-size: 4vmin;
 }
 #send_btn{
 	min-width: 0px;
-	height: 8vw;
 	flex: 1;
-	font-size: 4vw;
+	font-size: 4vmin;
 }
 </style>
 <h1>채팅</h1>
