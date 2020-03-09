@@ -215,7 +215,7 @@ function scrollDown(){
 	border: 3px solid gray;	
    	overflow-y: auto;
    	padding: 0 3vw;
-   	font-size: 4vw;
+   	font-size: 4vmin;
 }
 #chat_input{
 	border: 3px solid gray;
