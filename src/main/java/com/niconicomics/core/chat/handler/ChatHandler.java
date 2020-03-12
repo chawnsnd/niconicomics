@@ -1,4 +1,4 @@
-package com.niconicomics.core.util;
+package com.niconicomics.core.chat.handler;
 
 import java.util.ArrayList;
 
