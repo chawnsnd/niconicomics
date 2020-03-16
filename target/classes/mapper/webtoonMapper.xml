@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 웹툰 처리 SQL -->
+<mapper namespace="com.niconicomics.core.dao.WebtoonMapper">
+
+<!-- 웹툰 저장 -->
+	<insert id="insertWebtoon" parameterType="webtoon">
+		insert into tbl_webtoon(
+			webtoon_id
+			,title
+			,summary
+			,author_id
+			,hashtag
+			,mgr_hashtag
+			,thumbnail
+		)values(
+			seq_webtoon.nextval
+			,#{title}
+			,#{summary}
+			,#{authorId}
+			,#{hashtag}
+			,#{mgrHashtag}
+			,#{thumbnail}
+		)
+	</insert>
+<!-- 웹툰 정보 읽기 -->
+	<select id="getWebtoon" parameterType="int" resultType="webtoon">
+		select 	webtoon_id 
+			title 
+			,summary 
+			,author_id 
+			,hashtag 
+			,mgr_hashtag 
+			,thumbnail 
+			,hits 
+			,end 
+		from tbl_webtoon
+		where webtoon_id = #{webtoonId}
+	</select>	
+<!-- 에피소드 입력 -->
+	<insert id="episodeInsert" parameterType="episode">
+		insert into tbl_episode(
+			episode_id
+			,no
+			,title
+			,webtoon_id
+			,thumbnail
+		)values(
+			seq_episode
+			,#{no}
+			,#{title}
+			,#{webtoon_id}
+			,#{thumbnail}
+		)
+	</insert>
+
+
+<!-- 전체 글 개수 (검색 필터링 후) -->
+
+<!-- 현재 페이지 목록 (검색 필터링 후) -->
+
+
+
+<!-- 글 삭제 -->
+
+
+<!-- 글 수정 -->
+
+
+<!-- 리플 저장 -->
+
+
+<!-- 리플 삭제 -->
+
+
+
+
+</mapper>
