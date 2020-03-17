@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class User {
-	private int user_id;
+	private int userId;
 	private String email;
 	private String password;
 	private String nickname;
@@ -15,6 +15,4 @@ public class User {
 	private String salt;
 	private String regdate;
 	private int nico;
-	private String show_dotple;
-	private String show_chat;
 }
