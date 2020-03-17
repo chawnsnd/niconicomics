@@ -23,7 +23,8 @@ public class ContentsController {
 	@Autowired
 	private EpisodeDao dao;
 	
-	@RequestMapping(value = "/episodeInsert", method = RequestMethod.GET)
+//사현: mapping value="/episodeInsert" → "/contentsInsert"	
+	@RequestMapping(value = "/contentsInsert", method = RequestMethod.GET)
 	public String webtoonInsert(Episode episode) {
 		episode.setNo(1);
 		episode.setTitle("testTitle2");
@@ -33,7 +34,8 @@ public class ContentsController {
 		int result = dao.episodeInsert(episode);
 		return "home";
 	}
-	@RequestMapping(value = "/episodeList", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/contentsList", method = RequestMethod.GET)
 	public String webtoonList() {
 		ArrayList<Episode> list = dao.episodeList();
 		//테스트를 위한 강제 입력사항

@@ -1,20 +1,14 @@
 package com.niconicomics.core.controller;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.niconicomics.core.dao.EpisodeDao;
-import com.niconicomics.core.dao.WebtoonDao;
 import com.niconicomics.core.vo.Episode;
-import com.niconicomics.core.vo.Webtoon;
 
 @Controller
 

@@ -15,10 +15,10 @@ public class ContentsDao {
 	@Autowired
 	private SqlSession session;
 	
-	public int contentsInsert(Contents contents) {
-		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
-		int result = mapper.episodeInsert(episode);
-		return result;
-	}
+//	public int contentsInsert(Contents contents) {
+//		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
+//		int result = mapper.episodeInsert(episode);
+//		return result;
+//	}
 	
 }
