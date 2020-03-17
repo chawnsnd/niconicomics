@@ -3,12 +3,14 @@ package com.niconicomics.core.chat.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.niconicomics.core.chat.dao.ChatDao;
 import com.niconicomics.core.chat.vo.Chat;
 import com.niconicomics.core.chat.vo.ChatRoom;
 
@@ -17,7 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ChatHandler extends TextWebSocketHandler{
 
-	private ObjectMapper objectMapper = new ObjectMapper();
+	@Autowired
+	private ObjectMapper objectMapper;
+	@Autowired
+	private ChatDao chatDao;
 	
 	private Map<Integer, ChatRoom> chatRooms = new HashMap<>();
 	
@@ -26,8 +31,8 @@ public class ChatHandler extends TextWebSocketHandler{
 		int webtoonId = Integer.parseInt(session.getUri().getQuery().split("=")[1]);
 		ChatRoom chatRoom = null;
 		if(!chatRooms.containsKey(webtoonId)) {
-			chatRoom = new ChatRoom();
-			chatRooms.put(webtoonId, chatRoom);			
+			chatRoom = new ChatRoom(chatDao);
+			chatRooms.put(webtoonId, chatRoom);
 		}else {
 			chatRoom = chatRooms.get(webtoonId);
 		}

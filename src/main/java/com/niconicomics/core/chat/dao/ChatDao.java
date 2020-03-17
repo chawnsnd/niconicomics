@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 public class ChatDao {
 
-//	@Autowired
+	@Autowired
 	private SqlSession session;
 	
 	public ArrayList<Chat> selectChatsByWebtoonId(int webtoonId){
