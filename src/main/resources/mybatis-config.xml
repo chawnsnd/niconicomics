@@ -8,9 +8,9 @@
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings> 
 	<typeAliases>
-<!-- 		<typeAlias type="global.sesoc.web5.vo.Member" alias="member"/> -->
+		<typeAlias type="com.niconicomics.core.chat.vo.Chat" alias="chat"/>
 	</typeAliases>
 	<mappers>
-<!-- 		<mapper resource="mapper/memberMapper.xml"/> -->
+		<mapper resource="mapper/chat/chatMapper.xml"/>
 	</mappers>
 </configuration>
