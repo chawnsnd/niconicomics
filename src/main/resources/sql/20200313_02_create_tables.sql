@@ -60,7 +60,7 @@ create table tbl_donate (
 	nico				number			not null,
 	dotple_id			number			unique,
 	constraint donate_fk_dotple foreign key(dotple_id)
-		references tbl_dotple(dotple_id) on delete cascade,
+		references tbl_dotple(dotple_id) on delete cascade
 );
 create sequence seq_donate;
 
