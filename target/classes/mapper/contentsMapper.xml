@@ -7,7 +7,7 @@
 <mapper namespace="com.niconicomics.core.dao.ContentsMapper">
 
 <!-- 콘텐츠 입력 -->
-	<insert id="contentsInsert" parameterType="contents">
+	<insert id="insertContents" parameterType="contents">
 		insert into tbl_contents(
 			contents_id
 			,episode_id
@@ -20,15 +20,36 @@
 			,#{image}
 		)
 	</insert>
-
+<!-- 콘텐츠 정보 읽기 -->
+	<select id="getContents" resultType="contents">
+		select
+			contents_id
+			,episode_id
+			,idx
+			,image
+		from
+			tbl_contents
+		where	
+			episode_id = #{episodeId}
+	</select>	
+<!-- 콘텐츠 업데이트 -->
+	<update id="updateContents" parameterType="contents">
+		update
+			tbl_contents
+		set
+			<if test="idx != null">
+				idx = #{idx},
+			</if>
+			<if test="image != null">
+				image = #{image},
+			</if>
+				episode_id = #{episodeId}
+		where
+			episode_id = #{episodeId} and
+			contents_id = #{contentsId}
+	</update>
+<!-- 콘텐츠 삭제 -->
 	
-		
-<!-- 현재 페이지 목록 (검색 필터링 후) -->
-
-
-
-<!-- 글 삭제 -->
-
 
 <!-- 글 수정 -->
 

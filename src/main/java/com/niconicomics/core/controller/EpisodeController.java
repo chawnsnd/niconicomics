@@ -25,12 +25,12 @@ public class EpisodeController {
 	
 	@RequestMapping(value = "/episodeInsert", method = RequestMethod.GET)
 	public String webtoonInsert(Episode episode) {
-		episode.setNo(1);
+		episode.setNo(3);
 		episode.setTitle("testTitle2");
-		episode.setWebtoonId(6);
+		episode.setWebtoonId(7);
 		episode.setThumbnail("testThumbnail2");
 		//테스트를 위한 강제 입력사항
-		int result = dao.episodeInsert(episode);
+		int result = dao.insertEpisode(episode);
 		return "home";
 	}
 	@RequestMapping(value = "/episodeList", method = RequestMethod.GET)
@@ -40,6 +40,25 @@ public class EpisodeController {
 		for (int i = 0; i < list.size(); i++) {
 			System.out.println(list.get(i));
 		}
+		return "home";
+	}
+	@RequestMapping(value = "/updateEpisode", method = RequestMethod.GET)
+	public String updateEpisode(Episode episode) {
+		episode.setWebtoonId(7);
+		episode.setEpisodeId(3);
+		episode.setNo(4);
+		//episode.setTitle("updatedTitle");
+		episode.setThumbnail("updatedThumbnail");
+		//테스트를 위한 강제 입력사항
+		int result = dao.updateEpisode(episode);
+		return "home";
+	}
+	@RequestMapping(value = "/deleteEpisode", method = RequestMethod.GET)
+	public String deleteEpisode(Episode episode) {
+		episode.setWebtoonId(7);
+		episode.setEpisodeId(4);
+		//테스트를 위한 강제 입력사항
+		int result = dao.deleteEpisode(episode);
 		return "home";
 	}
 	

@@ -7,7 +7,7 @@
 <mapper namespace="com.niconicomics.core.dao.EpisodeMapper">
 
 <!-- 에피소드 입력 -->
-	<insert id="episodeInsert" parameterType="episode">
+	<insert id="InsertEpisode" parameterType="episode">
 		insert into tbl_episode(
 			episode_id
 			,no
@@ -34,24 +34,32 @@
 		from 
 			tbl_episode
 	</select>
-	
-		
-<!-- 현재 페이지 목록 (검색 필터링 후) -->
-
-
-
-<!-- 글 삭제 -->
-
-
-<!-- 글 수정 -->
-
-
-<!-- 리플 저장 -->
-
-
-<!-- 리플 삭제 -->
-
-
-
+<!-- 에피소드 업데이트 -->
+	<update id="updateEpisode" parameterType="episode">
+		update
+			tbl_episode
+		set
+			<if test="no != null">
+				no = #{no},
+			</if>
+			<if test="title != null">
+				title = #{title},
+			</if>
+			<if test="thumbnail != null">
+				thumbnail = #{thumbnail},
+			</if>
+				webtoon_id = #{webtoonId}
+		where
+			episode_id = #{episodeId} and
+			webtoon_id = #{webtoonId}
+	</update>
+<!-- 에피소드 삭제 -->
+	<delete id="deleteEpisode" parameterType="episode">
+		delete from
+			tbl_episode
+		where
+			episode_id = #{episodeId} and
+			webtoon_id = #{webtoonId}
+	</delete>
 
 </mapper>

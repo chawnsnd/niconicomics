@@ -11,8 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.niconicomics.core.dao.ContentsDao;
 import com.niconicomics.core.dao.EpisodeDao;
 import com.niconicomics.core.dao.WebtoonDao;
+import com.niconicomics.core.vo.Contents;
 import com.niconicomics.core.vo.Episode;
 import com.niconicomics.core.vo.Webtoon;
 
@@ -21,26 +23,42 @@ import com.niconicomics.core.vo.Webtoon;
 public class ContentsController {
 
 	@Autowired
-	private EpisodeDao dao;
+	private ContentsDao dao;
 	
-	@RequestMapping(value = "/episodeInsert", method = RequestMethod.GET)
-	public String webtoonInsert(Episode episode) {
-		episode.setNo(1);
-		episode.setTitle("testTitle2");
-		episode.setWebtoonId(6);
-		episode.setThumbnail("testThumbnail2");
+	@RequestMapping(value = "/insertContents", method = RequestMethod.GET)
+	public String insertContents(Contents contents) {
+		contents.setEpisodeId(2);
+		contents.setIdx(2);
+		contents.setImage("testImgRoot");
 		//테스트를 위한 강제 입력사항
-		int result = dao.episodeInsert(episode);
+		int result = dao.insertContents(contents);
 		return "home";
 	}
-	@RequestMapping(value = "/episodeList", method = RequestMethod.GET)
-	public String webtoonList() {
-		ArrayList<Episode> list = dao.episodeList();
-		//테스트를 위한 강제 입력사항
-		for (int i = 0; i < list.size(); i++) {
-			System.out.println(list.get(i));
+	@RequestMapping(value = "/getContents", method = RequestMethod.GET)
+	public String getContents() {
+		int episodeId = 1;
+		//테스트를 위한 강제입력사항
+		ArrayList<Contents> contentsList = dao.getContents(episodeId);
+		for (int i = 0; i < contentsList.size(); i++) {
+			System.out.println(contentsList.get(i));
 		}
 		return "home";
 	}
+	@RequestMapping(value = "/updateContents", method = RequestMethod.GET)
+	public String updateContents(Contents contents) {
+		contents.setIdx(4);
+		contents.setImage("img");
+		contents.setEpisodeId(2);
+		contents.setContentsId(15);
+		//테스트를 위한 강제입력사항
+		int result = dao.updateContents(contents);
+		return "home";
+	}
+	@RequestMapping(value = "/uploadPractice", method = RequestMethod.GET)
+	public String updatePracitce() {
+		
+		return "uploadPractice";
+	}
+	
 	
 }

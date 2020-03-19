@@ -15,9 +15,19 @@ public class ContentsDao {
 	@Autowired
 	private SqlSession session;
 	
-	public int contentsInsert(Contents contents) {
-		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
-		int result = mapper.episodeInsert(episode);
+	public int insertContents(Contents contents) {
+		ContentsMapper mapper = session.getMapper(ContentsMapper.class);
+		int result = mapper.insertContents(contents);
+		return result;
+	}
+	public ArrayList<Contents> getContents(int episodeId){
+		ContentsMapper mapper = session.getMapper(ContentsMapper.class);
+		ArrayList<Contents> contentsList = mapper.getContents(episodeId);
+		return contentsList;
+	}
+	public int updateContents(Contents contents) {
+		ContentsMapper mapper = session.getMapper(ContentsMapper.class);
+		int result = mapper.updateContents(contents);
 		return result;
 	}
 	
