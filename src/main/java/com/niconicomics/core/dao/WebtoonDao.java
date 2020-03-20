@@ -22,6 +22,7 @@ public class WebtoonDao {
 		webtoon=mapper.getWebtoon(webtoonId);
 		return webtoon;
 	}
+<<<<<<< HEAD
 	public int updateWebtoon(Webtoon webtoon) {
 		WebtoonMapper mapper = session.getMapper(WebtoonMapper.class);
 		int result = mapper.updateWebtoon(webtoon);
@@ -36,4 +37,6 @@ public class WebtoonDao {
 		WebtoonMapper mapper = session.getMapper(WebtoonMapper.class);
 		mapper.updateHits(webtoonId);
 	}
+=======
+>>>>>>> chat
 }
