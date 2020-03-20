@@ -16,6 +16,9 @@ import org.springframework.web.client.RestTemplate;
 import com.niconicomics.core.nico.vo.KakaoPayApprove;
 import com.niconicomics.core.nico.vo.KakaoPayReady;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class KakaopayService {
 	
@@ -60,6 +63,7 @@ public class KakaopayService {
 		body.add("fail_url", "http://localhost:8888/core/charge/kakao-fail");
 		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(body, headers);
 		ready = restTemplate.postForObject(HOST+"/v1/payment/ready", entity, KakaoPayReady.class);
+		log.debug(ready.toString());
 		return ready;
 	}
 	
@@ -72,6 +76,7 @@ public class KakaopayService {
         body.add("pg_token", pg_token);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(body, headers);
 		approve = restTemplate.postForObject(HOST+"/v1/payment/approve", entity, KakaoPayApprove.class);
+		log.debug(approve.toString());
 		return approve;
 	}
 	

@@ -1,21 +1,13 @@
 package com.niconicomics.core.nico.controller;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
+import com.niconicomics.core.nico.dao.AccountDao;
+import com.niconicomics.core.nico.service.OpenBankingService;
 import com.niconicomics.core.nico.util.RandomScope;
 import com.niconicomics.core.nico.vo.OpenBankingRealName;
 
@@ -28,6 +20,57 @@ public class AccountController {
 
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private AccountDao accountDao;
+	
+	@Autowired
+	private OpenBankingService openBankingService;
+	
+	@GetMapping(value = "")
+	public String goAccount() {
+		return "account/account";
+	}
+	
+//	@PostMapping(value = "/enroll")
+//	public String enroll(Account account) {
+//		log.debug(account.toString());
+//		account.setAuthorId(1);
+//		if(accountDao.insertAccount(account)) {
+//			HttpHeaders headers = new HttpHeaders();
+//	        headers.set("Content-Type", "application/json; charset=UTF-8");
+//	        headers.set("Accept", "application/vnd.tosslab.jandi-v2+json");
+//	        MultiValueMap<String, Object> body = new LinkedMultiValueMap<String, Object>();
+//	        body.add("body", "새로운 계좌등록 신청이 있습니다.");
+//	        body.add("connectColor", "#FAC11B");
+//	        ArrayList<MultiValueMap<String, String>> connectInfo = new ArrayList<>();
+//	        
+//	        MultiValueMap<String, String> name = new LinkedMultiValueMap<String, String>();
+//	        name.add("title", "이름");
+//	        name.add("desription", account.getName());
+//	        connectInfo.add(name);
+//	        
+//	        MultiValueMap<String, String> bankName = new LinkedMultiValueMap<String, String>();
+//	        bankName.add("title", "은행명");
+//	        bankName.add("desription", account.getBankName());
+//	        connectInfo.add(bankName);
+//
+//	        MultiValueMap<String, String> accountNumber = new LinkedMultiValueMap<String, String>();
+//	        accountNumber.add("title", "계좌번호");
+//	        accountNumber.add("desription", account.getAccountNumber());
+//	        connectInfo.add(accountNumber);
+//
+//	        MultiValueMap<String, String> link = new LinkedMultiValueMap<String, String>();
+//	        link.add("title", "확인하러 가기");
+//	        link.add("desription", "http://localhost:8888/core/account-approve/"+account.getAuthorId());
+//	        connectInfo.add(link);
+//	        
+//	        body.add("connectInfo", connectInfo);
+//			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
+//	        String result = restTemplate.postForObject("https://wh.jandi.com/connect-api/webhook/20858837/8eb8abe45489dd7a33a92259d9d4927e", entity, String.class);
+//		}
+//		return "success";
+//	}
 	
 	@GetMapping(value = "/authorize-1")
 	public String authorize1() {
@@ -50,38 +93,10 @@ public class AccountController {
 	}
 	
 	@GetMapping(value = "/inquiry-real-name")
-	public String inquiryRealName(String bankName, String accountNum, String accountHolderInfo) {
-		String access_token = getAccessToken();
-		HttpHeaders headers = new HttpHeaders();
-		Date date = new Date();
-		DateFormat format1 = new SimpleDateFormat("HHmmssSSS");
-		headers.set("Authorization", "Bearer "+access_token);
-        headers.set("Content-Type", "application/json; charset=UTF-8");
-		Map<String, String> body = new HashMap<String, String>();
-		body.put("bank_tran_id", "T991617520U"+format1.format(date)); //내가 만드는거임
-		body.put("bank_code_std", "020");
-		body.put("account_num", "1002045880243");
-		body.put("account_holder_info_type", " ");
-		body.put("account_holder_info", "930110");
-		DateFormat format2 = new SimpleDateFormat("yyyyMMddHHmmss");
-		body.put("tran_dtime", format2.format(date));
-		HttpEntity<Map<String, String>> entity = new HttpEntity<Map<String, String>>(body, headers);
-		OpenBankingRealName realName = restTemplate.postForObject("https://testapi.openbanking.or.kr/v2.0/inquiry/real_name", entity, OpenBankingRealName.class);
+	public String inquiryRealName(String bankName, String accountNum, String birthdate, String accountHolderInfo) {
+		OpenBankingRealName realName = openBankingService.inquiryRealName("우리은행", "1002045880243", "930110");
 		log.debug(realName.toString());
 		return "";
-	}
-
-	private String getAccessToken() {
-		HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		body.add("client_id", "OO2GQHBwJArOFvcr8Ezr55cqCn5sIS1JjGqtLbPW");
-		body.add("client_secret", "tt2P8BVUWqUeYKa6laBrFKulf228gdKsoIEN3Nn8");
-		body.add("scope", "oob");
-		body.add("grant_type", "client_credentials");
-		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(body, headers);
-		String token = (String) restTemplate.postForObject("https://testapi.openbanking.or.kr/oauth/2.0/token", entity, Map.class).get("access_token");
-		return token;
 	}
 	
 }

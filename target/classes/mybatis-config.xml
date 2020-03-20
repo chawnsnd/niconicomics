@@ -11,6 +11,7 @@
 
 	<typeAliases>
 		<typeAlias type="com.niconicomics.core.chat.vo.Chat" alias="chat"/>
+		<typeAlias type="com.niconicomics.core.nico.vo.Account" alias="account"/>
 		<typeAlias type="com.niconicomics.core.vo.Webtoon" alias="webtoon"/>
 		<typeAlias type="com.niconicomics.core.vo.Episode" alias="episode"/>
 		<typeAlias type="com.niconicomics.core.vo.Contents" alias="contents"/>
@@ -19,6 +20,7 @@
 
 	<mappers>
 		<mapper resource="mapper/chat/chatMapper.xml"/>
+		<mapper resource="mapper/nico/accountMapper.xml"/>
 		<mapper resource="mapper/webtoonMapper.xml"/>
 		<mapper resource="mapper/episodeMapper.xml"/>
 		<mapper resource="mapper/contentsMapper.xml"/>
