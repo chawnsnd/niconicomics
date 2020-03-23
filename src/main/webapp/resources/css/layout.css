@@ -1,0 +1,29 @@
+body{
+	font-size: 14px;
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	background-color: #fff;
+	color: #333;
+	position: relative;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+header{
+	padding: 15px;
+	border-bottom: 1px solid #eaeaea;
+}
+
+footer{
+	padding: 30px;
+	background-color: #3a3a3a;
+	color: #a3a3a3;
+}
+
+main{
+	flex: 1;
+	margin: 20px auto;
+	width: 1000px;
+	min-height: 100%;
+}
