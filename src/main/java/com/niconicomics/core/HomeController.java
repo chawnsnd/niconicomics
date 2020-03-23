@@ -51,12 +51,6 @@ public class HomeController {
 		return "home";
 	}
 	
-	@ResponseBody
-	@RequestMapping(value= "/test", method = RequestMethod.GET)
-	public String test(String str) {
-		return str;
-	}
-	
 	@GetMapping(value="file-upload-test")
 	public String goFileUploadTest() {
 		return "fileUploadTest";
@@ -80,6 +74,11 @@ public class HomeController {
 	public void fileDeleteTest(String path) {
 		log.debug(path);
 		ImageService.deleteImage(path);
+	}
+	
+	@GetMapping(value="test")
+	public String goTest() {
+		return "test";
 	}
 	
 }
