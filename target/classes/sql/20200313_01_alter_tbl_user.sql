@@ -8,4 +8,3 @@ ALTER TABLE tbl_user ADD(
     show_chat varchar2(5) default 'HIDE' not null
         check (show_chat in ('SHOW', 'HIDE'))    
 );
-

@@ -1,0 +1,32 @@
+.header_wrap{
+	width: 1000px;
+	margin: auto;
+}
+.header_left{
+	float: left;
+}
+.header_right{
+	float: right;
+}
+.header_title{
+	font-weight: bold;
+	font-size: 15px;
+	cursor: pointer;
+	background-color: #fbc714;
+	padding: 8px;
+}
+.header_bars{
+	font-size: 20px;
+	cursor: pointer;
+}
+.header_bars:hover{
+	color: #a3a3a3;
+}
+.header_dropdown{
+	display: inline-block;
+}
+.header_dropdown_menu{
+	position: absolute;
+	left: -140px;
+	top: 30px;
+}

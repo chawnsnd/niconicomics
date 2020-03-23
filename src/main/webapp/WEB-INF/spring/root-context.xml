@@ -46,4 +46,8 @@
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
     </bean>
     
+    <!-- Object to Json -->
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+    </bean>
+    
 </beans>

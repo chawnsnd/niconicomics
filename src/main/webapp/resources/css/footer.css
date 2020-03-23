@@ -1,0 +1,9 @@
+.footer_wrap{
+	overflow: hidden;
+	width: 1000px;
+	margin: auto;
+}
+.footer_title{
+	font-weight: bold;
+	font-size: 30px;
+}

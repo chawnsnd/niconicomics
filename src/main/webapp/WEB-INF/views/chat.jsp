@@ -25,20 +25,12 @@ $(function(){
 		sendMessage();
 	})
 })
-// function init(){
-// 	sock.send(JSON.stringify({
-// 		userId:1,
-// 		webtoonId: webtoonId,
-// 		type: "join"
-// 	}));
-// }
 function sendMessage(){
 	me = $("#me").val();
 	message = $("#message").val();
 	if(me==""||message==""){
 		return;
 	}else{
-		JSON.stringify({writer:me, message:message})
 		sock.send(JSON.stringify({
 			userId:1,
 			webtoonId: webtoonId,
@@ -48,10 +40,9 @@ function sendMessage(){
 	}
 }
 function onMessage(evt){
-	var data = evt.data;
-	var strArray = data.split("|");
-	var sender = strArray[0];
-	var message = strArray[1];
+	var data =JSON.parse(evt.data);
+	var sender = data.userId;
+	var message = data.message;
 	if(sender == me){
 		$("#chat_room").append(
 			"<p style='text-align: right;'><b>"+sender+"</b><br>"+message+"</p>"
