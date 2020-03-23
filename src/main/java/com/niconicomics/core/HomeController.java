@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.niconicomics.core.util.FileService;
+import com.niconicomics.core.webtoon.util.FileService;
 
 import lombok.extern.slf4j.Slf4j;
 

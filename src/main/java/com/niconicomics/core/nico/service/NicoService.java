@@ -3,8 +3,8 @@ package com.niconicomics.core.nico.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.niconicomics.core.dao.UserDao;
-import com.niconicomics.core.vo.User;
+import com.niconicomics.core.webtoon.dao.UserDao;
+import com.niconicomics.core.webtoon.vo.User;
 
 @Service
 public class NicoService {

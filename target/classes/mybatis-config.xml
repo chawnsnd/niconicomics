@@ -9,14 +9,14 @@
 	</settings> 
 	<typeAliases>
 <!-- 		<typeAlias type="global.sesoc.web5.vo.Member" alias="member"/> -->
-			<typeAlias type="com.niconicomics.core.vo.Webtoon" alias="webtoon"/>
-			<typeAlias type="com.niconicomics.core.vo.Episode" alias="episode"/>
-			<typeAlias type="com.niconicomics.core.vo.Contents" alias="contents"/>
+			<typeAlias type="com.niconicomics.core.webtoon.vo.Webtoon" alias="webtoon"/>
+			<typeAlias type="com.niconicomics.core.webtoon.vo.Episode" alias="episode"/>
+			<typeAlias type="com.niconicomics.core.webtoon.vo.Contents" alias="contents"/>
 	</typeAliases>
 	<mappers>
 <!-- 		<mapper resource="mapper/webtoonMapper.xml"/> -->
-			<mapper resource="mapper/webtoonMapper.xml"/>
-			<mapper resource="mapper/episodeMapper.xml"/>
-			<mapper resource="mapper/contentsMapper.xml"/>
+			<mapper resource="mapper/webtoon/webtoonMapper.xml"/>
+			<mapper resource="mapper/webtoon/episodeMapper.xml"/>
+			<mapper resource="mapper/webtoon/contentsMapper.xml"/>
 	</mappers>
 </configuration>
