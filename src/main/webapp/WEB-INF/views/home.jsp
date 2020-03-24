@@ -38,6 +38,8 @@
 <body>
 <%@ include file="./layout/header.jsp"%>
 <main>
+${sessionScope.loginUser.userId}
+${sessionScope.loginUser.email}
 <div class="main_left">
 	<div class="carousel slide left_item" data-ride="carousel">
 	  <ol class="carousel-indicators">

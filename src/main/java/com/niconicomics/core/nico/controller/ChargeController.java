@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.niconicomics.core.dao.UserDao;
 import com.niconicomics.core.nico.service.KakaopayService;
 import com.niconicomics.core.nico.service.NicoService;
 import com.niconicomics.core.nico.vo.KakaoPayApprove;
 import com.niconicomics.core.nico.vo.KakaoPayReady;
-import com.niconicomics.core.vo.User;
+import com.niconicomics.core.user.vo.User;
 
 import lombok.extern.slf4j.Slf4j;
 

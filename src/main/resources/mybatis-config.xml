@@ -3,28 +3,24 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-
 	<settings>
 		<!-- 자동으로 카멜케이스 규칙으로 변환 -->
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings> 
-
 	<typeAliases>
+		<typeAlias type="com.niconicomics.core.webtoon.vo.Webtoon" alias="webtoon"/>
+		<typeAlias type="com.niconicomics.core.webtoon.vo.Episode" alias="episode"/>
+		<typeAlias type="com.niconicomics.core.webtoon.vo.Contents" alias="contents"/>
 		<typeAlias type="com.niconicomics.core.chat.vo.Chat" alias="chat"/>
 		<typeAlias type="com.niconicomics.core.nico.vo.Account" alias="account"/>
-		<typeAlias type="com.niconicomics.core.vo.Webtoon" alias="webtoon"/>
-		<typeAlias type="com.niconicomics.core.vo.Episode" alias="episode"/>
-		<typeAlias type="com.niconicomics.core.vo.Contents" alias="contents"/>
-		<typeAlias type="com.niconicomics.core.vo.User" alias="user"/>
+		<typeAlias type="com.niconicomics.core.user.vo.User" alias="user"/>
 	</typeAliases>
-
 	<mappers>
 		<mapper resource="mapper/chat/chatMapper.xml"/>
 		<mapper resource="mapper/nico/accountMapper.xml"/>
-		<mapper resource="mapper/webtoonMapper.xml"/>
-		<mapper resource="mapper/episodeMapper.xml"/>
-		<mapper resource="mapper/contentsMapper.xml"/>
-		<mapper resource="mapper/userMapper.xml"/>
+		<mapper resource="mapper/webtoon/webtoonMapper.xml"/>
+		<mapper resource="mapper/webtoon/episodeMapper.xml"/>
+		<mapper resource="mapper/webtoon/contentsMapper.xml"/>
+		<mapper resource="mapper/user/userMapper.xml"/>
 	</mappers>
-
 </configuration>
