@@ -10,16 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.niconicomics.core.chat.controller.ChatController;
 import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.service.UserService;
 import com.niconicomics.core.user.util.UserUtil;
 import com.niconicomics.core.user.vo.User;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 @RequestMapping("users")
 public class UserController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
 	private UserDao userDao;
@@ -47,7 +49,6 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public String join(String email, String password, String nickname,String type, String birthdate, String gender) throws Exception {
-		logger.info("post join");
 		
 		boolean result = userService.checkEmailValidation(email);
 		if(!result) {
@@ -65,8 +66,6 @@ public class UserController {
 		user.setGender(gender);
 		user.setSalt(salt);
 		
-		System.out.println(user.toString());
-		
 		int result2 = userDao.insertUser(user);
 		if(result2!=1) {
 			return "no";
@@ -74,15 +73,33 @@ public class UserController {
 			return "yes";
 		}
 	}
-
+	
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String goLogin() {
+		
+		return "user/login";
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(String email, String password, HttpSession session) {
 		
-		logger.debug("email: {}, password: {}", email, password);
+		System.out.println(email+","+password);
+//		System.out.println("email: {}, password: {}", email, password);
 		
-		session.setAttribute("loginEmail", email);
+		User user = userDao.selectUserByEmail(email);
 		
-		return "redirect:/";
+		String salt = user.getSalt();
+		String hashedPassword = UserUtil.hashBySHA256(password, salt);
+		
+		if(user != null && hashedPassword.equals(user.getPassword())) {
+			session.setAttribute("loginUser", user);
+			return "yes";
+		}
+		else {
+			return "no";
+		}
+		
 	}
 	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)

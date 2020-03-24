@@ -7,5 +7,9 @@ public interface UserMapper {
 	public int insertUser(User user);
 
 	public int selectCountByEmail(String email);
+
+	public User selectUserByUserId(int userId);
+
+	public User selectUserByEmail(String email);
 	
 }

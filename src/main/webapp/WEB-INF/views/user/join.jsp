@@ -14,7 +14,7 @@
 $(document).ready(function(){
 
 	$(".cancel").on("click", function(){
-		location.href = "./test";
+		location.href = "<c:url redirect='/'/>";
 	})
 
 	$("#submit").on("click", function(){
@@ -124,28 +124,6 @@ function fn_checkEmail(){
 			<button class="btn btn-primary" type="button" id="submit">Sign up</button>
 			<button class="cancel btn btn-danger" type="button">Cancel</button>
 		</div>
-
-<hr>
-	<h2>Sign in</h2>
-	<h3>Using your niconicomics account!</h3>
-	<form action="/users/login" method="post" id="loginForm">
-		<div class="form-group">
-			<ul>
-				<li class="active"><a data-toggle="tab" href="#logIn">Sign up</a>
-			</ul>
-			<div class="tab-content">
-				<div id="logIn" class="tab-pane fade in active">
-					<input type="text" class="form-control" id="email" placeholder="enter your Email">
-				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<input type="password" class="form-control" id="password" placeholder="enter your password">
-		</div>
-		<div class="form-group">
-			<button type="button" class="btn btn-pimary btn-block" id="login">sign up</button>
-		</div>
-	</form>
 </main>
 <%@ include file="../layout/footer.jsp"%>
 </body>

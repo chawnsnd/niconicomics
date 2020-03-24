@@ -12,6 +12,18 @@ public class UserDao {
 	@Autowired
 	private SqlSession session;
 	
+	public User selectUserByUserId(int userId) {
+		UserMapper mapper = session.getMapper(UserMapper.class);
+		User result = mapper.selectUserByUserId(userId);
+		return result;
+	}
+	
+	public User selectUserByEmail(String email) {
+		UserMapper mapper = session.getMapper(UserMapper.class);
+		User result = mapper.selectUserByEmail(email);
+		return result;
+	}
+	
 	/*
 	TODO 회원가입
 	@param email, password, nickname, (birthdate), (gender), type
