@@ -9,14 +9,14 @@
 		<div class="header_right">
 		<input type="text" placeholder="작가 | 작품명 | 해시태그 검색">
 		<div>
-			<c:if test="${sessionScope.loginUser.userId == null}">
+			<c:if test="${sessionScope.loginUser == null}">
 			<a href="<c:url value="/users/login"/>">로그인</a>
 			<a href="<c:url value="/users/join"/>">회원가입</a>
 			</c:if>
-			<c:if test="${sessionScope.loginUser.email != null}">
-			<b>${sessionScope.loginUser }</b>
+			<c:if test="${sessionScope.loginUser != null}">
+			<b>${sessionScope.loginUser.nickname}(${sessionScope.loginUser.email})</b>
 			<a href="<c:url value="/users/me"/>">마이페이지</a>
-			<a href="<c:url value="/users/logout"/>">회원가입</a>
+			<a href="<c:url value="/users/logout"/>">로그아웃</a>
 			</c:if>
 		</div>
 	</div>

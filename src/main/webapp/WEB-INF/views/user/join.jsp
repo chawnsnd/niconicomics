@@ -14,7 +14,7 @@
 $(document).ready(function(){
 
 	$(".cancel").on("click", function(){
-		location.href = "<c:url redirect='/'/>";
+		location.href = "<c:url value='/'/>";
 	})
 
 	$("#submit").on("click", function(){
