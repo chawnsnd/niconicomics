@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.service.UserService;
+import com.niconicomics.core.user.util.UserUtil;
 import com.niconicomics.core.user.vo.User;
 
 @Controller
@@ -25,9 +26,9 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String test() {
-		return "user";
+		return "user/join";
 	}
 	
 	// 이메일 중복 체크
@@ -35,32 +36,43 @@ public class UserController {
 	public @ResponseBody String checkEmail(String email) {
 		
 		boolean result = userService.checkEmailValidation(email);
-		System.out.println("1: " + result);
 		
 		if (result == false) {
-			System.out.println("2: " + result);
 			return "no";
 		} else {
 			return "yes";
 		}
 	}
 	
+	@ResponseBody
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public String join(String email, String password, String nickname, String birthdate, String gender, String type) throws Exception {
+	public String join(String email, String password, String nickname,String type, String birthdate, String gender) throws Exception {
 		logger.info("post join");
 		
+		boolean result = userService.checkEmailValidation(email);
+		if(!result) {
+			return "no";
+		}
 		User user = new User();
-		
+		String salt = UserUtil.makeSalt();
+		String hashedPassword = UserUtil.hashBySHA256(password, salt);
+
 		user.setEmail(email);
-		user.setPassword(password);
+		user.setPassword(hashedPassword);
+		user.setType(type);
 		user.setNickname(nickname);
 		user.setBirthdate(birthdate);
 		user.setGender(gender);
-		user.setType(type);
+		user.setSalt(salt);
 		
-		userDao.insertUser(user);
+		System.out.println(user.toString());
 		
-		return "redirect:/";
+		int result2 = userDao.insertUser(user);
+		if(result2!=1) {
+			return "no";
+		}else {
+			return "yes";
+		}
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

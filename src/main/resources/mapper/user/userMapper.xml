@@ -12,18 +12,24 @@
 		user_id
 		,email
 		,password
+		,type
 		,nickname
 		,birthdate
+		<if test="gender=='MALE'|| gender=='FEMALE'">
 		,gender
+		</if>
 		,salt
 	)
 	values(
 		seq_user.nextval
 		,#{email}
 		,#{password}
+		,#{type}
 		,#{nickname}
 		,#{birthdate}
+		<if test="gender=='MALE'|| gender=='FEMALE'">
 		,#{gender}
+		</if>
 		,#{salt}
 	)
 </insert>
