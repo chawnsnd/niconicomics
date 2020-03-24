@@ -25,13 +25,6 @@ $(function(){
 		sendMessage();
 	})
 })
-// function init(){
-// 	sock.send(JSON.stringify({
-// 		userId:1,
-// 		webtoonId: webtoonId,
-// 		type: "join"
-// 	}));
-// }
 function sendMessage(){
 	me = $("#me").val();
 	message = $("#message").val();

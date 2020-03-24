@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.niconicomics.core.nico.dao.AccountMapper">
+
+	<select id="selectAccountByAccountId" resultType="account">
+		select *
+		from tbl_account
+		where account_id = #{accountId}
+	</select>
+
+	<select id="selectAccountByAuthorId" resultType="account">
+		select *
+		from tbl_account
+		where author_id = #{authorId}
+	</select>
+	
+	<insert id="insertAccount" parameterType="account">
+		insert into tbl_account(
+			account_id, 
+			author_id,
+			name, 
+			phone, 
+			registration_number, 
+			bank_name, 
+			account_holder_name, 
+			account_number, 
+			id_card, 
+			copy_of_bankbook
+		) values (
+			seq_account.nextval,
+			#{authorId},
+			#{name},
+			#{phone}
+			#{registrationNumber},
+			#{bankName},
+			#{accountHolderName},
+			#{accountNumber},
+			#{idCard},
+			#{copyOfBankbook}
+		)
+	</insert>
+	
+	<update id="updateAccount" parameterType="account">
+		update tbl_account
+		<set>
+			account_id = #{accountId},
+	      <if test="name != null">name=#{name},</if>
+	      <if test="phone != null">phone=#{phone},</if>
+	      <if test="registration_number != null">registration_number=#{registrationNumber},</if>
+	      <if test="bank_name != null">bank_name=#{bankName},</if>
+	      <if test="account_holder_name != null">account_holder_name=#{accountHolderName},</if>
+	      <if test="account_number != null">account_number=#{accountNumber},</if>
+	      <if test="approved != null">approved=#{approved},</if>
+	      <if test="id_card != null">id_card=#{idCard},</if>
+	      <if test="copy_of_bankbook != null">copy_of_bankbook=#{copyOfBankbook},</if>
+	      <if test="inquiryName != null">inquiry_name=#{inquiryName}</if>
+	    </set>
+		where account_id=#{accountId}
+	</update>
+	
+</mapper>
