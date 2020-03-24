@@ -14,7 +14,7 @@
 		<typeAlias type="com.niconicomics.core.vo.Webtoon" alias="webtoon"/>
 		<typeAlias type="com.niconicomics.core.vo.Episode" alias="episode"/>
 		<typeAlias type="com.niconicomics.core.vo.Contents" alias="contents"/>
-		<typeAlias type="com.niconicomics.core.vo.User" alias="user"/>
+		<typeAlias type="com.niconicomics.core.user.vo.User" alias="user"/>
 	</typeAliases>
 
 	<mappers>
@@ -22,7 +22,7 @@
 		<mapper resource="mapper/webtoonMapper.xml"/>
 		<mapper resource="mapper/episodeMapper.xml"/>
 		<mapper resource="mapper/contentsMapper.xml"/>
-		<mapper resource="mapper/userMapper.xml"/>
+		<mapper resource="mapper/user/userMapper.xml"/>
 	</mappers>
 
 </configuration>

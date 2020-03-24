@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- 회원 관리 SQL -->
-<mapper namespace="com.niconicomics.core.dao.UserMapper">
+<mapper namespace="com.niconicomics.core.user.dao.UserMapper">
 
 <!-- 회원 가입 -->
 <insert id="insertUser" parameterType="user">
@@ -15,11 +15,7 @@
 		,nickname
 		,birthdate
 		,gender
-		,type
-		,authority
 		,salt
-		,regdate
-		,nico
 	)
 	values(
 		seq_user.nextval
@@ -28,12 +24,14 @@
 		,#{nickname}
 		,#{birthdate}
 		,#{gender}
-		,#{type}
-		,default
 		,#{salt}
-		,default
-		,default
 	)
 </insert>
+
+<!-- 이메일 중복 체크 -->
+<select id="selectCountByEmail" resultType="int">
+	select count(*) from tbl_user
+	where email = #{email}
+</select>
 
 </mapper>
