@@ -1,10 +1,12 @@
-package com.niconicomics.core.dao;
+package com.niconicomics.core.webtoon.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.niconicomics.core.vo.Webtoon;
+import com.niconicomics.core.webtoon.vo.Webtoon;
+
+
 
 @Repository
 public class WebtoonDao {
@@ -22,4 +24,20 @@ public class WebtoonDao {
 		webtoon=mapper.getWebtoon(webtoonId);
 		return webtoon;
 	}
+
+	public int updateWebtoon(Webtoon webtoon) {
+		WebtoonMapper mapper = session.getMapper(WebtoonMapper.class);
+		int result = mapper.updateWebtoon(webtoon);
+		return result;
+	}
+	public int deleteWebtoon(Webtoon webtoon) {
+		WebtoonMapper mapper = session.getMapper(WebtoonMapper.class);
+		int result = mapper.deleteWebtoon(webtoon);
+		return result;
+	}
+	public void updateHits(int webtoonId) {
+		WebtoonMapper mapper = session.getMapper(WebtoonMapper.class);
+		mapper.updateHits(webtoonId);
+	}
+
 }

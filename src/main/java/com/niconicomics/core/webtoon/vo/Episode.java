@@ -1,4 +1,4 @@
-package com.niconicomics.core.vo;
+package com.niconicomics.core.webtoon.vo;
 
 import lombok.Data;
 
