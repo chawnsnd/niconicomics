@@ -16,6 +16,9 @@
 			<c:if test="${sessionScope.loginUser != null}">
 			<b>${sessionScope.loginUser.nickname}(${sessionScope.loginUser.email})</b>
 			<a href="<c:url value="/users/me"/>">마이페이지</a>
+				<c:if test="${sessionScope.loginUser.type == 'AUTHOR'}">
+				<a href="<c:url value="/dashboard"/>">작가 대시보드</a>
+				</c:if>
 			<a href="<c:url value="/users/logout"/>">로그아웃</a>
 			</c:if>
 		</div>

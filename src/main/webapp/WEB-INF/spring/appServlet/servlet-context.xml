@@ -39,6 +39,20 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 	
+	<!-- Interceptor -->	
+	<beans:bean
+	id="AuthorInterceptor"
+	class="com.niconicomics.core.user.interceptor.AuthorInterceptor">
+	</beans:bean>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/dashboard"/>
+			
+			<beans:ref bean="AuthorInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
 	<!-- interceptor -->
 <!-- 	<beans:bean id="authInterceptor" class="com.niconicomics.api.interceptor"> -->
 <!-- 	</beans:bean> -->
