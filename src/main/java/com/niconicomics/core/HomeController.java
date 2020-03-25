@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.niconicomics.core.webtoon.util.FileService;
 import com.niconicomics.core.exception.NotImageException;
 import com.niconicomics.core.util.ImageService;
+import com.niconicomics.core.webtoon.dao.ContentsDao;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -68,11 +68,15 @@ public class HomeController {
 	public String fileUploadTest(@RequestParam(name = "image") MultipartFile image, HttpServletResponse res) {
 		String savedFile;
 		try {
-			savedFile = ImageService.saveImage(image, "/test", "aaabbb");
+			savedFile = ImageService.saveImage(image, "/abb", "aaabbb");
 		} catch (NotImageException e) {
 			res.setStatus(406);
 			return "";
 		}
+		/*
+		 * contents.setIndex(index); contents.setImage(savedFile);
+		 * ContentsDao.insertContents(contents);
+		 */
 		return savedFile;
 	}
 
