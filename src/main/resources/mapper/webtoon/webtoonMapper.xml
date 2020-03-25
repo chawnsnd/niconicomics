@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- 웹툰 처리 SQL -->
-<mapper namespace="com.niconicomics.core.dao.WebtoonMapper">
+<mapper namespace="com.niconicomics.core.webtoon.dao.WebtoonMapper">
 
 <!-- 웹툰 저장 -->
 	<insert id="insertWebtoon" parameterType="webtoon">
@@ -73,8 +73,10 @@
 			webtoon_id = #{webtoonId} and
 			author_id = #{authorId} 
 	</delete>
-
-
+<!-- 웹툰전체출력 -->
+	<select id="getAllWebtoon" resultType="webtoon">
+		select * from tbl_webtoon where author_id = #{authorId} 
+	</select>
 <!-- 조회수 업데이트 -->
 	<update id="updateHits" parameterType="int">
 		update
@@ -84,18 +86,4 @@
 		where
 			webtoon_id = #{webtoonId}
 	</update>
-	
-
-
-<!-- 글 수정 -->
-
-
-<!-- 리플 저장 -->
-
-
-<!-- 리플 삭제 -->
-
-
-
-
 </mapper>
