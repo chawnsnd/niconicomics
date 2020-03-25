@@ -20,5 +20,15 @@ public class AccountDao {
 			return false;
 		}
 	}
+
+	public Account selectAccountByAuthorId(int authorId) {
+		AccountMapper mapper = session.getMapper(AccountMapper.class);
+		return mapper.selectAccountByAuthorId(authorId);
+	}
+
+	public Account selectAccountByAccountId(int accountId) {
+		AccountMapper mapper = session.getMapper(AccountMapper.class);
+		return mapper.selectAccountByAccountId(accountId);
+	}
 	
 }

@@ -1,8 +1,11 @@
 package com.niconicomics.core.nico.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,6 +13,8 @@ import com.niconicomics.core.nico.dao.AccountDao;
 import com.niconicomics.core.nico.service.OpenBankingService;
 import com.niconicomics.core.nico.util.RandomScope;
 import com.niconicomics.core.nico.vo.OpenBankingRealName;
+import com.niconicomics.core.user.dao.UserDao;
+import com.niconicomics.core.user.vo.User;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,15 +28,20 @@ public class AccountController {
 	
 	@Autowired
 	private AccountDao accountDao;
+	@Autowired
+	private UserDao userDao;
 	
 	@Autowired
 	private OpenBankingService openBankingService;
 	
-	@GetMapping(value = "")
-	public String goAccount() {
-		return "account/account";
+	@GetMapping("value=/{userId}")
+	public void getAccount(@PathVariable(name = "userId") int userId, HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		if(user.getUserId() == userId) {			
+			accountDao.selectAccountByAccountId(userId);
+		}
 	}
-	
+
 //	@PostMapping(value = "/enroll")
 //	public String enroll(Account account) {
 //		log.debug(account.toString());

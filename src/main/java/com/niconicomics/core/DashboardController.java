@@ -13,4 +13,14 @@ public class DashboardController {
 		return "dashboard/home";
 	}
 	
+	@GetMapping(value = "/account")
+	public String goAccount() {
+		return "dashboard/account";
+	}
+
+	@GetMapping(value = "/enroll-account")
+	public String goEnrollAccount() {
+		return "dashboard/enrollAccount";
+	}
+	
 }

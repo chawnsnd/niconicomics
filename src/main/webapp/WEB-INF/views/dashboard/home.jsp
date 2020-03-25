@@ -4,15 +4,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<%@ include file="./global.jsp"%>
+<title>작가 대시보드</title>
+<%@ include file="./layout/global.jsp"%>
 </head>
 <body>
-<%@ include file="./header.jsp"%>
-<%@ include file="./navigator.jsp"%>
+<%@ include file="./layout/header.jsp"%>
+<%@ include file="./layout/nav.jsp"%>
 <main>
-ㅎㅎㅎㅎ
+
 </main>
-<%@ include file="./footer.jsp"%>
+<%@ include file="./layout/footer.jsp"%>
 </body>
 </html>

@@ -1,6 +1,5 @@
 body{
 	font-size: 14px;
-	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
 	background-color: #fff;
@@ -9,14 +8,21 @@ body{
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
+header{
+	border-bottom: 1px solid #eaeaea;
+	height: 20px;
+}
 footer{
 	background-color: #3a3a3a;
 	color: #a3a3a3;
+	height: 20px;
 }
-
+nav{
+	margin: 20px auto;
+	float: left;
+}
 main{
-	flex: 1;
 	margin: 20px auto;
 	width: 100%;
-	min-height: 100%;
+	min-height: calc(100vh - 81px);
 }

@@ -20,7 +20,10 @@ public class AuthorInterceptor extends HandlerInterceptorAdapter {
 		
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
-		
+		if(loginUser == null) {
+			response.setStatus(401);
+			return false;
+		}
 		if(!loginUser.getType().equals("AUTHOR")) {
 			response.setStatus(403);
 			return false;
