@@ -8,14 +8,16 @@
 	</div>
 		<div class="header_right">
 		<input type="text" placeholder="작가 | 작품명 | 해시태그 검색">
-		<div class="header_dropdown dropdown">
-			<div class="dropdown-toggle" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<i class="header_bars fas fa-bars"></i>
-			</div>
-			<ul class="header_dropdown_menu dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Login</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Join</a></li>
-			</ul>
+		<div>
+			<c:if test="${sessionScope.loginUser == null}">
+			<a href="<c:url value="/users/login"/>">로그인</a>
+			<a href="<c:url value="/users/join"/>">회원가입</a>
+			</c:if>
+			<c:if test="${sessionScope.loginUser != null}">
+			<b>${sessionScope.loginUser.nickname}(${sessionScope.loginUser.email})</b>
+			<a href="<c:url value="/users/me"/>">마이페이지</a>
+			<a href="<c:url value="/users/logout"/>">로그아웃</a>
+			</c:if>
 		</div>
 	</div>
 </div>

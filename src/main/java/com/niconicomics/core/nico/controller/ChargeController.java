@@ -13,8 +13,7 @@ import com.niconicomics.core.nico.service.KakaopayService;
 import com.niconicomics.core.nico.service.NicoService;
 import com.niconicomics.core.nico.vo.KakaoPayApprove;
 import com.niconicomics.core.nico.vo.KakaoPayReady;
-import com.niconicomics.core.webtoon.dao.UserDao;
-import com.niconicomics.core.webtoon.vo.User;
+import com.niconicomics.core.user.vo.User;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package com.niconicomics.core.webtoon.util;
+package com.niconicomics.core.util;
 
 import java.io.File;
 import java.io.FileInputStream;
