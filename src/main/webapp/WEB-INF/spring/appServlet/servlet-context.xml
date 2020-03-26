@@ -57,7 +57,5 @@
 		<websocket:mapping handler="chatHandler" path="/chat" /> 
 		<websocket:sockjs /> 
 	</websocket:handlers>
-
-
 	
 </beans:beans>

@@ -6,7 +6,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>user test</title>
+<title>sign up for uniconicomics</title>
 <%@ include file="../layout/global.jsp"%>
 </head>
 
@@ -14,7 +14,7 @@
 $(document).ready(function(){
 
 	$(".cancel").on("click", function(){
-		location.href = "<c:url redirect='/'/>";
+		location.href = "<c:url value='/users/join'/>";
 	})
 
 	$("#submit").on("click", function(){
@@ -38,15 +38,16 @@ $(document).ready(function(){
 		if(emailCheckValue == "N"){
 			alert("press the email-check button");
 		}else if(emailCheckValue == "Y"){
-			join();
+			join1();
 		}
+
 	});
 
 })
 
-function join(){
+function join1(){
 	$.ajax({
-		url: "./join",
+		url: "./join1",
 		type: "post",
 		data: {
 			email : $("#userEmail").val()
@@ -57,8 +58,8 @@ function join(){
 			, type : $(".userType:checked").val()
 		},
 		success: function(data){
-			if(data == 'yes'){
-				location.href = "<c:url value='/'/>";
+			if(data){
+				location.href = "<c:url value='/users/join2'/>";
 			}else{
 				alert("Fail")
 			}
@@ -86,7 +87,6 @@ function fn_checkEmail(){
 		error: function(error){console.log(error);}
 	})
 }
-
 </script>
 
 <body>
@@ -111,14 +111,14 @@ function fn_checkEmail(){
 		</div>
 		<div class="form-group">
 			Gender<br>
-			<input class="form-control userGender" type="radio" value="MALE" name="userGender"/>Male
-			<input class="form-control userGender" type="radio" value="FEMALE" name="userGender"/>Female
-			<input class="form-control userGender" type="radio" value="NONE" name="userGender" checked="checked"/>I prefer not to answer
+			<input class="userGender" type="radio" value="MALE" name="userGender"/>Male
+			<input class="userGender" type="radio" value="FEMALE" name="userGender"/>Female
+			<input class="userGender" type="radio" value="NONE" name="userGender" checked="checked"/>I prefer not to answer
 		</div>
 		<div class="form-group">
 			Type<br>
-			<input class="form-control userType" type="radio" value="GENERAL" name="userType" checked="checked"/>General
-			<input class="form-control userType" type="radio" value="AUTHOR" name="userType"/>Author
+			<input class="userType" type="radio" value="GENERAL" name="userType" checked="checked"/>General
+			<input class="userType" type="radio" value="AUTHOR" name="userType"/>Author
 		</div>
 		<div class="form-group">
 			<button class="btn btn-primary" type="button" id="submit">Sign up</button>
