@@ -31,7 +31,7 @@
 			seq_account.nextval,
 			#{authorId},
 			#{name},
-			#{phone}
+			#{phone},
 			#{registrationNumber},
 			#{bankName},
 			#{accountHolderName},
@@ -44,19 +44,25 @@
 	<update id="updateAccount" parameterType="account">
 		update tbl_account
 		<set>
-			account_id = #{accountId},
+			author_id = #{authorId},
 	      <if test="name != null">name=#{name},</if>
 	      <if test="phone != null">phone=#{phone},</if>
-	      <if test="registration_number != null">registration_number=#{registrationNumber},</if>
-	      <if test="bank_name != null">bank_name=#{bankName},</if>
-	      <if test="account_holder_name != null">account_holder_name=#{accountHolderName},</if>
-	      <if test="account_number != null">account_number=#{accountNumber},</if>
+	      <if test="registrationNumber != null">registration_number=#{registrationNumber},</if>
+	      <if test="bankName != null">bank_name=#{bankName},</if>
+	      <if test="accountHolderName != null">account_holder_name=#{accountHolderName},</if>
+	      <if test="accountNumber != null">account_number=#{accountNumber},</if>
 	      <if test="approved != null">approved=#{approved},</if>
-	      <if test="id_card != null">id_card=#{idCard},</if>
-	      <if test="copy_of_bankbook != null">copy_of_bankbook=#{copyOfBankbook},</if>
+	      <if test="idCard != null">id_card=#{idCard},</if>
+	      <if test="copyOfBankbook != null">copy_of_bankbook=#{copyOfBankbook},</if>
 	      <if test="inquiryName != null">inquiry_name=#{inquiryName}</if>
 	    </set>
-		where account_id=#{accountId}
+		where author_id=#{authorId}
 	</update>
 	
+	<delete id="deleteAccountByAuthorId" parameterType="int">
+		delete
+		from tbl_account
+		where author_id = #{authorId}
+	</delete>
+		
 </mapper>

@@ -7,16 +7,19 @@
 		<div class="header_title" onclick="location.href='<c:url value="/"/>'">ニコニコ x 2<br>ミクス</div>
 	</div>
 		<div class="header_right">
-		<input type="text" placeholder="작가 | 작품명 | 해시태그 검색">
+		<input type="text" placeholder="Author | Webtoon | Hashtag">
 		<div>
 			<c:if test="${sessionScope.loginUser == null}">
-			<a href="<c:url value="/users/login"/>">로그인</a>
-			<a href="<c:url value="/users/join"/>">회원가입</a>
+			<a href="<c:url value="/users/login"/>">Sign in</a>
+			<a href="<c:url value="/users/join"/>">Sign up</a>
 			</c:if>
 			<c:if test="${sessionScope.loginUser != null}">
 			<b>${sessionScope.loginUser.nickname}(${sessionScope.loginUser.email})</b>
-			<a href="<c:url value="/users/me"/>">마이페이지</a>
-			<a href="<c:url value="/users/logout"/>">로그아웃</a>
+			<a href="<c:url value="/users/me"/>">MyPage</a>
+				<c:if test="${sessionScope.loginUser.type == 'AUTHOR'}">
+				<a href="<c:url value="/dashboard"/>">Dashboard</a>
+				</c:if>
+			<a href="<c:url value="/users/logout"/>">Sign out</a>
 			</c:if>
 		</div>
 	</div>
