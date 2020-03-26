@@ -48,7 +48,7 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/dashboard"/>
-			
+			<mvc:mapping path="/account"/>			
 			<beans:ref bean="AuthorInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
