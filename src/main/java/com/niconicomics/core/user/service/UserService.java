@@ -9,7 +9,7 @@ import com.niconicomics.core.user.dao.UserDao;
 public class UserService {
 	@Autowired
 	private UserDao userDao;
-	
+
 	public boolean checkEmailValidation(String email) {
 		if(userDao.selectCountByEmail(email)>=1) {
 			return false;
