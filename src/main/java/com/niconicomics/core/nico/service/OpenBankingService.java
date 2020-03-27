@@ -16,6 +16,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.niconicomics.core.nico.vo.OpenBankingRealName;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class OpenBankingService {
 	
@@ -73,9 +76,12 @@ public class OpenBankingService {
 	
 	public OpenBankingRealName inquiryRealName(String bankName, String accountNum, String birthdate) {
 		String access_token = getAccessToken();
+		log.debug(access_token);
 		HttpHeaders headers = new HttpHeaders();
 		Date date = new Date();
 		String bankCode = bankMap.get(bankName);
+		log.debug(bankCode);
+		log.debug(birthdate);
 		DateFormat format1 = new SimpleDateFormat("HHmmssSSS");
 		headers.set("Authorization", "Bearer "+access_token);
         headers.set("Content-Type", "application/json; charset=UTF-8");

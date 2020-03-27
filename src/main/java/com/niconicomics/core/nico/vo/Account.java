@@ -1,10 +1,11 @@
 package com.niconicomics.core.nico.vo;
 
+import com.niconicomics.core.nico.dao.AccountMapper;
+
 import lombok.Data;
 
 @Data
-public class Account {
-	
+public class Account{
 	private int accountId;
 	private int authorId;
 	private String name;
@@ -16,5 +17,5 @@ public class Account {
 	private String approved;
 	private String idCard;
 	private String copyOfBankbook;
-	private String inquiry_name;
+	private String inquiryName;
 }

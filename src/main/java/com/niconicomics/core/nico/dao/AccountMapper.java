@@ -8,5 +8,6 @@ public interface AccountMapper {
 	public Account selectAccountByAuthorId(int authorId);
 	public int insertAccount(Account account);
 	public int updateAccount(Account account);
+	public int deleteAccountByAuthorId(int authorId);
 	
 }
