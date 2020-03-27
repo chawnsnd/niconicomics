@@ -31,15 +31,20 @@ public class DashboardController {
 		return "dashboard/enrollAccount";
 	}
 	
-	@GetMapping(value = "/webtoons")
+	@GetMapping(value = "/webtoons-list")
 	public String goWebtoonFront() {
 		log.debug("저쪽");
 		return "dashboard/webtoon/webtoonFront";
 	}
 	
-	@GetMapping(value = "/webtoons/insert")
+	@GetMapping(value = "/insert-webtoon")
 	public String goInsertWebtoon() {
 		log.debug("이쪽");
 		return "dashboard/webtoon/insertWebtoon";
+	}
+	@GetMapping(value = "/insert-episode")
+	public String goepisodeFront() {
+		log.debug("이쪽");
+		return "dashboard/webtoon/episodeFront";
 	}
 }

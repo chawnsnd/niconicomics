@@ -46,45 +46,57 @@ public class WebtoonController {
 	public Webtoon webtoonInsert(Webtoon webtoon, HttpSession session) {
 		User user = (User) session.getAttribute("loginUser");
 		webtoon.setAuthorId(user.getUserId()); 
-		System.out.println(webtoon.toString());
 		dao.webtoonInsert(webtoon);
 		ArrayList<Webtoon> getAllWebtoonList = dao.getAllWebtoon(user.getUserId());
-		System.out.println(getAllWebtoonList.size());
 		int max = getAllWebtoonList.get(0).getWebtoonId();
 		for (int i = 0; i < getAllWebtoonList.size(); i++) {
-			System.out.println(i);
 			if (max<getAllWebtoonList.get(i).getWebtoonId()) {
 				max = getAllWebtoonList.get(i).getWebtoonId();
 			}
 		}
 		Webtoon lastestWebtoon =dao.webtoonGet(max);
-		System.out.println(lastestWebtoon.toString());
 		session.setAttribute("newWebtoon", lastestWebtoon);
-		System.out.println("넣음");
 		return lastestWebtoon;
 	}
-
-	/*
-	 * @ResponseBody
-	 * 
-	 * @RequestMapping(value = "/webtoons/insert", method = RequestMethod.POST)
-	 * public String webtoonInsertTrans(Webtoon webtoon) {
-	 * 
-	 * webtoon.setAuthorId(1); webtoon.setMgrHashtag("#시간순삭#일단클릭");
-	 * webtoon.setEnd("end"); System.out.println(webtoon.toString()); return ""; }
-	 */
+	@ResponseBody
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public void updateWebtoon(Webtoon webtoon) {
+		/*
+		 * webtoon.setWebtoonId(6); webtoon.setTitle("test");
+		 * webtoon.setSummary("testUpdateSummary"); webtoon.setAuthorId(1);
+		 * webtoon.setHashtag("#일상#개그"); webtoon.setMgrHashtag("#시간순삭#일단클릭");
+		 * webtoon.setThumbnail("testThumbnail"); webtoon.setEnd("end");
+		 */
+		System.out.println(webtoon.toString());
+		//테스트를 위한 강제 입력사항
+		int result = dao.updateWebtoon(webtoon);
+		
+	}
 	@ResponseBody
 	@PostMapping(value="webtoon-upload")
-	public String fileUploadTest(@RequestParam(name = "image") MultipartFile image, HttpServletResponse res) {
-		String savedFile;
+	public String fileUploadTest(@RequestParam(name = "image") String image
+		,@RequestParam(name = "webtoonId") int webtoonId
+		,@RequestParam(name = "authorId") int authorId
+		, HttpServletResponse res) {
+		String savedFile;/*
+							 * try { savedFile = ImageService.saveImage(image, "/abb", "aaabbb");
+							 * 
+							 * } catch (NotImageException e) { res.setStatus(406); return ""; }
+							 */
+		
+		return "";
+	}
+	@ResponseBody
+	@PostMapping(value="/thumbnail")
+	public String postThumbnail(MultipartFile image, HttpSession session, HttpServletResponse res) {
+		String savedFile = "";
+		Webtoon webtoon = (Webtoon) session.getAttribute("newWebtoon");
+		int webtoonId = webtoon.getWebtoonId();
 		try {
-			savedFile = ImageService.saveImage(image, "/abb", "aaabbb");
-			
+			savedFile = ImageService.saveImage(image, "/webtoons/"+Integer.toString(webtoonId), "thumbnail");
 		} catch (NotImageException e) {
 			res.setStatus(406);
-			return "";
 		}
-		
 		return savedFile;
 	}
 	@ResponseBody
@@ -93,7 +105,13 @@ public class WebtoonController {
 		log.debug(path);
 		ImageService.deleteImage(path);
 	}
-
+	@ResponseBody
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public ArrayList<Webtoon> myWebtoonList(int authorId) {
+		log.debug(Integer.toString(authorId));
+		ArrayList<Webtoon> getAllWebtoonList = dao.getAllWebtoon(authorId);
+		return getAllWebtoonList;
+	}
 	
 	@RequestMapping(value = "/webtoonGet", method = RequestMethod.GET)
 	public String webtoonGet() {
@@ -115,20 +133,7 @@ public class WebtoonController {
 		}//해시태그를 빼는 유틸패키지로, 포스트맨
 		return "home";
 	}
-	@RequestMapping(value = "/updateWebtoon", method = RequestMethod.GET)
-	public String updateWebtoon(Webtoon webtoon) {
-		webtoon.setWebtoonId(6);
-		webtoon.setTitle("test");
-		webtoon.setSummary("testUpdateSummary");
-		webtoon.setAuthorId(1);
-		webtoon.setHashtag("#일상#개그");
-		webtoon.setMgrHashtag("#시간순삭#일단클릭");
-		webtoon.setThumbnail("testThumbnail");
-		webtoon.setEnd("end");
-		//테스트를 위한 강제 입력사항
-		int result = dao.updateWebtoon(webtoon);
-		return "home";
-	}
+	
 	@RequestMapping(value = "/deleteWebtoon", method = RequestMethod.GET)
 	public String deleteWebtoon(Webtoon webtoon) {
 		webtoon.setAuthorId(1);

@@ -55,7 +55,7 @@ function myWebtoons(){
 function output(data){
 	var str="<table border='1'>"
 	$.each(data,function(index, items){
-		str +="<tr onclick = 'location.href = +./webtoons/"+items.webtoonId+"/insert-episode'>"
+		str +="<tr onclick = 'location.href='>"
 		str +="<td class ='replynum'>"+items.title+"</td>"
 		str +="<td class ='text'>"+items.summary+"</td>"
 		str +="<td class ='id'>"+items.hashtag+"</td>"
@@ -75,10 +75,6 @@ function output(data){
 <input type = "button" class="btn btn-primary" id = "insert" value ="웹툰등록">
 
 </main>
-<td onClick = 'location.href="episode-list"'>ddddd</td>
-
-
-출처: https://sovc.tistory.com/1 [sovc]
 <%@ include file="../layout/footer.jsp"%>
 <div id = "webtoonList">
 </div>
