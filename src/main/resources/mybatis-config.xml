@@ -8,19 +8,9 @@
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings> 
 	<typeAliases>
-		<typeAlias type="com.niconicomics.core.webtoon.vo.Webtoon" alias="webtoon"/>
-		<typeAlias type="com.niconicomics.core.webtoon.vo.Episode" alias="episode"/>
-		<typeAlias type="com.niconicomics.core.webtoon.vo.Contents" alias="contents"/>
-		<typeAlias type="com.niconicomics.core.chat.vo.Chat" alias="chat"/>
-		<typeAlias type="com.niconicomics.core.nico.vo.Account" alias="account"/>
-		<typeAlias type="com.niconicomics.core.user.vo.User" alias="user"/>
+<!-- 		<typeAlias type="global.sesoc.web5.vo.Member" alias="member"/> -->
 	</typeAliases>
 	<mappers>
-		<mapper resource="mapper/chat/chatMapper.xml"/>
-		<mapper resource="mapper/nico/accountMapper.xml"/>
-		<mapper resource="mapper/webtoon/webtoonMapper.xml"/>
-		<mapper resource="mapper/webtoon/episodeMapper.xml"/>
-		<mapper resource="mapper/webtoon/contentsMapper.xml"/>
-		<mapper resource="mapper/user/userMapper.xml"/>
+<!-- 		<mapper resource="mapper/memberMapper.xml"/> -->
 	</mappers>
 </configuration>

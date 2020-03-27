@@ -1,55 +1,45 @@
 package com.niconicomics.core.chat.handler;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.niconicomics.core.chat.dao.ChatDao;
-import com.niconicomics.core.chat.vo.Chat;
-import com.niconicomics.core.chat.vo.ChatRoom;
-
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class ChatHandler extends TextWebSocketHandler{
 
-	@Autowired
-	private ObjectMapper objectMapper;
-	@Autowired
-	private ChatDao chatDao;
+	private static final Logger logger = LoggerFactory.getLogger(ChatHandler.class);
 	
-	private Map<Integer, ChatRoom> chatRooms = new HashMap<>();
+	private ArrayList<WebSocketSession> sessionList = new ArrayList<>();
+	private ArrayList<TextMessage> messageList = new ArrayList<>();
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		int webtoonId = Integer.parseInt(session.getUri().getQuery().split("=")[1]);
-		ChatRoom chatRoom = null;
-		if(!chatRooms.containsKey(webtoonId)) {
-			chatRoom = new ChatRoom(chatDao);
-			chatRooms.put(webtoonId, chatRoom);
-		}else {
-			chatRoom = chatRooms.get(webtoonId);
+		sessionList.add(session);
+		logger.debug(session.getId()+" 연결 됨");
+		logger.debug("참여자 : "+session.getId());
+		for (TextMessage message : messageList) {			
+			session.sendMessage(message);
 		}
-		chatRoom.join(webtoonId, session, objectMapper);
 	}
 	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		Chat chat = objectMapper.readValue(message.getPayload(), Chat.class);
-		int webtoonId = chat.getWebtoonId();
-		ChatRoom chatRoom = chatRooms.get(webtoonId);
-		chatRoom.send(chat, objectMapper);
-		
+		logger.debug(session.getId()+" : "+message.getPayload());
+		messageList.add(message);
+		for (WebSocketSession sess : sessionList) {
+			sess.sendMessage(new TextMessage(message.getPayload()));
+		}
 	}
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		sessionList.remove(session);
+		logger.debug(session.getId()+" 연결 끊킴");
+		logger.debug("퇴장자 : "+session.getId());
 	}
 	
 }
