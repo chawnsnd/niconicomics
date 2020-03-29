@@ -10,29 +10,25 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.niconicomics.core.user.vo.User;
 
-public class AuthorInterceptor extends HandlerInterceptorAdapter {
-	private static final Logger logger = LoggerFactory.getLogger(AuthorInterceptor.class);
+public class AdminInterceptor extends HandlerInterceptorAdapter {
+	private static final Logger logger = LoggerFactory.getLogger(AdminInterceptor.class);
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		logger.debug("AuthorInterceptor 실행");
+		logger.debug("AdminInterceptor 실행");
+		
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
 		if(loginUser == null) {
 			response.setStatus(401);
 			return false;
 		}
-
-		if(loginUser.getType().equals("ADMIN")) {
-			return super.preHandle(request, response, handler);		
-		}
-		
-		if(!loginUser.getType().equals("AUTHOR")) {
+		if(!loginUser.getType().equals("ADMIN")) {
 			response.setStatus(403);
 			return false;
 		}
-		
+
 		return super.preHandle(request, response, handler);
 	}
 }

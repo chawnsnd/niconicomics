@@ -40,7 +40,26 @@ public class AccountService {
 		account.setCopyOfBankbook(copyOfBankbook);
 		if(accountDao.insertAccount(account)) {
 			OpenBankingRealName realName = openBankingService.inquiryRealName(account.getBankName(), account.getAccountNumber(), account.getRegistrationNumber().substring(0, 6));
-			log.debug(realName.toString());
+			if(realName.getAccount_holder_name().equals(account.getAccountHolderName())) {
+				account.setInquiryName("TRUE");
+				accountDao.updateAccount(account);
+			}
+			jandiService.accountMessage(account);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean modifyAccount(Account account, MultipartFile idCardImg, MultipartFile copyOfBankbookImg) throws NotImageException{
+		String idCard = "";
+		String copyOfBankbook = "";
+		idCard = ImageService.saveImage(idCardImg, "/account/"+Integer.toString(account.getAuthorId()), "id_card");
+		copyOfBankbook = ImageService.saveImage(copyOfBankbookImg, "/account/"+Integer.toString(account.getAuthorId()), "copy_of_bankbook");
+		account.setAuthorId(account.getAuthorId());
+		account.setIdCard(idCard);
+		account.setCopyOfBankbook(copyOfBankbook);
+		if(accountDao.updateAccount(account)) {
+			OpenBankingRealName realName = openBankingService.inquiryRealName(account.getBankName(), account.getAccountNumber(), account.getRegistrationNumber().substring(0, 6));
 			if(realName.getAccount_holder_name().equals(account.getAccountHolderName())) {
 				account.setInquiryName("TRUE");
 				accountDao.updateAccount(account);
