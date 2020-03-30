@@ -19,10 +19,11 @@ footer{
 }
 nav{
 	margin: 20px auto;
+	min-height: calc(100vh - 81px);
 	float: left;
 }
 main{
-	margin: 20px auto;
+	margin: 20px;
 	width: 100%;
 	min-height: calc(100vh - 81px);
 }

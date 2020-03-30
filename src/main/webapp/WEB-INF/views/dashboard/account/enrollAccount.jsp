@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<%@ include file="./layout/global.jsp"%>
+<%@ include file="../layout/global.jsp"%>
 <script>
 $(function(){
 	$("#submit").on("click", function(){
@@ -36,8 +36,8 @@ function enrollAccount(){
 </script>
 </head>
 <body>
-<%@ include file="./layout/header.jsp"%>
-<%@ include file="./layout/nav.jsp"%>
+<%@ include file="../layout/header.jsp"%>
+<%@ include file="../layout/nav.jsp"%>
 <main>
 <form id="accountForm">
 	이름: <input type="text" id="name" name="name"><br>
@@ -51,6 +51,6 @@ function enrollAccount(){
 </form>
 <button id="submit">등록</button>
 </main>
-<%@ include file="./layout/footer.jsp"%>
+<%@ include file="../layout/footer.jsp"%>
 </body>
 </html>

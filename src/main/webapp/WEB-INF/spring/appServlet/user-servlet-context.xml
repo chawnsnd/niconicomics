@@ -47,8 +47,24 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/dashboard"/>
+			<mvc:mapping path="/dashboard/*"/>
 			<mvc:mapping path="/account"/>			
+			<mvc:mapping path="/account/*"/>			
 			<beans:ref bean="AuthorInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!-- Interceptor -->
+	<beans:bean 
+	id="AdminInterceptor" 
+	class="com.niconicomics.core.user.interceptor.AdminInterceptor">
+	</beans:bean>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/admin"/>
+			<mvc:mapping path="/admin/*"/>
+			<beans:ref bean="AdminInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
 	

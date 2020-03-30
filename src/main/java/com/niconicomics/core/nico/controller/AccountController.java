@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,17 +36,9 @@ import lombok.extern.slf4j.Slf4j;
 public class AccountController {
 
 	@Autowired
-	private RestTemplate restTemplate;
-	
-	@Autowired
 	private AccountDao accountDao;
 	@Autowired
 	private AccountService accountService;
-	@Autowired
-	private UserDao userDao;
-	
-	@Autowired
-	private OpenBankingService openBankingService;
 	
 	@ResponseBody
 	@GetMapping(value="/{userId}")
@@ -53,9 +47,11 @@ public class AccountController {
 			HttpSession session,
 			HttpServletResponse res) {
 		User user = (User) session.getAttribute("loginUser");
-		if(userId != user.getUserId()) {
-			res.setStatus(403);
-			return null;
+		if(!user.getType().equals("ADMIN")) {
+			if(userId != user.getUserId()) {
+				res.setStatus(403);
+				return null;
+			}
 		}
 		Account account = accountService.getAccount(userId);
 		return account;
@@ -71,13 +67,42 @@ public class AccountController {
 			HttpServletResponse res,
 			HttpSession session) {
 		User user = (User) session.getAttribute("loginUser");
-		if(userId != user.getUserId()) {
-			res.setStatus(403);
-			return false;
+		if(!user.getType().equals("ADMIN")) {
+			if(userId != user.getUserId()) {
+				res.setStatus(403);
+				return false;
+			}
 		}
 		try {
 			account.setAuthorId(userId);
 			return accountService.enrollAccount(account, idCardImg, copyOfBankbookImg);
+		} catch (NotImageException e) {
+			e.printStackTrace();
+			res.setStatus(406);
+			return false;
+		}
+	}
+	
+	@ResponseBody
+	@PatchMapping(value="/{userId}")
+	public boolean modifyAccount(
+			@PathVariable(name="userId") int userId,
+			@RequestBody Account account,
+			@RequestBody MultipartFile idCardImg, 
+			@RequestBody MultipartFile copyOfBankbookImg,
+			HttpServletResponse res,
+			HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		if(!user.getType().equals("ADMIN")) {
+			if(userId != user.getUserId()) {
+				res.setStatus(403);
+				return false;
+			}
+		}
+		log.debug(account.toString());
+		try {
+			account.setAuthorId(userId);
+			return accountService.modifyAccount(account, idCardImg, copyOfBankbookImg);
 		} catch (NotImageException e) {
 			e.printStackTrace();
 			res.setStatus(406);
@@ -92,38 +117,13 @@ public class AccountController {
 			HttpServletResponse res,
 			HttpSession session) {
 		User user = (User) session.getAttribute("loginUser");
-		if(userId != user.getUserId()) {
-			res.setStatus(403);
-			return false;
+		if(!user.getType().equals("ADMIN")) {
+			if(userId != user.getUserId()) {
+				res.setStatus(403);
+				return false;
+			}
 		}
 		return accountDao.deleteAccountByAuthorId(userId);
-	}
-	
-	@GetMapping(value = "/authorize-1")
-	public String authorize1() {
-		String url = "https://testapi.openbanking.or.kr/oauth/2.0/authorize?"
-        		+ "response_type=code&"
-        		+ "client_id=OO2GQHBwJArOFvcr8Ezr55cqCn5sIS1JjGqtLbPW&"
-        		+ "redirect_uri=http://localhost:8888/core/account/authorize-2&"
-        		+ "scope=inquiry&"
-        		+ "state="+RandomScope.make(32)+"&"
-        		+ "auth_type=0";
-		return "redirect:"+url;
-	}
-	
-	@GetMapping(value = "/authorize-2")
-	public void authorize2(String code, String scope, String client_info, String state) {
-		log.debug(code);
-		log.debug(scope);
-		log.debug(client_info);
-		log.debug(state);
-	}
-	
-	@GetMapping(value = "/inquiry-real-name")
-	public String inquiryRealName(String bankName, String accountNum, String birthdate, String accountHolderInfo) {
-		OpenBankingRealName realName = openBankingService.inquiryRealName("우리은행", "1002045880243", "930110");
-		log.debug(realName.toString());
-		return "";
 	}
 	
 }
