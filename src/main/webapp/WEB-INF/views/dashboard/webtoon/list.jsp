@@ -12,7 +12,7 @@ $(document).ready(function() {
 });
 function insertWebtoons(){
 	$.ajax({
-		url: "../webtoons", // core/webtoons
+		url: "../api/webtoons", // core/webtoons
 		type: "POST",
 		data:{
 			title : "def"
@@ -21,21 +21,20 @@ function insertWebtoons(){
 			,mgrHashtag : "def"
 			,thumbnail : "def"
 		},
-		success: function(data){
-			console.log(data);
-			location.href="<c:url value='/dashboard/insert-webtoon'/>"
+		success: function(){
+			location.href="<c:url value='/dashboard/webtoons/insert'/>"
 		},
 		error: function(data){
 			console.log("err", data);
-		},
-		complete: function(){
-			console.log("complete");
 		}
+// 		,complete: function(){
+// 			console.log("complete");
+// 		}
 	})
 }
 function myWebtoons(){
 	$.ajax({
-		url: "../webtoons", // core/webtoons
+		url: "../api/webtoons", // core/webtoons
 		type: "GET",
 		data:{
 			authorId : "${sessionScope.loginUser.userId}" 

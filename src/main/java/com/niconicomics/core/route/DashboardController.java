@@ -1,4 +1,4 @@
-package com.niconicomics.core;
+package com.niconicomics.core.route;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,16 +33,16 @@ public class DashboardController {
 		return "dashboard/account/modifyAccount";
 	}
 	
-	@GetMapping(value = "/webtoons-list")
-	public String goWebtoonFront() {
+	@GetMapping(value = "/webtoons")
+	public String goWebtoons() {
 		log.debug("저쪽");
-		return "dashboard/webtoon/webtoonFront";
+		return "dashboard/webtoon/list";
 	}
-	
-	@GetMapping(value = "/insert-webtoon")
+	//뷰 컨트롤러에서 페이지를 반환함
+	@GetMapping(value = "/webtoons/insert")
 	public String goInsertWebtoon() {
 		log.debug("이쪽");
-		return "dashboard/webtoon/insertWebtoon";
+		return "dashboard/webtoon/insert";
 	}
 	@GetMapping(value = "/webtoons/{webtoonId}/episode-front")
 	public String goepisodeFront(@PathVariable(name = "webtoonId") int webtoonId, Model model) {

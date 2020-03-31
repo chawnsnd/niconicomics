@@ -29,7 +29,7 @@
 		var formData = new FormData(form);
 		
 		$.ajax({
-			url :'<c:url value="/webtoons/thumbnail" />' ,
+			url :'<c:url value="/api/webtoons/'+${sessionScope.newWebtoon.webtoonId}+'/thumbnail"/>' ,
 			method : "post",
 			data : formData,
 			async : false,
@@ -77,21 +77,21 @@
 		var summary = $("#summary").val();
 		var thumbnailUp = thumbnailPath;
 		console.log(thumbnailUp);
-
-		$.ajax({
-			url : "<c:url value='/webtoons/update'/>",
-			type : 'POST',
-			data : {
+		var data = {
 				title : title,
 				hashtag : hashtag,
 				summary : summary,
 				thumbnail : thumbnailUp,
-				authorId : "${sessionScope.loginUser.userId}",
-				webtoonId : "${sessionScope.newWebtoon.webtoonId}"
-			},
+				authorId : "${sessionScope.loginUser.userId}"
+		};
+		$.ajax({
+			url : "<c:url value='/api/webtoons/"+${sessionScope.newWebtoon.webtoonId}+"'/>",
+			type : 'patch',
+			data : JSON.stringify(data),
+			contentType : 'application/json',
 			success : function() {
 				alert('등록성공')
-				location.href = "../webtoons"
+				location.href = "<c:url value='/dashboard/webtoons'/>";
 			},
 			error : function() {
 				alert('실패')
