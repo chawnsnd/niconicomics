@@ -7,23 +7,24 @@
 <%@ include file="../layout/global.jsp"%>
 <script>
 $(document).ready(function() {
-	$('#insert').on('click', insertWebtoons);
-	myWebtoons();
+	$('#insert').on('click', insertEpisode);
+	myEpisode();
 });
-function insertWebtoons(){
+function insertEpisode(){
+	var url = "../../../webtoons/"+${webtoonId}+"/episodeInsert";
+	console.log("url: " + url);
 	$.ajax({
-		url: "../webtoons", // core/webtoons
-		type: "POST",
+		url: url, // core/webtoons
+		type: "GET",
 		data:{
-			title : "def"
-			,summary : "def"
-			,hashtag : "def"
-			,mgrHashtag : "def"
+			no : 0
+			,title : "def"
+			,webtoon_id : ${webtoonId}
 			,thumbnail : "def"
 		},
 		success: function(data){
 			console.log(data);
-			location.href="<c:url value='/dashboard/insert-webtoon'/>"
+			location.href="<c:url value='/dashboard/webtoons/"+${webtoonId}+"/insert-episode'/>"
 		},
 		error: function(data){
 			console.log("err", data);
@@ -33,7 +34,7 @@ function insertWebtoons(){
 		}
 	})
 }
-function myWebtoons(){
+function myEpisode(){
 	$.ajax({
 		url: "../webtoons", // core/webtoons
 		type: "GET",
@@ -64,7 +65,7 @@ function output(data){
 		str +="</tr>"	
 	})
 	str+="</table>"
-	$('#webtoonList').html(str);
+	$('#episodeList').html(str);
 }
 </script>
 </head>
@@ -72,11 +73,11 @@ function output(data){
 <%@ include file="../layout/header.jsp"%>
 <%@ include file="../layout/nav.jsp"%>
 <main>
-<input type = "button" class="btn btn-primary" id = "insert" value ="웹툰등록">
-
+<input type = "button" class="btn btn-primary" id = "insert" value ="에피소드등록">
+${webtoonId}
+<div id = "episodeList">
+</div>
 </main>
 <%@ include file="../layout/footer.jsp"%>
-<div id = "webtoonList">
-</div>
 </body>
 </html>

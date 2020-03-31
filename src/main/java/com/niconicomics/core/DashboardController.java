@@ -1,7 +1,9 @@
 package com.niconicomics.core;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +44,15 @@ public class DashboardController {
 		log.debug("이쪽");
 		return "dashboard/webtoon/insertWebtoon";
 	}
-	@GetMapping(value = "/insert-episode")
-	public String goepisodeFront() {
+	@GetMapping(value = "/webtoons/{webtoonId}/episode-front")
+	public String goepisodeFront(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
+		model.addAttribute("webtoonId", webtoonId);
 		log.debug("이쪽");
 		return "dashboard/webtoon/episodeFront";
+	}
+	@GetMapping(value = "/webtoons/{webtoonId}/insert-episode")
+	public String goInsertEpisode(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
+		log.debug("이쪽");
+		return "dashboard/webtoon/insertEpisode";
 	}
 }

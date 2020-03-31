@@ -89,6 +89,11 @@ public class WebtoonController {
 	@ResponseBody
 	@PostMapping(value="/thumbnail")
 	public String postThumbnail(MultipartFile image, HttpSession session, HttpServletResponse res) {
+		/* 보내는 쪽 HTML의 Form에서
+		 * <input type="file" name="image"><input type="file" name="image"><input type="file" name="image">
+		 * 이런식을 name이 같은 input태그가 여러개일때
+		 * ArrayList<MultipartFile> image 로 받는다
+		 */
 		String savedFile = "";
 		Webtoon webtoon = (Webtoon) session.getAttribute("newWebtoon");
 		int webtoonId = webtoon.getWebtoonId();
