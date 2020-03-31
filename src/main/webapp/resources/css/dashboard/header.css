@@ -1,0 +1,14 @@
+.header_wrap{
+	margin: auto;
+	background-color: #E4B100;
+}
+.header_right{
+	float: right;
+}
+.header_title{
+	font-weight: bold;
+	font-size: 15px;
+	cursor: pointer;
+	color: white;
+	padding: 8px;
+}

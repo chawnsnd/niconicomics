@@ -1,0 +1,13 @@
+.footer_wrap{
+	overflow: hidden;
+	margin: auto;
+}
+.footer_title{
+	font-weight: bold;
+}
+.footer_left{
+	float: left;	
+}
+.footer_right{
+	float: right;	
+}

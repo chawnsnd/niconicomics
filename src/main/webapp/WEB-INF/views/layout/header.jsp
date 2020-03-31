@@ -7,15 +7,20 @@
 		<div class="header_title" onclick="location.href='<c:url value="/"/>'">ニコニコ x 2<br>ミクス</div>
 	</div>
 		<div class="header_right">
-		<input type="text" placeholder="작가 | 작품명 | 해시태그 검색">
-		<div class="header_dropdown dropdown">
-			<div class="dropdown-toggle" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<i class="header_bars fas fa-bars"></i>
-			</div>
-			<ul class="header_dropdown_menu dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Login</a></li>
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Join</a></li>
-			</ul>
+		<input type="text" placeholder="Author | Webtoon | Hashtag">
+		<div>
+			<c:if test="${sessionScope.loginUser == null}">
+			<a href="<c:url value="/users/login"/>">Sign in</a>
+			<a href="<c:url value="/users/join"/>">Sign up</a>
+			</c:if>
+			<c:if test="${sessionScope.loginUser != null}">
+			<b>${sessionScope.loginUser.nickname}(${sessionScope.loginUser.email})</b>
+			<a href="<c:url value="/users/me"/>">MyPage</a>
+				<c:if test="${sessionScope.loginUser.type == 'AUTHOR'}">
+				<a href="<c:url value="/dashboard"/>">Dashboard</a>
+				</c:if>
+			<a href="<c:url value="/users/logout"/>">Sign out</a>
+			</c:if>
 		</div>
 	</div>
 </div>

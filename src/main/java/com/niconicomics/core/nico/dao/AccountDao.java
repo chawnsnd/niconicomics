@@ -20,5 +20,33 @@ public class AccountDao {
 			return false;
 		}
 	}
+
+	public Account selectAccountByAuthorId(int authorId) {
+		AccountMapper mapper = session.getMapper(AccountMapper.class);
+		return mapper.selectAccountByAuthorId(authorId);
+	}
+
+	public Account selectAccountByAccountId(int accountId) {
+		AccountMapper mapper = session.getMapper(AccountMapper.class);
+		return mapper.selectAccountByAccountId(accountId);
+	}
+
+	public boolean deleteAccountByAuthorId(int userId) {
+		AccountMapper mapper = session.getMapper(AccountMapper.class);
+		if(mapper.deleteAccountByAuthorId(userId)==1) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	public boolean updateAccount(Account account) {
+		AccountMapper mapper = session.getMapper(AccountMapper.class);
+		if(mapper.updateAccount(account)==1) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
 }

@@ -9,6 +9,7 @@
 <script src="<c:url value="/resources/js/jquery-3.4.1.min.js" />"></script>
 <script>
 var images = [];
+var index = 1;
 var imageTypes = ['image/png', 'image/gif', 'image/jpeg', 'image/bmp', 'image/x-icon'];
 $(function(){
 	$("#uploadInput").on("change", function(){
@@ -62,6 +63,7 @@ function isImage(file){
 </head>
 <body>
 <form id="uploadForm">
+<!-- <input type="number" name="index"> -->
 <input type="file" name="image" value="이미지추가" id="uploadInput">
 </form>
 <div id="output"></div>

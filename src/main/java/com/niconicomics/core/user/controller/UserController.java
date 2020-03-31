@@ -134,7 +134,6 @@ public class UserController {
 //		System.out.println("email: {}, password: {}", email, password);
 		
 		User user = userDao.selectUserByEmail(email);
-		
 		String salt = user.getSalt();
 		String hashedPassword = UserUtil.hashBySHA256(password, salt);
 		

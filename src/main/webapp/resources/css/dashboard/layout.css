@@ -1,0 +1,29 @@
+body{
+	font-size: 14px;
+	min-height: 100vh;
+	flex-direction: column;
+	background-color: #fff;
+	color: #333;
+	position: relative;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+header{
+	border-bottom: 1px solid #eaeaea;
+	height: 20px;
+}
+footer{
+	background-color: #3a3a3a;
+	color: #a3a3a3;
+	height: 20px;
+}
+nav{
+	margin: 20px auto;
+	min-height: calc(100vh - 81px);
+	float: left;
+}
+main{
+	margin: 20px;
+	width: 100%;
+	min-height: calc(100vh - 81px);
+}
