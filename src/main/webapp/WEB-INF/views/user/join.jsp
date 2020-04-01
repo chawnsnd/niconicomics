@@ -29,7 +29,7 @@ $(document).ready(function(){
 			return false;
 		}
 		if($("#userNickname").val()==""){
-			alert("enter your name");
+			alert("enter your nickname");
 			$("#userNickname").focus();
 			return false;
 		}
@@ -58,13 +58,15 @@ function join1(){
 			, type : $(".userType:checked").val()
 		},
 		success: function(data){
+			console.log(data);
 			if(data){
 				location.href = "<c:url value='/users/join2'/>";
 			}else{
 				alert("Fail")
 			}
 		},
-		error: function(error){console.log(error);}
+		error: function(error){console.log(error);
+		}
 	})
 }
 

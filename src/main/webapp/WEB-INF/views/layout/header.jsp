@@ -15,7 +15,7 @@
 			</c:if>
 			<c:if test="${sessionScope.loginUser != null}">
 			<b>${sessionScope.loginUser.nickname}(${sessionScope.loginUser.email})</b>
-			<a href="<c:url value="/users/me"/>">MyPage</a>
+			<a href="<c:url value="/users/me/profile"/>">MyPage</a>
 				<c:if test="${sessionScope.loginUser.type == 'AUTHOR'}">
 				<a href="<c:url value="/dashboard"/>">Dashboard</a>
 				</c:if>
