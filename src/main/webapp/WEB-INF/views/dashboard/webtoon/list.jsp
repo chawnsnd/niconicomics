@@ -45,17 +45,8 @@ function deleteWebtoons(webtoonId){
 	})
 	
 }
-function getWebtoons(webtoonId){
-	$.ajax({
-		url : "../api/webtoons/"+webtoonId,
-		method : get,
-		success : function(){
-			location.href = "<c:url value='../dashboard/webtoons/update'/>"
-		}
-		error : function(data){
-			console.log("err",data)
-		}
-	})
+function updateWebtoons(webtoonId){
+	location.href = "<c:url value='/dashboard/webtoons/"+webtoonId+"/update'/>"
 }
 function myWebtoons(){
 	$.ajax({
@@ -128,7 +119,7 @@ function output(data){
 			<input type = "button" value = "삭제" id = "deleteWebtoon" onclick="deleteWebtoons({{webtoonId}})">
 		</td>
 		<td>
-			<input type = "button" value = "수정" id = "updateWebtoon" onclick="getWebtoons({{webtoonId}})">
+			<input type = "button" value = "수정" id = "updateWebtoon" onclick="updateWebtoons({{webtoonId}})">
 		</td>
 	</tr>
 	</script>

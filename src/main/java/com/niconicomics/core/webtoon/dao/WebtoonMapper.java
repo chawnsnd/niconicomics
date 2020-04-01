@@ -7,7 +7,7 @@ import com.niconicomics.core.webtoon.vo.Webtoon;
 public interface WebtoonMapper {
 
 	public int insertWebtoon(Webtoon webtoon);
-	public Webtoon getWebtoon(int webtoonId);
+	public Webtoon selectWebtoonByWebtoonId(int webtoonId);
 	public int updateWebtoon(Webtoon webtoon);
 	public int deleteWebtoon(Webtoon webtoon);
 	public ArrayList<Webtoon> getAllWebtoon(int authorId);
