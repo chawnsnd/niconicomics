@@ -23,6 +23,11 @@ $(function(){
 		$("#chatroom").toggle();
 	})
 })
+function toggleHeaderFooter(){
+	$("header").toggle();
+	$("footer").toggle();
+	$("#chatroom").toggle();
+}
 function dotple(e){
 	var offsetX = e.offsetX; //DB에 넣을때 사용
 	var offsetY = e.offsetY; //이미지태그 기준
@@ -58,7 +63,7 @@ function dotple(e){
 	margin: 0;
 }
 .contents{
-	height: 90vh;	
+	height: 87vh;	
 	padding: 60px 0;
 	margin: auto;
 	text-align: center;
@@ -99,7 +104,7 @@ main{
 </div>
 </header>
 <main>
-<div class="contents">
+<div class="contents" onclick="toggleHeaderFooter()">
 	<div class="image">
 		<img src="/core/resources/images/ps.jpg" width="700px">
 	</div>

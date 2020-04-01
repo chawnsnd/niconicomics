@@ -9,10 +9,7 @@
 </head>
 <body>
 <%@ include file="./layout/header.jsp"%>
-<%-- <%@ include file="./layout/nav.jsp"%> --%>
-<nav>
-~~~~~~~
-</nav>
+<%@ include file="./layout/nav.jsp"%>
 <main>
 
 </main>
