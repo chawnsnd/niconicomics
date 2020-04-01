@@ -1,10 +1,15 @@
 package com.niconicomics.core.route;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.niconicomics.core.webtoon.dao.WebtoonDao;
+import com.niconicomics.core.webtoon.vo.Webtoon;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/dashboard")
 @Controller
 public class DashboardController {
-
+	@Autowired
+	private WebtoonDao dao;
 	@GetMapping("")
 	public String goDashboard() {
 		return "dashboard/home";
@@ -54,5 +60,12 @@ public class DashboardController {
 	public String goInsertEpisode(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
 		log.debug("이쪽");
 		return "dashboard/webtoon/insertEpisode";
+	}
+	@RequestMapping(value = "/webtoons/{webtoonId}", method = RequestMethod.GET)
+	public Webtoon webtoonGet(
+			@PathVariable(value = "webtoonId") int webtoonId
+			) {
+		Webtoon webtoon = dao.webtoonGet(webtoonId);
+		return webtoon;
 	}
 }

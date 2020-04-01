@@ -32,6 +32,31 @@ function insertWebtoons(){
 // 		}
 	})
 }
+function deleteWebtoons(webtoonId){
+	$.ajax({
+		url : "../api/webtoons/"+webtoonId,
+		method : "delete",
+		success : function(){
+			location.href = "<c:url value='../dashboard/webtoons'/>"
+		},
+		error : function(data){
+			console.log("err", data)
+		}
+	})
+	
+}
+function getWebtoons(webtoonId){
+	$.ajax({
+		url : "../api/webtoons/"+webtoonId,
+		method : get,
+		success : function(){
+			location.href = "<c:url value='../dashboard/webtoons/update'/>"
+		}
+		error : function(data){
+			console.log("err",data)
+		}
+	})
+}
 function myWebtoons(){
 	$.ajax({
 		url: "../api/webtoons", // core/webtoons
@@ -52,18 +77,8 @@ function myWebtoons(){
 	})
 }
 function output(data){
-	var str="<table border='1'>"
-	$.each(data,function(index, items){
-		str +="<tr onclick = 'location.href = \"./webtoons/"+items.webtoonId+"/episode-front\";'>"
-		str +="<td class ='replynum'>"+items.title+"</td>"
-		str +="<td class ='text'>"+items.summary+"</td>"
-		str +="<td class ='id'>"+items.hashtag+"</td>"
-		str +="<td class ='inputdate'>"+items.mgrhashtag+"</td>"
-		str +="<td class ='inputdate'><img src ="+items.thumbnail+"></td>"
-		str +="</tr>"	
-	})
-	str+="</table>"
-	$('#webtoonList').html(str);
+	var template = $('#myWebtoonList');
+	bindTemplates(template, data)
 }
 </script>
 </head>
@@ -72,15 +87,53 @@ function output(data){
 <%@ include file="../layout/nav.jsp"%>
 <main>
 <input type = "button" class="btn btn-primary" id = "insert" value ="웹툰등록">
-
-</main>
-<td onClick = 'location.href="episode-list"'>ddddd</td>
-
-
-출처: https://sovc.tistory.com/1 [sovc]
-<%@ include file="../layout/footer.jsp"%>
 <div id = "webtoonList">
 </div>
-
+<table>
+	<tr>
+		<th>
+			Title
+		</th>
+		<th>
+			Summary
+		</th>
+		<th>
+			Hashtag
+		</th>
+		<th>
+			Thumbnail
+		</th>
+		<th>
+			Delete
+		</th>
+		<th>
+			Update
+		</th>
+	</tr>
+	<script id="myWebtoonList">
+	<tr>
+		<td>
+			{{title}}
+		</td>
+		<td>
+			{{summary}}
+		</td>
+		<td>
+			{{hashtag}}
+		</td>
+		<td>
+			<img src = "{{thumbnail}}" width = "100px">
+		</td>
+		<td>
+			<input type = "button" value = "삭제" id = "deleteWebtoon" onclick="deleteWebtoons({{webtoonId}})">
+		</td>
+		<td>
+			<input type = "button" value = "수정" id = "updateWebtoon" onclick="getWebtoons({{webtoonId}})">
+		</td>
+	</tr>
+	</script>
+</table>
+</main>
+<%@ include file="../layout/footer.jsp"%>
 </body>
 </html>
