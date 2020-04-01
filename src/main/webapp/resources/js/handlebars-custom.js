@@ -14,7 +14,7 @@ function bindTemplate(templateDom, data){
 
 function bindTemplates(templateDom, datas){
 	var source = $(templateDom).html(); 
-	var template = Handlebars.compile(source); 
+	var template = Handlebars.compile(source);
 	$.each(datas, function(index, data){
 		var html = template(data);
 		$(templateDom).after(html);		

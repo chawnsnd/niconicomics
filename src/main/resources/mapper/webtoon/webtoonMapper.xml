@@ -76,6 +76,7 @@
 <!-- 웹툰전체출력 -->
 	<select id="getAllWebtoon" resultType="webtoon">
 		select * from tbl_webtoon where author_id = #{authorId} 
+		order by webtoon_id desc
 	</select>
 <!-- 조회수 업데이트 -->
 	<update id="updateHits" parameterType="int">
