@@ -43,13 +43,28 @@ function onMessage(evt){
 	var data =JSON.parse(evt.data);
 	var sender = data.nickname;
 	var message = data.message;
+	var rgb = hashStringToColor(sender);
 	$("#chat_room").append(
-		"<p><b>"+sender+"</b><br>"+message+"</p>"
+		"<p style='word-break:break-all;'><b style='color: "+rgb+"; margin-right: 10px;'>"+sender+"</b>"+message+"</p>"
 	);
 	scrollDown();
 }
 function scrollDown(){
 	$("#chat_room").scrollTop($("#chat_room")[0].scrollHeight);
+}
+function djb2(str){
+	var hash = 5381;
+	for (var i = 0; i < str.length; i++) {
+		hash = ((hash << 5) + hash) + str.charCodeAt(i); /* hash * 33 + c */
+	}
+	return hash;
+}
+function hashStringToColor(str) {
+	var hash = djb2(str);
+	var r = (hash & 0xFF0000) >> 16;
+	var g = (hash & 0x00FF00) >> 8;
+	var b = hash & 0x0000FF;
+	return "#" + ("0" + r.toString(16)).substr(-2) + ("0" + g.toString(16)).substr(-2) + ("0" + b.toString(16)).substr(-2);
 }
 </script>
 <style>
