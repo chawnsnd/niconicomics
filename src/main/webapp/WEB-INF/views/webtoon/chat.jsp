@@ -89,7 +89,7 @@ function hashStringToColor(str) {
 </div>
 <div id="chat_input">
 	<c:if test="${sessionScope.loginUser == null}">
-	<div>로그인 후 이용해주세요</div>
+	<div><a href="<c:url value='/users/login'/>">로그인</a> 후 이용해주세요</div>
 	</c:if>
 	<c:if test="${sessionScope.loginUser != null}">
 	<div id="me">${sessionScope.loginUser.nickname }</div>
