@@ -1,4 +1,4 @@
-package com.niconicomics.core;
+package com.niconicomics.core.route;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

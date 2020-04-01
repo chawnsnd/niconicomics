@@ -84,7 +84,7 @@ function approveAccount(){
 				<div class="title">이름</div>
 				<div class="value">{{name}}</div>
 			</div>
-			<div class="item">		
+			<div class="item">
 				<div class="title">전화번호</div>			
 				<div class="value">{{phone}}</div>
 			</div>

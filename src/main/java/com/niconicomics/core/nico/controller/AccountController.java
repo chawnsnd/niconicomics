@@ -14,19 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.niconicomics.core.exception.NotImageException;
 import com.niconicomics.core.nico.dao.AccountDao;
 import com.niconicomics.core.nico.service.AccountService;
-import com.niconicomics.core.nico.service.OpenBankingService;
-import com.niconicomics.core.nico.util.RandomScope;
 import com.niconicomics.core.nico.vo.Account;
-import com.niconicomics.core.nico.vo.OpenBankingRealName;
-import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.vo.User;
-import com.niconicomics.core.util.ImageService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -99,7 +93,6 @@ public class AccountController {
 				return false;
 			}
 		}
-		log.debug(account.toString());
 		try {
 			account.setAuthorId(userId);
 			return accountService.modifyAccount(account, idCardImg, copyOfBankbookImg);
