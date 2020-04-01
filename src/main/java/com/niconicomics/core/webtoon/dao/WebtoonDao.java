@@ -20,10 +20,10 @@ public class WebtoonDao {
 		int result = mapper.insertWebtoon(webtoon);
 		return result;
 	}
-	public Webtoon webtoonGet(int webtoonId) {
+	public Webtoon selectWebtoonByWebtoonId(int webtoonId) {
 		WebtoonMapper mapper = session.getMapper(WebtoonMapper.class);
 		Webtoon webtoon = new Webtoon();
-		webtoon=mapper.getWebtoon(webtoonId);
+		webtoon=mapper.selectWebtoonByWebtoonId(webtoonId);
 		return webtoon;
 	}
 
