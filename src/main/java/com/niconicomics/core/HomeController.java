@@ -74,7 +74,7 @@ public class HomeController {
 	public String fileUploadTest(@RequestParam(name = "image") MultipartFile image, HttpServletResponse res) {
 		String savedFile;
 		try {
-			savedFile = ImageService.saveImage(image, "/abb", "aaabbb");
+			savedFile = ImageService.saveImage(image, "/test-directory", "test-image");
 		} catch (NotImageException e) {
 			res.setStatus(406);
 			return "";

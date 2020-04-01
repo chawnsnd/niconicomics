@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.niconicomics.core.chat.dao.ChatDao;
 import com.niconicomics.core.chat.vo.Chat;
 import com.niconicomics.core.chat.vo.ChatRoom;
+import com.niconicomics.core.user.dao.UserDao;
+import com.niconicomics.core.user.vo.User;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +25,8 @@ public class ChatHandler extends TextWebSocketHandler{
 	private ObjectMapper objectMapper;
 	@Autowired
 	private ChatDao chatDao;
+	@Autowired
+	private UserDao userDao;
 	
 	private Map<Integer, ChatRoom> chatRooms = new HashMap<>();
 	
@@ -31,7 +35,7 @@ public class ChatHandler extends TextWebSocketHandler{
 		int webtoonId = Integer.parseInt(session.getUri().getQuery().split("=")[1]);
 		ChatRoom chatRoom = null;
 		if(!chatRooms.containsKey(webtoonId)) {
-			chatRoom = new ChatRoom(chatDao);
+			chatRoom = new ChatRoom(chatDao, userDao);
 			chatRooms.put(webtoonId, chatRoom);
 		}else {
 			chatRoom = chatRooms.get(webtoonId);
@@ -42,14 +46,18 @@ public class ChatHandler extends TextWebSocketHandler{
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		Chat chat = objectMapper.readValue(message.getPayload(), Chat.class);
+		User user = userDao.selectUserByUserId(chat.getUserId());
+		chat.setNickname(user.getNickname());
 		int webtoonId = chat.getWebtoonId();
 		ChatRoom chatRoom = chatRooms.get(webtoonId);
 		chatRoom.send(chat, objectMapper);
-		
 	}
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		int webtoonId = Integer.parseInt(session.getUri().getQuery().split("=")[1]);
+		ChatRoom chatRoom = chatRooms.get(webtoonId);
+		chatRoom.exit(session, objectMapper);
 	}
 	
 }

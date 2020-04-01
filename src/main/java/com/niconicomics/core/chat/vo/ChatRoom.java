@@ -9,6 +9,8 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.niconicomics.core.chat.dao.ChatDao;
+import com.niconicomics.core.user.dao.UserDao;
+import com.niconicomics.core.user.vo.User;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,10 +21,13 @@ public class ChatRoom {
 
     private ChatDao chatDao;
     
-    public ChatRoom(ChatDao chatDao) {
+	private UserDao userDao;
+    
+    public ChatRoom(ChatDao chatDao, UserDao userDao) {
 		super();
 		this.sessions = new ArrayList<>();
 		this.chatDao = chatDao;
+		this.userDao = userDao;
 	}
 
 	public void join(int webtoonId, WebSocketSession session, ObjectMapper objectMapper) {
@@ -35,7 +40,6 @@ public class ChatRoom {
 		try {
 			TextMessage message = new TextMessage(objectMapper.writeValueAsString(chat));
 			for (WebSocketSession session : sessions) {
-				log.debug(session.toString());
 				session.sendMessage(message);
 			}
 		} catch (IOException e) {
@@ -47,6 +51,7 @@ public class ChatRoom {
     	try {
 	    	ArrayList<Chat> chats = chatDao.selectChatsByWebtoonId(webtoonId);
 	    	for (Chat chat : chats) {
+	    		log.debug(chat.toString());
 				try {
 					TextMessage message = new TextMessage(objectMapper.writeValueAsString(chat));
 					session.sendMessage(message);
@@ -58,4 +63,14 @@ public class ChatRoom {
     		e.printStackTrace();
     	}
     }
+
+	public void exit(WebSocketSession session, ObjectMapper objectMapper) {
+		for (WebSocketSession ssession : sessions) {
+			if(ssession.getId() == session.getId()) {
+				sessions.remove(ssession);
+				break;
+			}
+		}
+		
+	}
 }
