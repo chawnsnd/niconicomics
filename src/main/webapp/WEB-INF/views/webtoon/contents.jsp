@@ -63,7 +63,7 @@ function dotple(e){
 	margin: 0;
 }
 .contents{
-	height: 87vh;	
+	height: 83vh;	
 	padding: 60px 0;
 	margin: auto;
 	text-align: center;
@@ -78,6 +78,7 @@ function dotple(e){
 	border: 1px solid #a3a3a3;
 }
 .footer_container > * {
+	height: 50px;
 	cursor: pointer;
 	text-align: center;
 	flex: 1;
@@ -95,7 +96,7 @@ main{
 <header>
 <div class="header_container">
 	<div class="logo" onclick="location.href='<c:url value="/"/>'">ニコ<br>ニコ</div>
-	<div class="title" onclick="location.href='<c:url value="/webtoons/${webtoonId}"/>'">펭수펭하</div>
+	<div class="title" onclick="location.href='<c:url value="/webtoons/${webtoonId}"/>'">펭수펭하 ${episodeNo}화</div>
 	<div class="menu">
 		<div class="menu_item" id="toggleDotple">DOTPLE</div>
 		<div class="menu_item" id="toggleChatroom">CHAT</div>
@@ -126,8 +127,8 @@ main{
 </div>
 </main>
 <footer class="footer_container">
-	<div class="item" id="prev">prev</div>
-	<div class="item" id="next">next</div>
+	<div class="item" id="prev"><a href="./${episodeNo - 1}">prev</a></div>
+	<div class="item" id="next"><a href="./${episodeNo + 1}">next</a></div>
 </footer>
 </body>
 <%@ include file="./modal.jsp"%>

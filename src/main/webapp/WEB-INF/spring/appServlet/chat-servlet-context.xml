@@ -12,7 +12,7 @@
 	<beans:bean id="chatHandler" class="com.niconicomics.core.chat.handler.ChatHandler" />
 	<websocket:handlers> 
 		<websocket:mapping handler="chatHandler" path="/chat" /> 
-		<websocket:sockjs /> 
+		<websocket:sockjs />
 	</websocket:handlers>
 	
 </beans:beans>
