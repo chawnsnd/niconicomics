@@ -68,22 +68,22 @@ ${sessionScope.loginUser.email}
 		<div class="item_title">Recommand</div>
 		<div class="row">
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
@@ -93,22 +93,22 @@ ${sessionScope.loginUser.email}
 		<div class="item_title">New</div>
 		<div class="row">
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
@@ -118,22 +118,22 @@ ${sessionScope.loginUser.email}
 		<div class="item_title">#SF</div>
 		<div class="row">
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
 			<div class="col-xs-6 col-md-3">
-				<a href="#" class="thumbnail">
+				<a href="<c:url value='/webtoons/12345'/>" class="thumbnail">
 					<img src="resources/images/ps.jpg">
 				</a>
 			</div>
