@@ -51,6 +51,38 @@ public class UserController {
 		}
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping(value = "/join1", method = RequestMethod.POST)
+	public boolean authorizeEmail(HttpSession session, User user, HttpServletResponse response_email) throws IOException {
+		
+		System.out.println("send-mail check : " + user.getEmail());
+		
+		String random = Integer.toString(new Random().nextInt(900000)+100000);
+		
+		session.setAttribute("random", random);
+		session.setAttribute("user", user);
+		// 보내는 사람 주소
+		String fromEmail = "niconicomics@gmail.com";
+		// 제목
+		String subject = "[niconicomics] Please verify your email address.";
+		// 내용
+		String text =
+				"Hi,"+
+				System.lineSeparator()+
+				"We recieved a request to verify " + user.getEmail() + " as your email account."+
+				System.lineSeparator()+
+				"If you made this request, use the code below to complete the verification process:"+
+				System.lineSeparator()+
+				random+
+				System.lineSeparator()+
+				System.lineSeparator()+
+				"Thanks,"+
+				"niconicomics Security Team";
+		
+		return mailService.sendMail(subject, text, fromEmail, user.getEmail(), null);
+	}
+	
 	@GetMapping(value="/join2")
 	public String goJoin2() {
 		return "user/sendEmail";
@@ -81,38 +113,7 @@ public class UserController {
 			return false;
 		}
 	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/join1", method = RequestMethod.GET)
-	public boolean authorizeEmail(HttpSession session, User user, HttpServletResponse response_email) throws IOException {
-		
-		System.out.println("send-mail check : " + user.getEmail());
-		
-		String random = Integer.toString(new Random().nextInt(900000)+100000);
-		
-		session.setAttribute("random", random);
-		session.setAttribute("user", user);
-		// 보내는 사람 주소
-		String fromEmail = "niconicomics@gmail.com";
-		// 제목
-		String subject = "[niconicomics] Please verify your email address.";
-		// 내용
-		String text =
-				"Hi,"+
-				System.lineSeparator()+
-				"We recieved a request to verify " + user.getEmail() + " as your email account."+
-				System.lineSeparator()+
-				"If you made this request, use the code below to complete the verification process:"+
-				System.lineSeparator()+
-				random+
-				System.lineSeparator()+
-				System.lineSeparator()+
-				"Thanks,"+
-				"niconicomics Security Team";
-		
-		return mailService.sendMail(subject, text, fromEmail, user.getEmail(), null);
-	}
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String goLogin() {
 		
