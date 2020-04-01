@@ -1,9 +1,12 @@
 package com.niconicomics.core.chat.handler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -27,9 +30,8 @@ public class ChatHandler extends TextWebSocketHandler{
 	private ChatDao chatDao;
 	@Autowired
 	private UserDao userDao;
-	
-	private ArrayList<WebSocketSession> sessionList = new ArrayList<>();
-	private ArrayList<TextMessage> messageList = new ArrayList<>();
+
+	private Map<Integer, ChatRoom> chatRooms = new HashMap<>();
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -41,6 +43,7 @@ public class ChatHandler extends TextWebSocketHandler{
 		}else {
 			chatRoom = chatRooms.get(webtoonId);
 		}
+		chatRoom.join(webtoonId, session, objectMapper);
 	}
 	
 	@Override
