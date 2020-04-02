@@ -43,6 +43,15 @@ public class WebtoonController {
 		ArrayList<Webtoon> getAllWebtoonList = dao.getAllWebtoon(authorId);
 		return getAllWebtoonList;
 	}
+	//웹툰 하나 가져오기
+	
+	@ResponseBody
+	@RequestMapping(value = "/{webtoonId}", method = RequestMethod.GET)
+	public Webtoon getWebtoon(@PathVariable(value = "webtoonId") int webtoonId) {
+		log.debug(Integer.toString(webtoonId));
+		Webtoon webtoon = dao.selectWebtoonByWebtoonId(webtoonId);
+		return webtoon;
+	}
 	//웹툰인서트 작가대시보드에서 웹툰등록을 누를때 만들어지는 가등록웹툰을 등록
 	@ResponseBody
 	@RequestMapping(value = "", method = RequestMethod.POST)
@@ -57,7 +66,7 @@ public class WebtoonController {
 				max = getAllWebtoonList.get(i).getWebtoonId();
 			}
 		}
-		Webtoon lastestWebtoon =dao.webtoonGet(max);
+		Webtoon lastestWebtoon =dao.selectWebtoonByWebtoonId(max);
 		session.setAttribute("newWebtoon", lastestWebtoon);
 	}
 	//웹툰업데이트 작가대시보드에서 웹툰등록후 상세입력때 사용되는 웹툰업데이트 또는

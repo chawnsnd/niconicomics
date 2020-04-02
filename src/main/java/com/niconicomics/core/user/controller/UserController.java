@@ -9,8 +9,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.niconicomics.core.user.dao.UserDao;
@@ -33,27 +33,26 @@ public class UserController {
 	@Autowired
 	private MailService mailService;
 	
-	@RequestMapping(value = "/join", method = RequestMethod.GET)
+	@GetMapping(value = "/join")
 	public String test() {
 		return "user/join";
 	}
 	
 	// 이메일 중복 체크
-	@RequestMapping(value = "/check-email", method = RequestMethod.POST)
+	@PostMapping(value = "/check-email")
 	public @ResponseBody String checkEmail(String email) {
 		
 		boolean result = userService.checkEmailValidation(email);
 		
-		if (result == false) {
+		if (!result) {
 			return "no";
 		} else {
 			return "yes";
 		}
 	}
 	
-	
 	@ResponseBody
-	@RequestMapping(value = "/join1", method = RequestMethod.POST)
+	@PostMapping(value = "/join1")
 	public boolean authorizeEmail(HttpSession session, User user, HttpServletResponse response_email) throws IOException {
 		
 		System.out.println("send-mail check : " + user.getEmail());
@@ -89,7 +88,7 @@ public class UserController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/join2", method = RequestMethod.POST)
+	@PostMapping(value = "/join2")
 	public Boolean sendEmail(String random, HttpSession session) {
 		String sessionRandom = (String)session.getAttribute("random");
 		User user = (User)session.getAttribute("user");
@@ -114,14 +113,14 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@GetMapping(value = "/login")
 	public String goLogin() {
 		
 		return "user/login";
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@PostMapping(value = "/login")
 	public String login(String email, String password, HttpSession session) {
 		
 		System.out.println(email+","+password);
@@ -141,11 +140,59 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	// 비밀번호 확인
+	@PostMapping(value = "/me/check-password")
+	public @ResponseBody String checkPassword(HttpSession session, String userId, String password) {
+		
+		User user = (User)session.getAttribute("loginUser");
+		
+		String salt = user.getSalt();
+		String hashedPassword = UserUtil.hashBySHA256(password, salt);
+		
+		if(user != null && hashedPassword.equals(user.getPassword())) {
+			return "yes";
+		}
+		else {
+			return "no";
+		}
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/me/edit-profile")
+	public String editUser(HttpSession session, String nickname, String password) {
+		User user = (User)session.getAttribute("loginUser");
+		System.out.println(user.toString());
+		user.setNickname(nickname);
+		
+		if(!password.equals("") && password != null) {
+			String salt = user.getSalt();
+			String hashedPassword = UserUtil.hashBySHA256(password, salt);
+			user.setPassword(hashedPassword);
+		}
+		
+		boolean result = userDao.editUser(user);
+		if (result) {
+			return "yes";
+		} else {
+			return "no";
+		}
+	}
+	
+	@GetMapping(value = "/logout")
 	public String logout(HttpSession session) {
 		session.removeAttribute("loginUser");
 		return "redirect:/";
 	}
 	
+	@GetMapping(value = "/me/profile")
+	public String myPage() {
+		
+		return "user/me/profile";
+	}
 	
+	@GetMapping(value = "/me/edit-profile")
+	public String selectUser() {
+		
+		return "user/me/editProfile";
+	}
 }

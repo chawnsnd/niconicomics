@@ -61,11 +61,11 @@ public class DashboardController {
 		log.debug("이쪽");
 		return "dashboard/webtoon/insertEpisode";
 	}
-	@RequestMapping(value = "/webtoons/{webtoonId}", method = RequestMethod.GET)
-	public Webtoon webtoonGet(
-			@PathVariable(value = "webtoonId") int webtoonId
-			) {
-		Webtoon webtoon = dao.webtoonGet(webtoonId);
-		return webtoon;
+	@GetMapping(value = "/webtoons/{webtoonId}/update")
+	public String webtoonUpdate(
+		@PathVariable(value = "webtoonId") int webtoonId,
+		Model model) {
+		model.addAttribute("webtoonId", webtoonId);
+		return "dashboard/webtoon/update";
 	}
 }

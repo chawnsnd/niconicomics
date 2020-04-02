@@ -27,7 +27,7 @@
 		)
 	</insert>
 <!-- 웹툰 정보 읽기 -->
-	<select id="getWebtoon" parameterType="int" resultType="webtoon">
+	<select id="selectWebtoonByWebtoonId" parameterType="int" resultType="webtoon">
 		select 	webtoon_id 
 			,title 
 			,summary 

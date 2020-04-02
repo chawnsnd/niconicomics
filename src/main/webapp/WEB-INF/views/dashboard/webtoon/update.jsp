@@ -8,18 +8,33 @@
 <%@ include file="../layout/global.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#bts1").on('click', insertWebtoon);
+		getWebtoon();
 	})
-	var images = [];
-	var index = 1;
-	var imageTypes = [ 'image/png', 'image/gif', 'image/jpeg', 'image/bmp',
-			'image/x-icon' ];
-	var thumbnailPath;
 	$(function() {
 		$("#uploadInput").on("change", function() {
 			uploadImage(this.files[0]);
 		})
 	})
+	function getWebtoon(){
+		$.ajax({ 
+			url : '<c:url value="/api/webtoons/'+${webtoonId}+'"/>',
+			type : "GET",
+			success : function(data){
+				console.log(data)
+				var template = $('#getWebtoon');
+				bindTemplate(template, data);
+			},
+			error : function(data) {
+				console.log("err", data);
+			}
+		})
+	}	
+	var images = [];
+	var index = 1;
+	var imageTypes = [ 'image/png', 'image/gif', 'image/jpeg', 'image/bmp',
+			'image/x-icon' ];
+	var thumbnailPath;
+	
 	function uploadImage(file) {
 		if (!isImage(file)) {
 			return alert("지원하지 않는 형식입니다..");
@@ -29,7 +44,7 @@
 		var formData = new FormData(form);
 		
 		$.ajax({
-			url :'<c:url value="/api/webtoons/'+${sessionScope.newWebtoon.webtoonId}+'/thumbnail"/>' ,
+			url :'<c:url value="/api/webtoons/'+${webtoonId}+'/thumbnail"/>' ,
 			method : "post",
 			data : formData,
 			async : false,
@@ -39,6 +54,7 @@
 
 				thumbnailPath = data
 				console.log(thumbnailPath)
+				$("#output").html("")
 				$("#output").html(
 						"<img src = '"+data+"'><button onclick='deleteImage(`"
 								+ data + "`)'>삭제</button>")
@@ -70,34 +86,6 @@
 			return true;
 		}
 	}
-	function insertWebtoon(data) {
-
-		var title = $("#title").val();
-		var hashtag = $("#hashtag").val();
-		var summary = $("#summary").val();
-		var thumbnailUp = thumbnailPath;
-		console.log(thumbnailUp);
-		var data = {
-				title : title,
-				hashtag : hashtag,
-				summary : summary,
-				thumbnail : thumbnailUp,
-				authorId : "${sessionScope.loginUser.userId}"
-		};
-		$.ajax({
-			url : "<c:url value='/api/webtoons/"+${sessionScope.newWebtoon.webtoonId}+"'/>",
-			type : 'patch',
-			data : JSON.stringify(data),
-			contentType : 'application/json',
-			success : function() {
-				alert('등록성공')
-				location.href = "<c:url value='/dashboard/webtoons'/>";
-			},
-			error : function() {
-				alert('실패')
-			}
-		})
-	}
 </script>
 </head>
 <body>
@@ -106,17 +94,18 @@
 	<main>
 		<table>
 			<table border="1">
+				<script id = "getWebtoon">
 				<tr>
 					<th>제목</th>
-					<td><input type="text" name="title" id="title"></td>
+					<td><input type="text" value = "{{title}}" name="title" id="title"></td>
 				</tr>
 				<tr>
 					<th>요약</th>
-					<td><input type="text" name="summary" id="summary"></td>
+					<td><input type="text" value = "{{summary}}" name="summary" id="summary"></td>
 				</tr>
 				<tr>
 					<th>해시태그</th>
-					<td><input type="text" id="hashtag" "name="hashtag"></td>
+					<td><input type="text" id="hashtag" value ="{{hashtag}}"name="hashtag"></td>
 				</tr>
 				<tr>
 					<th>썸네일</th>
@@ -124,11 +113,15 @@
 							<!-- <input type="number" name="index"> -->
 							<input type="file" name="image" value="이미지추가" id="uploadInput">
 						</form>
-						<div id="output"></div></td>
+						<div id="output">
+							<img src = '{{thumbnail}}'>
+							<button onclick='deleteImage({{thumbnail}})'>삭제</button>
+						</div></td>
 				</tr>
 				<tr>
 					<td><input type="button" id="bts1" value="등록"></td>
 				</tr>
+				</script>
 			</table>
 			
 	</main>
