@@ -10,6 +10,32 @@
 <title>My Page</title>
 <%@ include file="../../layout/global.jsp"%>
 <script>
+function getMe(){
+	$.ajax({
+		url: "/api/users/me",
+		method: "get",
+		success: function(user){
+			//data -> 나라는 사람의 유저정보
+			user
+		},
+		error: function(err){
+			console.log(err);
+		}
+	})
+}
+function getUser(){
+	$.ajax({
+		url: "/api/users/"+${sessionScope.loginUser.userId},
+		method: "get",
+		success: function(user){
+			//data -> 나라는 사람의 유저정보
+			user
+		},
+		error: function(err){
+			console.log(err);
+		}
+	})
+}
 /*
 $(function(){
 	getUser();

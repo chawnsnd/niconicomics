@@ -33,7 +33,7 @@ function sendMessage(){
 		sock.send(JSON.stringify({
 			userId: ${sessionScope.loginUser.userId},
 			webtoonId: ${webtoonId},
-			type: "chat",
+			type: "GENERAL",
 			message: message})) //소켓에다 메시지 보냄
 		$("#message").val("");
 	}
@@ -43,10 +43,17 @@ function onMessage(evt){
 	var data =JSON.parse(evt.data);
 	var sender = data.nickname;
 	var message = data.message;
+	var type = data.type;
 	var rgb = hashStringToColor(sender);
-	$("#chat_room").append(
-		"<p style='word-break:break-all;'><b style='color: "+rgb+"; margin-right: 10px;'>"+sender+"</b>"+message+"</p>"
-	);
+	if(type == "GENERAL"){
+		$("#chat_room").append(
+			"<p style='word-break:break-all;'><b style='color: "+rgb+"; margin-right: 10px;'>"+sender+"</b>"+message+"</p>"
+		);
+	}else if(type == "DONATE"){
+		$("#chat_room").append(
+				"<p style='word-break:break-all;'><b>"+message+"</b></p>"
+		);
+	}
 	scrollDown();
 }
 function scrollDown(){

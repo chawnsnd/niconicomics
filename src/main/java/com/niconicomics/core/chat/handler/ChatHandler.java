@@ -1,11 +1,8 @@
 package com.niconicomics.core.chat.handler;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -49,6 +46,7 @@ public class ChatHandler extends TextWebSocketHandler{
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		Chat chat = objectMapper.readValue(message.getPayload(), Chat.class);
+		log.debug(chat.toString());
 		User user = userDao.selectUserByUserId(chat.getUserId());
 		chat.setNickname(user.getNickname());
 		int webtoonId = chat.getWebtoonId();
