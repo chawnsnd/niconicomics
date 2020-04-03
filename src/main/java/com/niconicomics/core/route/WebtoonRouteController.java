@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/webtoons")
 public class WebtoonRouteController {
 
+	@GetMapping(value = "")
+	public String goWebtoonList() {
+		return "webtoon/webtoonList";
+	}
+
 	@GetMapping(value = "/{webtoonId}")
 	public String goWebtoon(
 			@PathVariable(name = "webtoonId") int webtoonId,
