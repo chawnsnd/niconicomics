@@ -5,13 +5,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Information</title>
+<title>My Page</title>
 <%@ include file="../../layout/global.jsp"%>
 
 </head>
 
 <script>
 $(function(){
+	getMe();
 	$("#submit").on("click", function(){
 		if($("#password").val()==""){
 			alert("enter your password");
@@ -26,6 +27,20 @@ $(function(){
 		});
 })
 
+function getMe(){
+	$.ajax({
+		url: "<c:url value='/api/users'/>"+"/${sessionScope.loginUser.userId}",
+		type: "get",
+		success: function(data){
+			console.log(data);	
+			bindTemplate($("#userTemplate"), data);
+		},
+		error: function(err){
+			console.log(err)
+		}
+	})
+}
+
 function confirmPassword(){
 	$('#newPassword2').blur(function(){
 		if($('#newPassword').val() != $('#newPassword2').val()){
@@ -39,7 +54,7 @@ function confirmPassword(){
 
 function checkPassword(){
 	$.ajax({
-		url: "./check-password",
+		url: "<c:url value='/api/users/check-password'/>",
 		type: "post",
 		data: {
 			userId : ${sessionScope.loginUser.userId}
@@ -62,7 +77,7 @@ function checkPassword(){
 
 function editUser(){
 	$.ajax({
-		url: "./edit-profile",
+		url: "<c:url value='/api/users'/>"+"/${sessionScope.loginUser.userId}"+"/edit-profile",
 		type: "post",
 		data: {
 			userId : ${sessionScope.loginUser.userId}
@@ -87,9 +102,9 @@ function editUser(){
 <main>
 <%@ include file="./layout/style.jsp"%>
 
-<div class="tempalte" id="formTemplate">
+<div class="template" id="userTemplate">
 	<form id="editUserForm">
-		email: <input type="text" id="email" name="email" value="${sessionScope.loginUser.email}" readonly="readonly"><br>
+		email: <input type="text" id="email" name="email" value="{{email}}" readonly="readonly"><br>
 		nickname: <input type="text" id="nickname" name="nickname"><br>
 		password: <input type="text" id="password" name="password" required="required"><br>
 		enter new password: <input type="text" id="newPassword" name="newPassword"><br>

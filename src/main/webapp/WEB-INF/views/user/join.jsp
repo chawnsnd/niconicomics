@@ -47,7 +47,7 @@ $(document).ready(function(){
 
 function join1(){
 	$.ajax({
-		url: "./join1",
+		url: "<c:url value='/api/users/join1'/>",
 		type: "post",
 		data: {
 			email : $("#userEmail").val()
@@ -60,7 +60,7 @@ function join1(){
 		success: function(data){
 			console.log(data);
 			if(data){
-				location.href = "<c:url value='/users/join2'/>";
+				location.href = "<c:url value='/api/users/join2'/>";
 			}else{
 				alert("Fail")
 			}
@@ -72,7 +72,7 @@ function join1(){
 
 function fn_checkEmail(){
 	$.ajax({
-		url: "./check-email",
+		url: "<c:url value='/api/users/check-email'/>",
 		type: "post",
 		dataType: "text",
 		data: {email : $("#userEmail").val()},

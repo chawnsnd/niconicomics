@@ -10,23 +10,23 @@
 <title>My Page</title>
 <%@ include file="../../layout/global.jsp"%>
 <script>
-/*
+
 $(function(){
-	getUser();
+	getMe();
 })
-function getUser(){
+function getMe(){
 	$.ajax({
-		url: "../me/profile",
+		url: "<c:url value='/api/users'/>"+"/${sessionScope.loginUser.userId}",
 		type: "get",
 		success: function(data){
-			console.log(data);
+			console.log(data);	
+			bindTemplate($("#userTemplate"), data);
 		},
 		error: function(err){
-			console.log(err);
+			console.log(err)
 		}
-	})	
+	})
 }
-*/
 </script>
 <style>
 .box{
@@ -55,20 +55,22 @@ function getUser(){
 
 	<div id = "contentsWrap">
 	<section>
+		<script id="userTemplate">
 		<div class="box">
 			<div class="item">
 				<div class="title">User Email</div>			
-				<div class="value">${sessionScope.loginUser.email}</div>
+				<div class="value">{{email}}</div>
 			</div>
 			<div class="item">		
 				<div class="title">User Nickname</div>			
-				<div class="value">${sessionScope.loginUser.nickname}</div>
+				<div class="value">{{nickname}}</div>
 			</div>
 			<div class="item">
 				<div class="title">Birthday</div>
-				<div class="value">${sessionScope.loginUser.birthdate}</div>
+				<div class="value">{{birthdate}}</div>
 			</div>
 		</div>
+		</script>
 	</section>
 	</div>
 </main>
