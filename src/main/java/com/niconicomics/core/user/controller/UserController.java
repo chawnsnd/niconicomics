@@ -208,6 +208,10 @@ public class UserController {
 			) {
 		User user = (User)session.getAttribute("loginUser");
 		if(userId == user.getUserId()) {
+			user.setShowDotple(setDotple);
+			user.setShowChat(setChat);
+			
+			System.out.println(user.toString());
 			
 			boolean result = userDao.editUser(user);
 			if(result) {

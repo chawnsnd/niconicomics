@@ -53,6 +53,8 @@
 		<if test="password != null">,password = #{password}</if>
 		<if test="nickname != null">,nickname = #{nickname}</if>
 		<if test="type != null">,type = #{type}</if>
+		<if test="showDotple != null">,show_dotple = #{showDotple}</if>
+		<if test="showChat != null">,show_chat = #{showChat}</if>
 	</set>
 	where user_id = #{userId}
 </update>
