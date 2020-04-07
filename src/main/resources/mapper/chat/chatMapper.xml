@@ -16,13 +16,15 @@
 		user_id,
 		nickname,
 		webtoon_id,
-		message
+		message,
+		type
 	)values(
 		seq_chat.nextval,
 		#{userId},
 		#{nickname},
 		#{webtoonId},
-		#{message}
+		#{message},
+		#{type}
 	)
 	</insert>
 	

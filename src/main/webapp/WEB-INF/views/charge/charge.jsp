@@ -25,6 +25,7 @@ function charge(){
 			item: item
 		},
 		success: function(url){
+			console.log(url);
 			location.href = url;
 		}
 	});

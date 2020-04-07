@@ -21,16 +21,15 @@ public class NicoService {
 	public boolean chargeNico(int userId, int nico) {
 		User user = userDao.selectUserByUserId(userId);
 		user.setNico(user.getNico()+nico);
-//		User user = userDao.selectByUserEamil(loginEmail);
-//		if(userDao.updateNico(user.getUserId(), nico)==1) {
-//			return true;
-//		}else {
+		if(userDao.editUser(user)) {
+			return true;
+		}else {
 			return false;
-//		}
+		}
 	}
 
 	@Transactional
-	public boolean donateNico(int authorId, int sponsorId, int nico) {
+	public boolean donateNico(int authorId, int sponsorId, int webtoonId, int nico) {
 		User author = userDao.selectUserByUserId(authorId);
 		User sponsor = userDao.selectUserByUserId(sponsorId);
 		int renico = (int)(nico * 0.97); //수수료 3% 
@@ -38,12 +37,14 @@ public class NicoService {
 		sponsor.setNico(sponsor.getNico()-renico);
 		Donate donate = new Donate();
 		donate.setNico(renico);
-		donateDao.insertDonate(donate);
-//		if(userDao.updateUser(author) == 1 && sponsor.updateUser(sponsor)) {
+		donate.setAuthorId(authorId);
+		donate.setSponsorId(sponsorId);
+		donate.setWebtoonId(webtoonId);
+		if(userDao.editUser(author) && userDao.editUser(sponsor) && donateDao.insertDonate(donate)) {
 			return true;
-//		}else {
-//			return false;
-//		}
+		}else {
+			return false;
+		}
 	}
 	
 }

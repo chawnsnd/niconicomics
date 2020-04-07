@@ -5,9 +5,14 @@
 <div class="header_wrap">
 	<div class="header_left">
 		<div class="header_title" onclick="location.href='<c:url value="/"/>'">ニコニコ x 2<br>ミクス</div>
+		<div class="header_menus">
+			<a href="<c:url value='/webtoons'/>">All</a>
+		</div>
 	</div>
-		<div class="header_right">
-		<input type="text" placeholder="Author | Webtoon | Hashtag">
+	<div class="header_right">
+		<div class="header_search">
+			<input type="text" placeholder="Author | Webtoon | Hashtag">
+		</div>
 		<div>
 			<c:if test="${sessionScope.loginUser == null}">
 			<a href="<c:url value="/users/login"/>">Sign in</a>
