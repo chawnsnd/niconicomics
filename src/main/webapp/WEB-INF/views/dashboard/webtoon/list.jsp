@@ -102,7 +102,7 @@ function output(data){
 		</th>
 	</tr>
 	<script id="myWebtoonList">
-	<tr>
+	<tr onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
 		<td>
 			{{title}}
 		</td>

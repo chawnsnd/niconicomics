@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -145,6 +146,14 @@ public class WebtoonController {
 			res.setStatus(406);
 		}
 		return savedFile;
+	}
+	
+	@ResponseBody
+	@DeleteMapping(value="/{webtoonId}/thumbnail")
+	public void deleteThumbnail(
+			@RequestBody String path) {
+		log.debug(path);
+		ImageService.deleteImage(path);
 	}
 	
 	@RequestMapping(value = "/updateHits", method = RequestMethod.GET)

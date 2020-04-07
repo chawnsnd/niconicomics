@@ -50,22 +50,29 @@ public class DashboardController {
 		log.debug("이쪽");
 		return "dashboard/webtoon/insert";
 	}
-	@GetMapping(value = "/webtoons/{webtoonId}/episode-front")
-	public String goepisodeFront(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
-		model.addAttribute("webtoonId", webtoonId);
-		log.debug("이쪽");
-		return "dashboard/webtoon/episodeFront";
-	}
-	@GetMapping(value = "/webtoons/{webtoonId}/insert-episode")
-	public String goInsertEpisode(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
-		log.debug("이쪽");
-		return "dashboard/webtoon/insertEpisode";
-	}
 	@GetMapping(value = "/webtoons/{webtoonId}/update")
-	public String webtoonUpdate(
+	public String updateWebtoon(
 		@PathVariable(value = "webtoonId") int webtoonId,
 		Model model) {
 		model.addAttribute("webtoonId", webtoonId);
 		return "dashboard/webtoon/update";
+	}
+	@GetMapping(value = "/webtoons/{webtoonId}")
+	public String GetMyWebtoon(
+		@PathVariable(value = "webtoonId") int webtoonId,
+		Model model) {
+		model.addAttribute("webtoonId", webtoonId);
+		return "dashboard/webtoon/episodeFront";
+	}
+
+	@GetMapping(value = "/webtoons/{webtoonId}/episodes")
+	public String goEpisodeFront(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
+		log.debug("이쪽");
+		return "dashboard/webtoon/insertEpisode";
+	}					
+	@GetMapping(value = "/webtoons/{webtoonId}/episodes/insert")
+	public String goInsertEpisode(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
+		log.debug("이쪽");
+		return "dashboard/webtoon/insertEpisode";
 	}
 }

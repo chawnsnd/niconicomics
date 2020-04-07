@@ -11,11 +11,11 @@ $(document).ready(function() {
 	myEpisode();
 });
 function insertEpisode(){
-	var url = "../../../webtoons/"+${webtoonId}+"/episodeInsert";
+	var url = "/core/api/webtoons/"+${webtoonId}+"/episodes/insert";
 	console.log("url: " + url);
 	$.ajax({
 		url: url, // core/webtoons
-		type: "GET",
+		type: "POST",
 		data:{
 			no : 0
 			,title : "def"
@@ -24,8 +24,8 @@ function insertEpisode(){
 		},
 		success: function(data){
 			console.log(data);
-			location.href="<c:url value='/dashboard/webtoons/"+${webtoonId}+"/insert-episode'/>"
-		},
+			location.href="<c:url value='/dashboard/webtoons/"+${webtoonId}+"/episodes/insert'/>"
+		},		
 		error: function(data){
 			console.log("err", data);
 		},

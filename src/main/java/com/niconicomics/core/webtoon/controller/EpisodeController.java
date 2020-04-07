@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.niconicomics.core.user.vo.User;
 import com.niconicomics.core.webtoon.dao.EpisodeDao;
@@ -23,20 +24,38 @@ import com.niconicomics.core.webtoon.vo.Episode;
 import com.niconicomics.core.webtoon.vo.Webtoon;
 
 import lombok.extern.slf4j.Slf4j;
-
-@Controller
-
+@Slf4j
+@RestController
+@RequestMapping("/api/webtoons")
 public class EpisodeController {
 
 	@Autowired
 	private EpisodeDao dao;
-	
 	@ResponseBody
-	@RequestMapping(value = "/webtoons/{webtoonId}/episodeInsert", method = RequestMethod.GET)
-	public String webtoonInsert(Episode episode,@PathVariable(name = "webtoonId") int webtoonId) {
-		System.out.println(episode.toString());
-		//int result = dao.insertEpisode(episode);
-		return "home";
+	@RequestMapping(value = "/{webtoonId}", method = RequestMethod.GET)
+	public ArrayList<Episode> myEpisodeList(int authorId,
+			@PathVariable (value="webtoonId") int webtoonId) {
+		log.debug(Integer.toString(authorId));
+		ArrayList<Episode> getEpisodeList = dao.episodeSelectList(webtoonId);
+		return getEpisodeList;
+	}
+	@ResponseBody
+	@RequestMapping(value = "/{webtoonId}/episodes/insert", method = RequestMethod.POST)
+	public void webtoonInsert(
+			Episode episode, 
+			HttpSession session) { 
+		dao.insertEpisode(episode);
+		ArrayList<Episode> getAllEpiosdeList = dao.episodeAllList();
+		int max = getAllEpiosdeList.get(0).getEpisodeId();
+		System.out.println(max);
+		for (int i = 0; i < getAllEpiosdeList.size(); i++) {
+			if (max<getAllEpiosdeList.get(i).getEpisodeId()) {
+				max = getAllEpiosdeList.get(i).getEpisodeId();
+			}
+		}
+		Episode lastestEpisode = dao.selectEpisodeByEpisodeId(max);
+		System.out.println(lastestEpisode);
+		session.setAttribute("newEpisode", lastestEpisode);
 	}
 	@RequestMapping(value = "/episodeList", method = RequestMethod.GET)
 	public String webtoonList() {
@@ -47,15 +66,12 @@ public class EpisodeController {
 		}
 		return "home";
 	}
-	@RequestMapping(value = "/updateEpisode", method = RequestMethod.GET)
-	public String updateEpisode(Episode episode) {
-		episode.setWebtoonId(7);
-		episode.setEpisodeId(3);
-		episode.setNo(4);
-		//episode.setTitle("updatedTitle");
-		episode.setThumbnail("updatedThumbnail");
-		//테스트를 위한 강제 입력사항
-		int result = dao.updateEpisode(episode);
+	
+	@RequestMapping(value = "/{webtoonId}/episodes/{episodeId}", method = RequestMethod.PATCH)
+	public String updateEpisode(Episode episode
+			,@PathVariable(value = "webtoonId") int webtoonId
+			,@PathVariable(value = "episodeId") int episodeId) {
+		//int result = dao.updateEpisode(episode);
 		return "home";
 	}
 	@RequestMapping(value = "/deleteEpisode", method = RequestMethod.GET)

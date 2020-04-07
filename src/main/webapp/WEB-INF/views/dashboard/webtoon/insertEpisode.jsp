@@ -8,7 +8,7 @@
 <%@ include file="../layout/global.jsp"%>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#bts1").on('click', insertWebtoon);
+		$("#bts1").on('click', insertEpisode);
 	})
 	var images = [];
 	var index = 1;
@@ -70,28 +70,26 @@
 			return true;
 		}
 	}
-	function insertWebtoon(data) {
+	function insertEpisode(data) {
 
 		var title = $("#title").val();
-		var hashtag = $("#hashtag").val();
-		var summary = $("#summary").val();
+		var no = $("#no").val();
 		var thumbnailUp = thumbnailPath;
 		console.log(thumbnailUp);
 
 		$.ajax({
-			url : "<c:url value='/webtoons/update'/>",
-			type : 'POST',
+			url : "<c:url value='../../../../api/webtoons/"+${sessionScope.newEpisode.webtoonId}+"/episodes/"+${sessionScope.newEpisode.episodeId}+"'/>",
+			type : 'PATCH',
 			data : {
 				title : title,
-				hashtag : hashtag,
-				summary : summary,
+				no : no,
 				thumbnail : thumbnailUp,
 				authorId : "${sessionScope.loginUser.userId}",
-				webtoonId : "${sessionScope.newWebtoon.webtoonId}"
+				episodeId : "${sessionScope.newEpisode.episodeId}"
 			},
 			success : function() {
 				alert('등록성공')
-				location.href = "../webtoons"
+				location.href = "<c:url value='/dashboard/webtoons/"+${webtoonId}+"'/>"
 			},
 			error : function() {
 				alert('실패')
@@ -111,12 +109,8 @@
 					<td><input type="text" name="title" id="title"></td>
 				</tr>
 				<tr>
-					<th>요약</th>
-					<td><input type="text" name="summary" id="summary"></td>
-				</tr>
-				<tr>
-					<th>해시태그</th>
-					<td><input type="text" id="hashtag" "name="hashtag"></td>
+					<th>회차</th>
+					<td><input type="text" name="no" id="no"></td>
 				</tr>
 				<tr>
 					<th>썸네일</th>
@@ -130,7 +124,7 @@
 					<td><input type="button" id="bts1" value="등록"></td>
 				</tr>
 			</table>
-			
+			 dddd = "${sessionScope.newEpisode}"
 	</main>
 	<%@ include file="../layout/footer.jsp"%>
 </body>
