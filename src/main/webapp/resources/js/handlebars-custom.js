@@ -9,7 +9,7 @@ function bindTemplate(templateDom, data){
 	var template = Handlebars.compile(source); 
 	var html = template(data);
 	$(templateDom).after(html);
-	$(templateDom).remove();
+	$(templateDom).hide();
 }
 
 function bindTemplates(templateDom, datas){

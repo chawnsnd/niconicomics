@@ -76,9 +76,9 @@ function hashStringToColor(str) {
 </script>
 <style>
 #chat_room{
-	height: 80vh;
    	overflow-y: auto;
    	padding: 1vw;
+   	height: 90vh;
 }
 #chat_input{
 	display: inline-flex;
