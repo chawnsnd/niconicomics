@@ -19,9 +19,14 @@ public class EpisodeDao {
 		int result = mapper.insertEpisode(episode);
 		return result;
 	}
-	public ArrayList<Episode> episodeList(){
+	public ArrayList<Episode> episodeSelectList(int webtoonId){
 		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
-		ArrayList<Episode> list = mapper.episodeList();
+		ArrayList<Episode> list = mapper.episodeSelectList(webtoonId);
+		return list;
+	}
+	public ArrayList<Episode> episodeAllList(){
+		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
+		ArrayList<Episode> list = mapper.episodeAllList();
 		return list;
 	}
 	public int updateEpisode(Episode episode) {
@@ -33,5 +38,20 @@ public class EpisodeDao {
 		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
 		int result = mapper.deleteEpisode(episode);
 		return result;
+	}
+	public Episode selectEpisodeByEpisodeId(int episodeId) {
+		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
+		Episode episode = mapper.selectEpisodeByEpisodeId(episodeId);
+		return episode;
+	}
+	public Episode selectEpisodeByEpisodeNo(int episodeNo) {
+		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
+		Episode episode = mapper.selectEpisodeByEpisodeNo(episodeNo);
+		return episode;
+	}
+	public ArrayList<Episode> selectEpisodeByWebtoonId(int WebtoonId) {
+		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
+		ArrayList<Episode> episodeList = mapper.selectEpisodeByWebtoonId(WebtoonId);
+		return episodeList;
 	}
 }

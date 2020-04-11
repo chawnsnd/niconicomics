@@ -4,10 +4,10 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- 에피소드 처리 SQL -->
-<mapper namespace="com.niconicomics.core.dao.EpisodeMapper">
+<mapper namespace="com.niconicomics.core.webtoon.dao.EpisodeMapper">
 
 <!-- 에피소드 입력 -->
-	<insert id="InsertEpisode" parameterType="episode">
+	<insert id="insertEpisode" parameterType="episode">
 		insert into tbl_episode(
 			episode_id
 			,no
@@ -23,7 +23,21 @@
 		)
 	</insert>
 <!-- 에피소드 정보 읽기-->
-	<select id="episodeList" resultType="episode">
+	<select id="episodeSelectList" resultType="episode" parameterType="int">
+		select
+			episode_id
+			,no
+			,title
+			,regdate
+			,webtoon_id
+			,thumbnail
+		from 
+			tbl_episode
+		where
+			webtoon_Id = #{webtoonId}
+	</select>
+<!-- 에피소드 정보 읽기-->
+	<select id="episodeAllList" resultType="episode">
 		select
 			episode_id
 			,no
@@ -61,5 +75,25 @@
 			episode_id = #{episodeId} and
 			webtoon_id = #{webtoonId}
 	</delete>
+<!-- 에피소드 선택 -->
+	<select id="selectEpisodeByEpisodeId" parameterType="episode" resultType="Episode">
+		select * from
+			tbl_episode
+		where
+			episode_id = #{episodeId}
+	</select>
+	<select id="sselectEpisodeByEpisodeNo" parameterType="episode" resultType="Episode">
+		select * from
+			tbl_episode
+		where
+			no = #{no}
+	</select>
+	<select id="selectEpisodeByWebtoonId" parameterType="episode" resultType="Episode">
+		select * from
+			tbl_episode
+		where
+			webtoon_id = #{webtoonId}
+	</select>
+	
 
 </mapper>

@@ -1,5 +1,7 @@
 package com.niconicomics.core.route;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.niconicomics.core.webtoon.dao.EpisodeDao;
 import com.niconicomics.core.webtoon.dao.WebtoonDao;
+import com.niconicomics.core.webtoon.vo.Episode;
 import com.niconicomics.core.webtoon.vo.Webtoon;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 public class DashboardController {
 	@Autowired
 	private WebtoonDao dao;
+	@Autowired
+	private EpisodeDao episodeDao;
 	@GetMapping("")
 	public String goDashboard() {
 		return "dashboard/home";
@@ -50,14 +56,39 @@ public class DashboardController {
 		log.debug("이쪽");
 		return "dashboard/webtoon/insert";
 	}
-	@GetMapping(value = "/webtoons/{webtoonId}/episode-front")
-	public String goepisodeFront(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
+	@GetMapping(value = "/webtoons/{webtoonId}/update")
+	public String updateWebtoon(
+		@PathVariable(value = "webtoonId") int webtoonId,
+		Model model) {
 		model.addAttribute("webtoonId", webtoonId);
-		log.debug("이쪽");
+		return "dashboard/webtoon/update";
+	}
+	@GetMapping(value = "/webtoons/{webtoonId}")
+	public String GetMyWebtoon(
+		@PathVariable(value = "webtoonId") int webtoonId,
+		Model model) {
+		model.addAttribute("webtoonId", webtoonId);
 		return "dashboard/webtoon/episodeFront";
 	}
-	@GetMapping(value = "/webtoons/{webtoonId}/insert-episode")
+
+	@GetMapping(value = "/webtoons/{webtoonId}/episodes")
+	public String goEpisodeFront(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
+		log.debug("이쪽");
+		model.addAttribute("webtoonId", webtoonId);
+		return "dashboard/webtoon/insertEpisode";
+	}					
+	@GetMapping(value = "/webtoons/{webtoonId}/episodes/{episodeNo}/insert")
 	public String goInsertEpisode(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
+		log.debug(Integer.toString(webtoonId));
+		ArrayList<Episode> episodeList = episodeDao.selectEpisodeByWebtoonId(webtoonId);
+		int max = episodeList.get(0).getEpisodeId();
+		for (int i = 0; i < episodeList.size(); i++) {
+			if (max<episodeList.get(i).getEpisodeId()) {
+				max = episodeList.get(i).getEpisodeId();
+			}
+		}
+		Episode episode = episodeDao.selectEpisodeByEpisodeId(max);
+		model.addAttribute("myWebtoonLastestEpisode", episode);
 		log.debug("이쪽");
 		return "dashboard/webtoon/insertEpisode";
 	}
