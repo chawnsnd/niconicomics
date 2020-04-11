@@ -10,6 +10,9 @@
 	$(document).ready(function() {
 		$("#bts1").on('click', insertEpisode);
 	})
+	
+	
+	var num
 	var images = [];
 	var index = 1;
 	var imageTypes = [ 'image/png', 'image/gif', 'image/jpeg', 'image/bmp',
@@ -24,12 +27,11 @@
 		if (!isImage(file)) {
 			return alert("지원하지 않는 형식입니다..");
 		}
-
+		
 		var form = $('#uploadForm')[0];
 		var formData = new FormData(form);
-		
 		$.ajax({
-			url :'<c:url value="/webtoons/thumbnail" />' ,
+			url :'<c:url value="/api/webtoons/${webtoonId}/episodes/${newEpisode.no}/thumbnail" />' ,
 			method : "post",
 			data : formData,
 			async : false,
@@ -51,8 +53,9 @@
 
 	function deleteImage(path) {
 		$.ajax({
-			url : "/core/file-delete-test",
-			method : "post",
+			
+			url : '<c:url value="/api/webtoons/${webtoonId}/episodes/${newEpisode.no}/thumbnail" />' ,
+			method : "delete",
 			data : {
 				path : path
 			},
@@ -76,22 +79,24 @@
 		var no = $("#no").val();
 		var thumbnailUp = thumbnailPath;
 		console.log(thumbnailUp);
-
-		$.ajax({
-			url : "<c:url value='../../../../api/webtoons/"+${sessionScope.newEpisode.webtoonId}+"/episodes/"+${sessionScope.newEpisode.episodeId}+"'/>",
-			type : 'PATCH',
-			data : {
+		var data = {			
 				title : title,
-				no : no,
+				no : ${newEpisode.no+1},
 				thumbnail : thumbnailUp,
-				authorId : "${sessionScope.loginUser.userId}",
+// 				authorId : "${sessionScope.loginUser.userId}",
 				episodeId : "${sessionScope.newEpisode.episodeId}"
-			},
+		};
+		$.ajax({
+			url : '<c:url value="/api/webtoons/${webtoonId}/episodes/${newEpisode.no}" />',
+			type : 'PATCH',
+			contentType: "application/json",
+			data : JSON.stringify(data),
 			success : function() {
 				alert('등록성공')
 				location.href = "<c:url value='/dashboard/webtoons/"+${webtoonId}+"'/>"
 			},
-			error : function() {
+			error : function(res) {
+				console.log(res);
 				alert('실패')
 			}
 		})
@@ -110,7 +115,7 @@
 				</tr>
 				<tr>
 					<th>회차</th>
-					<td><input type="text" name="no" id="no"></td>
+					<td><input type="text" name="no" id="no" value="${newEpisode.no}"></td>
 				</tr>
 				<tr>
 					<th>썸네일</th>

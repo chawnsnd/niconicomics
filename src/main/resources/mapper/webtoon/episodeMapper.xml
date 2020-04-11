@@ -23,7 +23,7 @@
 		)
 	</insert>
 <!-- 에피소드 정보 읽기-->
-	<select id="episodeSelectList" resultType="episode" parameterType="webtoonId">
+	<select id="episodeSelectList" resultType="episode" parameterType="int">
 		select
 			episode_id
 			,no
@@ -34,7 +34,7 @@
 		from 
 			tbl_episode
 		where
-			webtoon_id
+			webtoon_Id = #{webtoonId}
 	</select>
 <!-- 에피소드 정보 읽기-->
 	<select id="episodeAllList" resultType="episode">

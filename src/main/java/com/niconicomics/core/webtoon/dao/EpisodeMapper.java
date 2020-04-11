@@ -13,6 +13,6 @@ public interface EpisodeMapper {
 	public int deleteEpisode(Episode episode);
 	public Episode selectEpisodeByEpisodeId(int episodeId);
 	public Episode selectEpisodeByEpisodeNo(int episodeNo);
-	public Episode selectEpisodeByWebtoonId(int WebtoonId);
+	public ArrayList<Episode> selectEpisodeByWebtoonId(int WebtoonId);
 	
 }

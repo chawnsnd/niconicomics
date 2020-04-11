@@ -49,9 +49,9 @@ public class EpisodeDao {
 		Episode episode = mapper.selectEpisodeByEpisodeNo(episodeNo);
 		return episode;
 	}
-	public Episode selectEpisodeByWebtoonId(int WebtoonId) {
+	public ArrayList<Episode> selectEpisodeByWebtoonId(int WebtoonId) {
 		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
-		Episode episode = mapper.selectEpisodeByWebtoonId(WebtoonId);
-		return episode;
+		ArrayList<Episode> episodeList = mapper.selectEpisodeByWebtoonId(WebtoonId);
+		return episodeList;
 	}
 }

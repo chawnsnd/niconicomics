@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.plaf.multi.MultiFileChooserUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -102,29 +103,7 @@ public class WebtoonController {
 			webtoon.setAuthorId(authorId);
 		int result = dao.deleteWebtoon(webtoon);
 	}
-	//등록웹툰불러오기
 	
-	@ResponseBody
-	@PostMapping(value="webtoon-delete")
-	public void fileDeleteTest(String path) {
-		log.debug(path);
-		ImageService.deleteImage(path);
-	}
-	//이미지를 등록할때 쓰이는 이미지 서비스 메서드
-	@ResponseBody
-	@PostMapping(value="webtoon-upload")
-	public String fileUploadTest(@RequestParam(name = "image") String image
-		,@RequestParam(name = "webtoonId") int webtoonId
-		,@RequestParam(name = "authorId") int authorId
-		, HttpServletResponse res) {
-		String savedFile;/*
-							 * try { savedFile = ImageService.saveImage(image, "/abb", "aaabbb");
-							 * 
-							 * } catch (NotImageException e) { res.setStatus(406); return ""; }
-							 */
-		
-		return "";
-	}
 	//이미지를 등록할때 쓰이는 서버경로를 만들어주는 메서드
 	@ResponseBody
 	@PostMapping(value="/{webtoonId}/thumbnail")
@@ -147,16 +126,15 @@ public class WebtoonController {
 		}
 		return savedFile;
 	}
-	
-	@ResponseBody
+
 	@DeleteMapping(value="/{webtoonId}/thumbnail")
 	public void deleteThumbnail(
-			@RequestBody String path) {
-		log.debug(path);
+			@PathVariable(name = "webtoonId") int webtoonId, @RequestBody String path, HttpServletResponse res) {
+		System.out.println(path);
 		ImageService.deleteImage(path);
 	}
 	
-	@RequestMapping(value = "/updateHits", method = RequestMethod.GET)
+	@RequestMapping(value = "/{webtoonId}/updateHits", method = RequestMethod.GET)
 	public String updateHits() {
 		int webtoonId = 7;
 		//테스트를 위한 강제 입력사항

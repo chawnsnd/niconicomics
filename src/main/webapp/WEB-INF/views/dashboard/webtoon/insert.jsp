@@ -51,7 +51,7 @@
 
 	function deleteImage(path) {
 		$.ajax({
-			url : "<c:url value="/api/webtoons/'+${sessionScope.newWebtoon.webtoonId}+'/thumbnail"/>",
+			url : "<c:url value='/api/webtoons/${sessionScope.newWebtoon.webtoonId}/thumbnail'/>",
 			method : "delete",
 			data : {
 				path : path
