@@ -32,7 +32,7 @@ $(document).ready(function(){
 
 function login(){
 	$.ajax({
-		url: "./login",
+		url: "<c:url value='/api/users/login'/>",
 		type: "post",
 		data: {
 			email : $("#userEmail").val()

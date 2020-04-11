@@ -15,4 +15,6 @@ public class User {
 	private String salt;
 	private String regdate;
 	private int nico;
+	private String showDotple;
+	private String showChat;
 }
