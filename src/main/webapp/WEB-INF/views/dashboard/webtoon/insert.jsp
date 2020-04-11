@@ -26,7 +26,9 @@
 		}
 
 		var form = $('#uploadForm')[0];
+		console.log(form)
 		var formData = new FormData(form);
+		console.log(formData)
 		
 		$.ajax({
 			url :'<c:url value="/api/webtoons/'+${sessionScope.newWebtoon.webtoonId}+'/thumbnail"/>' ,

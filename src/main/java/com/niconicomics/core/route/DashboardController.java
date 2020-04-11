@@ -68,4 +68,9 @@ public class DashboardController {
 		model.addAttribute("webtoonId", webtoonId);
 		return "dashboard/webtoon/update";
 	}
+	
+	@GetMapping(value = "/exchange")
+	public String exchage() {
+		return "dashboard/exchage/exchage";
+	}
 }

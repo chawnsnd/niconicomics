@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.niconicomics.core.nico.service.KakaopayService;
 import com.niconicomics.core.nico.service.NicoService;
+import com.niconicomics.core.nico.service.OpenBankingService;
 import com.niconicomics.core.nico.vo.KakaoPayApprove;
 import com.niconicomics.core.nico.vo.KakaoPayReady;
+import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.vo.User;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,8 @@ public class NicoController {
 	private NicoService nicoService;
 	@Autowired
 	private KakaopayService kakaopayService;
+	@Autowired
+	private OpenBankingService openBankingService;
 	
 	@GetMapping(value = "/charge1")
 	@ResponseBody
@@ -64,4 +68,13 @@ public class NicoController {
 		return false;
 	}
 	
+	@PostMapping(value = "/exchage")
+	@ResponseBody
+	public boolean exchage(int userId, int nico, HttpSession session) {
+		User loginUser = (User) session.getAttribute("loginUser"); 
+		if(userId == loginUser.getUserId()) {
+			return nicoService.exchageNico(userId, nico);
+		}
+		return false;
+	}
 }

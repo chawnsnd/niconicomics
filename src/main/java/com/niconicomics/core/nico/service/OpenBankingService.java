@@ -14,6 +14,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.niconicomics.core.nico.vo.Account;
 import com.niconicomics.core.nico.vo.OpenBankingRealName;
 
 import lombok.extern.slf4j.Slf4j;
@@ -76,12 +77,9 @@ public class OpenBankingService {
 	
 	public OpenBankingRealName inquiryRealName(String bankName, String accountNum, String birthdate) {
 		String access_token = getAccessToken();
-		log.debug(access_token);
 		HttpHeaders headers = new HttpHeaders();
 		Date date = new Date();
 		String bankCode = bankMap.get(bankName);
-		log.debug(bankCode);
-		log.debug(birthdate);
 		DateFormat format1 = new SimpleDateFormat("HHmmssSSS");
 		headers.set("Authorization", "Bearer "+access_token);
         headers.set("Content-Type", "application/json; charset=UTF-8");
@@ -110,6 +108,41 @@ public class OpenBankingService {
 		String token = (String) restTemplate.postForObject(HOST+"/oauth/2.0/token", entity, Map.class).get("access_token");
 		accessToken = token;
 		return token;
+	}
+
+	public void transfer(Account account, int nico) {
+		String access_token = getAccessToken();
+		HttpHeaders headers = new HttpHeaders();
+		Date date = new Date();
+		DateFormat format1 = new SimpleDateFormat("yyyyMMddHHmmss");
+		DateFormat format2 = new SimpleDateFormat("HHmmssSSS");
+		headers.set("Authorization", "Bearer "+access_token);
+        headers.set("Content-Type", "application/json; charset=UTF-8");
+        Map<String, Object> body = new HashMap<>();
+		body.put("cntr_account_type", "N"); //내가 만드는거임
+		body.put("cntr_account_num", "1101230000678");
+		body.put("wd_pass_phrase", "123456");
+		body.put("wd_pass_content", "출금계좌인자내역");
+		body.put("name_check_option", "on");
+		body.put("tran_dtime", format1.format(date));
+		body.put("req_cnt", "1");
+		
+		Map<String, String> reqList = new HashMap<>();
+		reqList.put("tran_no", "1");
+		reqList.put("bank_tran_id", "T991617520U"+format2.format(date));
+		reqList.put("bank_code_std", bankMap.get(account.getBankName()));
+		reqList.put("account_num", account.getAccountNumber());
+		reqList.put("account_holder_name", account.getAccountHolderName());
+		reqList.put("print_content", "입금계좌인자내역");
+		reqList.put("tran_amt", Integer.toString(nico));
+		reqList.put("req_client_name", account.getName());
+		reqList.put("req_client_num", Integer.toString(account.getAccountId()));
+		reqList.put("transfer_purpose", "TR");
+		body.put("req_list", reqList);
+		// TODO Auto-generated method stub
+		HttpEntity<Map<String, Object>> entity = new HttpEntity<Map<String, Object>>(body, headers);
+		String result = (String) restTemplate.postForObject(HOST+"/v2.0/transfer/deposit/acnt_num", entity, String.class);
+		log.debug(result);
 	}
 	
 }

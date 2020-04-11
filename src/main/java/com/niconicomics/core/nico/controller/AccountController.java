@@ -34,6 +34,7 @@ public class AccountController {
 	@Autowired
 	private AccountService accountService;
 	
+	
 	@ResponseBody
 	@GetMapping(value="/{userId}")
 	public Account getAccount(

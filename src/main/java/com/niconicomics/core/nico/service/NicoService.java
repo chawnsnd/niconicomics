@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.niconicomics.core.nico.dao.AccountDao;
 import com.niconicomics.core.nico.dao.DonateDao;
+import com.niconicomics.core.nico.vo.Account;
 import com.niconicomics.core.nico.vo.Donate;
 import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.vo.User;
@@ -16,6 +18,10 @@ public class NicoService {
 	private UserDao userDao;
 	@Autowired
 	private DonateDao donateDao;
+	@Autowired
+	private OpenBankingService openBankingService;
+	@Autowired
+	private AccountDao accountDao;
 	
 	@Transactional
 	public boolean chargeNico(int userId, int nico) {
@@ -45,6 +51,16 @@ public class NicoService {
 		}else {
 			return false;
 		}
+	}
+
+	@Transactional
+	public boolean exchageNico(int userId, int nico) {
+		User user = userDao.selectUserByUserId(userId);
+		Account account = accountDao.selectAccountByAuthorId(userId);
+		openBankingService.transfer(account, nico);
+		user.setNico(user.getNico()-nico);
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }
