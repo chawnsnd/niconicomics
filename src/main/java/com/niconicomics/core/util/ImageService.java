@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ImageService {
 	
-	public static final String HTTP_ROOT = "http://localhost:8888/images";
+	public static final String HTTP_ROOT = "/images";
 //	public static final String ROCAL_ROOT = "C:\\niconicomics\\images";
 	public static final String ROCAL_ROOT = "/home/junwoong/niconicomics/images";
 	public static final String[] IMAGE_TYPES = 

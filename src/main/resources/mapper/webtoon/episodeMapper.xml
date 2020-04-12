@@ -84,7 +84,7 @@
 			,regdate
 			,webtoon_id
 			,thumbnail
-		from 
+		from
 			tbl_episode
 		where
 			webtoon_id = #{webtoonId} and no = #{episodeNo}

@@ -6,12 +6,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,14 +35,24 @@ public class WebtoonController {
 	
 	@Autowired
 	private WebtoonDao webtoonDao;
+	@Autowired
+	private UserDao userDao;
 
 	@GetMapping(value = "")
-	public Map<String, Object> getWebtoonList(WebtoonSearchOption option) {
-		log.debug(option.toString());
+	public Map<String, Object> getWebtoonList(
+			WebtoonSearchOption option,
+			@RequestParam(defaultValue = "20") int countPerPage,
+			@RequestParam(defaultValue = "1") int currentPage,
+			@RequestParam(defaultValue = "5") int pagePerGroup
+		) {
 		int webtoonListSize = webtoonDao.selectCountWebtoonList(option);
-		PageNavigator navi = new PageNavigator(option.getCountPerPage(), 20, option.getCurrentPage(), webtoonListSize);
+		PageNavigator navi = new PageNavigator(countPerPage, pagePerGroup, currentPage, webtoonListSize);
 		ArrayList<Webtoon> webtoonList = webtoonDao.selectWebtoonList(option, navi);
-		Map<String, Object> result = new HashMap<>();
+		for (Webtoon webtoon : webtoonList) {
+			User author = userDao.selectUserByUserId(webtoon.getAuthorId());
+			webtoon.setAuthorNickname(author.getNickname());
+		}
+		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("webtoonList", webtoonList);
 		result.put("navi", navi);
 		return result;
@@ -59,6 +71,8 @@ public class WebtoonController {
 	@GetMapping(value = "/{webtoonId}")
 	public Webtoon getWebtoon(@PathVariable(value = "webtoonId") int webtoonId) {
 		Webtoon webtoon = webtoonDao.selectWebtoonByWebtoonId(webtoonId);
+		User author = userDao.selectUserByUserId(webtoon.getAuthorId());
+		webtoon.setAuthorNickname(author.getNickname());
 		return webtoon;
 	}
 

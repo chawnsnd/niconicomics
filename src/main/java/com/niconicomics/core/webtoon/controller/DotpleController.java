@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.niconicomics.core.nico.dao.DonateDao;
+import com.niconicomics.core.nico.vo.Donate;
 import com.niconicomics.core.webtoon.dao.ContentsDao;
 import com.niconicomics.core.webtoon.dao.DotpleDao;
 import com.niconicomics.core.webtoon.dao.EpisodeDao;
@@ -30,6 +33,8 @@ public class DotpleController {
 	private EpisodeDao episodeDao;
 	@Autowired
 	private DotpleDao dotpleDao;
+	@Autowired
+	private DonateDao donateDao;
 	
 	@GetMapping(value = "/{webtoonId}/episodes/{episodeNo}/dotples")
 	public Map<Integer, ArrayList<Dotple>> getDotples(
@@ -49,7 +54,6 @@ public class DotpleController {
 			@PathVariable int webtoonId,
 			@PathVariable int episodeNo,
 			Dotple dotple) {
-		log.debug(dotple.toString());
 		int episodeId = episodeDao.selectEpisodeByWebtoonIdAndEpisodeNo(webtoonId, episodeNo).getEpisodeId();
 		int contentsId = contentsDao.selectContentsByEpsodeIdAndIdx(episodeId, dotple.getIdx()).getContentsId();
 		dotple.setContentsId(contentsId);

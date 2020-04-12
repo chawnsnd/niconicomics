@@ -4,16 +4,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>니코니코믹스 웹서버</title>
+<title>NICONICOMICS</title>
 <%@ include file="./layout/global.jsp"%>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
 <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
 <script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
 <script>
-
+var webtoons;
+$(function(){
+	bannerSliderSetting();
+	getWebtoons().then(function(){
+		imageContainer();
+	});
+	getNewWebtoons();
+	$(".type").on("click", function(){
+		getWebtoons($(this).data("type")).then(function(){
+			imageContainer();
+		});
+		$(".type").removeClass("active");
+		$(this).addClass("active");
+	})
+})
+function getNewWebtoons(){
+	$.ajax({
+		url: "<c:url value='/api/webtoons'/>",
+		method: "get",
+		async: false,
+		data:{
+			currentPage: 1,
+			CountPerPage: 10,
+		},
+		success: function(data){
+			$("#newWebtoons").remove();
+			bindTemplate($("#newWebtoonsTemplate"), data.webtoonList);
+		},
+		error: function(err){
+			console.log(err);
+		}
+	})
+}
+function getWebtoons(type){
+	return new Promise(function(resolve, reject){
+		$.ajax({
+			url: "<c:url value='/api/webtoons'/>",
+			method: "get",
+			async: false,
+			data:{
+				currentPage: 1,
+				CountPerPage: 30,
+				hashtags: type
+			},
+			success: function(data){
+				$("#webtoons").remove();
+				bindTemplate($("#webtoonsTemplate"), data.webtoonList);
+				resolve();
+			},
+			error: function(err){
+				console.log(err);
+				reject();
+			}
+		})
+	})
+}
 </script>
 <script>
-$(document).ready(function(){
+function bannerSliderSetting(){
 	var bannerSlider = new Swiper('#banner-slider', {
 		navigation: {
 			nextEl: '.swiper-button-next',
@@ -23,55 +78,21 @@ $(document).ready(function(){
 	        el: '.swiper-pagination',
       	}
 	});
-	var recommandSlider = new Swiper('#recommand-slider', {
-		cssMode: true,
-		slidesPerView: 4,
-      	spaceBetween: 30,
-      	mousewheel: true,
-        keyboard: true,
-        navigation: {
-			nextEl: '#recommand-button-next',
-			prevEl: '#recommand-button-prev',
-		}
-	});
-	var newSlider = new Swiper('#new-slider', {
-		cssMode: true,
-		slidesPerView: 6,
-      	spaceBetween: 30,
-      	mousewheel: true,
-        keyboard: true,
-        navigation: {
-			nextEl: '#new-button-next',
-			prevEl: '#new-button-prev',
-		}
-	});
-	var sfSlider = new Swiper('#sf-slider', {
-		cssMode: true,
-		slidesPerView: 6,
-      	spaceBetween: 30,
-      	mousewheel: true,
-        keyboard: true,
-        navigation: {
-			nextEl: '#sf-button-next',
-			prevEl: '#sf-button-prev',
-		}
-	});
-});
+}
 </script>
 <style>
 .swiper-container {
 	width: 100%;
-	height: 100%;
+	height: 200px;
 }
 .swiper-slide {
 	text-align: center;
 	font-size: 18px;
 	background: #fff;
-/* 	display: -webkit-box; */
-/* 	display: -ms-flexbox; */
-/* 	display: -webkit-flex; */
-/* 	display: flex; */
-	display: inline-block;
+	display: flex;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
 	-webkit-box-pack: center;
 	-ms-flex-pack: center;
 	-webkit-justify-content: center;
@@ -82,34 +103,82 @@ $(document).ready(function(){
 	align-items: center;
 	cursor: pointer;
 }
-.label{
-	text-align: left;
-}
-.label-big{
-	font-size: 20px;
-}
-.label-small{
-	font-size: 15px;
-}
 </style>
 <style>
 .item>img{
 	max-height: 200px;
 }
 .left_item{
-	padding: 50px 0 25px 0;
+	padding: 30px 0 15px 0;
 }
 .item_title{
 	font-size: 30px;
 	font-weight: bold;
 }
-.card{
-	margin: 0 0 30px 0;
-	border: 1px solid #e1e1e1;
-	padding: 10px;
+.types{
+	margin-top: 50px;
 }
-.card_title{
+.type{
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	padding: 0 10px;
+}
+.type.active{
+	color: #e83d3d
+}
+.webtoons{
+	display: inline-block;
+	margin-top: 10px;
+	width: 680px;
+}
+.webtoon{
+	display: inline-block;
+	cursor: pointer;
+	margin-right: 15px;
+	margin-top: 15px;
+}
+.webtoon:hover{
+    box-shadow: 0.5px 0.5px 3px 0px black;
+}
+.image_container{
+	width: 150px;
+	height: 120px;
+}
+.title{
 	font-weight: bold;
+	font-size: 16px;
+	padding: 5px;
+	padding-bottom: 0px;
+}
+.author{
+	padding-left: 5px;
+	padding-bottom: 5px;
+}
+.newWebtoon{
+    display: inline-block;
+    width: 310px;
+    margin-top: 25px;
+    margin-left: 30px;
+    height: 400px;
+}
+.newWebtoon .title{
+	color: #e83d3d
+}
+.newWebtoon ol{
+	list-style:none;
+	margin: 0;
+	padding: 5px;
+	width: 100%;
+}
+.newWebtoon ol li{
+	padding: 5px 0;
+	padding-top: 10px;
+	border-bottom: 1px solid #aeaeae;
+	cursor: pointer;
+}
+.newWebtoon ol li:hover{
+	color: #a3a3a3;
 }
 </style>
 </head>
@@ -118,134 +187,48 @@ $(document).ready(function(){
 <main>
 <div class="swiper-container" id="banner-slider">
 	<div class="swiper-wrapper">
-		<div class="swiper-slide"><img src="resources/images/ps.jpg" width="1000px" height="400px"/></div>
-		<div class="swiper-slide"><img src="resources/images/ps.jpg" width="1000px" height="400px"/></div>
-		<div class="swiper-slide"><img src="resources/images/ps.jpg" width="1000px" height="400px"/></div>
-		<div class="swiper-slide"><img src="resources/images/ps.jpg" width="1000px" height="400px"/></div>
-		<div class="swiper-slide"><img src="resources/images/ps.jpg" width="1000px" height="400px"/></div>
+		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 1</div></div>
+		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 2</div></div>
+		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 3</div></div>
+		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 4</div></div>
 	</div>
 	<div class="swiper-button-next"></div>
 	<div class="swiper-button-prev"></div>
 	<div class="swiper-pagination"></div>
 </div>
 
-<div class="webtoon_list left_item">
-	<div class="item_title">Recommand</div>
-	<div class="row">
-		<div class="swiper-container" id="recommand-slider">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="240px" height="300px">
-					<div class="label">펭수펭하</div>
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="240px" height="300px">
-					<div class="label">펭수펭하</div>
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="240px" height="300px">
-					<div class="label">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="240px" height="300px">
-					<div class="label label-big">펭수펭하</div>
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="240px" height="300px">
-					<div class="label label-big">펭수펭하</div>
-				</div>
-			</div>
-			<div class="swiper-button-next" id="recommand-button-next"></div>
-			<div class="swiper-button-prev" id="recommand-button-prev"></div>
-		</div>
-	</div>
+<div class="row types">
+	<span class="type active" data-type="">all</span>|
+	<span class="type" data-type="episode">#episode</span>|
+	<span class="type" data-type="omnibus">#omnibus</span>|
+	<span class="type" data-type="story">#story</span>
 </div>
-<div class="webtoon_list left_item">
-	<div class="item_title">New</div>
-	<div class="row">
-		<div class="swiper-container" id="new-slider">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-			</div>
-			<div class="swiper-button-next" id="new-button-next"></div>
-			<div class="swiper-button-prev" id="new-button-prev"></div>
+<script id="webtoonsTemplate" type="text/x-handlebars-template">
+<div id="webtoons" class="row webtoons">
+	{{#each .}}
+	<div class="card webtoon" onclick="location.href = '<c:url value='/webtoons/'/>{{webtoonId}}'">
+		<div class="image_container">
+			<img src="{{thumbnail}}">
 		</div>
+		<div class="title">{{title}}</div>
+		<div class="author">{{authorNickname}}</div>
 	</div>
+	{{/each}}
 </div>
-<div class="webtoon_list left_item">
-	<div class="item_title">#SF</div>
-	<div class="row">
-		<div class="swiper-container" id="sf-slider">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-				<div class="swiper-slide" onclick="location.href ='<c:url value='/webtoons/3'/>'">
-					<img src="resources/images/ps.jpg" width="150px" height="200px">
-					<div class="label label-big">펭수펭하</div>	
-				</div>
-			</div>
-			<div class="swiper-button-next" id="sf-button-next"></div>
-			<div class="swiper-button-prev" id="sf-button-prev"></div>
-		</div>
+</script>
+<script id="newWebtoonsTemplate" type="text/x-handlebars-template">
+<div id="newWebtoons" class="newWebtoon box">
+	<div class="title">
+		New Webtoon
 	</div>
+	<ol class="webtoons">
+		{{#each .}}
+		<li onclick="location.href = '<c:url value='/webtoons/'/>{{webtoonId}}'">{{title}}</li>
+		{{/each}}
+	<ol>
 </div>
+</div>
+</script>
 </main>
 <%@ include file="./layout/footer.jsp"%>
 </body>

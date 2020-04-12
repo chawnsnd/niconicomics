@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.niconicomics.core.exception.NotImageException;
 import com.niconicomics.core.user.vo.User;
 import com.niconicomics.core.util.ImageService;
+import com.niconicomics.core.util.PageNavigator;
 import com.niconicomics.core.webtoon.dao.ContentsDao;
 import com.niconicomics.core.webtoon.dao.EpisodeDao;
 import com.niconicomics.core.webtoon.dao.WebtoonDao;
@@ -44,7 +46,12 @@ public class EpisodeController {
 	private ContentsDao contentsDao;
 
 	@GetMapping(value = "/{webtoonId}/episodes")
-	public ArrayList<Episode> getEpisodeList(@PathVariable(value = "webtoonId") int webtoonId) {
+	public ArrayList<Episode> getEpisodeList(
+			@PathVariable(value = "webtoonId") int webtoonId,
+			@RequestParam(defaultValue = "20") int countPerPage,
+			@RequestParam(defaultValue = "1") int currentPage,
+			@RequestParam(defaultValue = "5") int pagePerGroup) {
+//		PageNavigator navi = new PageNavigator(countPerPage, pagePerGroup, currentPage, 100);
 		ArrayList<Episode> episodeList = episodeDao.selectEpisodeListByWebtoonId(webtoonId);
 		return episodeList;
 	}

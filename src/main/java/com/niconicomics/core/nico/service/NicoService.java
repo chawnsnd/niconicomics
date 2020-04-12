@@ -38,11 +38,11 @@ public class NicoService {
 	public boolean donateNico(int authorId, int sponsorId, int webtoonId, int nico) {
 		User author = userDao.selectUserByUserId(authorId);
 		User sponsor = userDao.selectUserByUserId(sponsorId);
-		int renico = (int)(nico * 0.97); //수수료 3% 
-		author.setNico(author.getNico()+renico);
-		sponsor.setNico(sponsor.getNico()-renico);
+		if(sponsor.getNico()-nico < 0) return false;
+		author.setNico(author.getNico()+nico);
+		sponsor.setNico(sponsor.getNico()-nico);
 		Donate donate = new Donate();
-		donate.setNico(renico);
+		donate.setNico(nico);
 		donate.setAuthorId(authorId);
 		donate.setSponsorId(sponsorId);
 		donate.setWebtoonId(webtoonId);

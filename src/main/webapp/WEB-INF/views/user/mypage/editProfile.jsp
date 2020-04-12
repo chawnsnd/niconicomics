@@ -11,17 +11,16 @@
 <script>
 $(function(){
 	getMe();
-	$("#submit").on("click", function(){
-		editUser();
-	});
 })
-
 function getMe(){
 	$.ajax({
 		url: "<c:url value='/api/users/${sessionScope.loginUser.userId}'/>",
 		type: "get",
 		success: function(data){
 			bindTemplate($("#userTemplate"), data);
+			$("#submit").on("click", function(){
+				editUser();
+			});
 		},
 		error: function(err){
 			console.log(err)
@@ -46,20 +45,29 @@ function editUser(){
 	})
 }
 </script>
-
 <body>
 <%@ include file="../../layout/header.jsp"%>
 <main>
 <%@ include file="./layout/style.jsp"%>
-
+<div id = "contentsWrap">
+	<section>
+	<h2>Edit Profile</h2><hr>
 <script id="userTemplate" type="text/x-handlebars-template">
-	<form id="editUserForm">
-		email: {{email}}<br>
-		nickname: <input type="text" id="nickname" name="nickname" value={{nickname}}><br>
-	</form>
+	<div class="box">
+		<div class="item">
+			<div class="title">Email</div>
+			<div class="value">{{email}}</div>
+		</div>
+		<div class="item">
+			<div class="title">Nickname</div>
+			<div class="value"><input type="text" id="nickname" name="nickname" value={{nickname}}></div>
+		</div>
+		<div class="item">
+			<button id="submit" class="btn btn-primary btn-block">edit</button>
+		</div>
 </script>
-<button id="submit">submit</button>
-
+	</section>
+</div>
 </main>
 <%@ include file="../../layout/footer.jsp"%>
 </body>

@@ -38,9 +38,7 @@ function getWebtoons(curPage){
 		url: "<c:url value='/api/webtoons'/>", // core/webtoons
 		type: "GET",
 		data:{
-			authorId : "${sessionScope.loginUser.userId}",
-			currentPage : curPage,
-			countPerPage : 10
+			authorId : "${sessionScope.loginUser.userId}"
 		},
 		success: function(data){
 			console.log(data);
@@ -58,6 +56,7 @@ function getWebtoons(curPage){
 <%@ include file="../layout/header.jsp"%>
 <%@ include file="../layout/nav.jsp"%>
 <main>
+<h2>Webtoon</h2><hr>
 <input type = "button" class="btn btn-primary" id = "insert" value ="웹툰등록">
 <table>
 	<tr>

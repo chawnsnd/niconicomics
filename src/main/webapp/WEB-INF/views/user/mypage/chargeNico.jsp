@@ -24,33 +24,14 @@ function charge(){
 	});
 }
 </script>
-<style>
-.box{
-	border: 1px solid #a3a3a3;
-	display: inline-block;
-	box-shadow: 3px 3px 5px 0px #6c757d;
-	padding: 10px;
-	width: 420px;
-	position: relative;
-}
-.title{
-	width: 120px;
-	font-weight: bold;
-}
-.item > div{
-	display: inline-block;
-}
-</style>
 </head>
-
 <body>
 <%@ include file="../../layout/header.jsp"%>
-
 <main>
 <%@ include file="./layout/style.jsp"%>
-
 	<div id = "contentsWrap">
 	<section>
+	<h2>Charge Nico</h2><hr>
 		<div class="box">
 			<div class="item">
 				<div class="title">Charged Nico</div>			
@@ -65,7 +46,7 @@ function charge(){
 				</div>
 			</div>
 			<div class="item">
-				<button class="btn btn-primary" onclick="charge()">Charge</button>
+				<button class="btn btn-primary btn-block" onclick="charge()">Charge</button>
 			</div>
 		</div>
 	</section>

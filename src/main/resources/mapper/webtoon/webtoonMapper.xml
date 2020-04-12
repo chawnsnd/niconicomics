@@ -31,7 +31,7 @@
 	</insert>
 
 	<select id="selectWebtoonByWebtoonId" parameterType="int" resultType="webtoon">
-		select 	webtoon_id 
+		select webtoon_id 
 			,title 
 			,summary 
 			,author_id 
@@ -39,7 +39,8 @@
 			,mgr_hashtag 
 			,thumbnail 
 			,hits 
-			,end 
+			,end
+			,(select max(no) from tbl_episode where webtoon_id = #{webtoonId}) as "max_no"
 		from tbl_webtoon
 		where webtoon_id = #{webtoonId}
 	</select>	
@@ -80,50 +81,50 @@
 
 	<select id="selectWebtoonList" resultType="webtoon" parameterType="webtoonSearchOption">
 		select * from tbl_webtoon
-		<where>
+		<trim prefix="WHERE" suffixOverrides="and">
 		<if test="authorId != null and authorId != 0">
-			author_id = #{authorId}
+			author_id = #{authorId} and
 		</if>
 		<if test="author != '' and author != null">
 			author_id = (
 				select user_id 
 				from tbl_user
 				where nickname = #{author}
-			)
+			) and
 		</if>
 		<if test="title != '' and title != null">
-			and title like '%'||#{title}||'%'
+			title like '%'||#{title}||'%' and
 		</if>
 		<if test="hashtags != null">
-			<foreach item="hashtag" collection="list">
-			and hashtag like '%'||#{hashtag}||'%'
+			<foreach item="hashtag" collection="hashtags" separator="and">
+			hashtag like '%'||#{hashtag}||'%'
 			</foreach>
 		</if>
-		</where>
+		</trim>
 	</select>
 
 	<select id="selectCountWebtoonList" resultType="int" parameterType="webtoonSearchOption">
 		select count(*) from tbl_webtoon
-		<where>
+		<trim prefix="WHERE" suffixOverrides="and">
 		<if test="authorId != null and authorId != 0">
-			author_id = #{authorId}
+			author_id = #{authorId} and
 		</if>
 		<if test="author != '' and author != null">
 			author_id = (
 				select user_id 
 				from tbl_user
 				where nickname = #{author}
-			)
+			) and
 		</if>
 		<if test="title != '' and title != null">
-			and title like '%'||#{title}||'%'
+			title like '%'||#{title}||'%' and
 		</if>
 		<if test="hashtags != null">
-			<foreach item="hashtag" collection="list">
-			and hashtag like '%'||#{hashtag}||'%'
+			<foreach item="hashtag" collection="hashtags" separator="and">
+			hashtag like '%'||#{hashtag}||'%'
 			</foreach>
 		</if>
-		</where>
+		</trim>
 	</select>
 
 </mapper>

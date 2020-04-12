@@ -27,25 +27,7 @@ function getMe(){
 	})
 }
 </script>
-<style>
-.box{
-	border: 1px solid #a3a3a3;
-	display: inline-block;
-	box-shadow: 3px 3px 5px 0px #6c757d;
-	padding: 10px;
-	width: 420px;
-	position: relative;
-}
-.title{
-	width: 120px;
-	font-weight: bold;
-}
-.item > div{
-	display: inline-block;
-}
-</style>
 </head>
-
 <body>
 <%@ include file="../../layout/header.jsp"%>
 
@@ -54,6 +36,7 @@ function getMe(){
 
 	<div id = "contentsWrap">
 	<section>
+		<h2>Profile</h2><hr>
 		<script id="userTemplate" type="text/x-handlebars-template">
 		<div class="box">
 			<div class="item">

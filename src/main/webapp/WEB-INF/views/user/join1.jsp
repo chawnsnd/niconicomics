@@ -92,17 +92,23 @@ function checkEmail(){
 	})
 }
 </script>
-
+<style>
+main{
+	width: 500px;
+}
+.btn-group{
+	wdith: 100%;
+}
+</style>
 <body>
 <%@ include file="../layout/header.jsp"%>
 <main>
-<h1>user</h1>
-<hr>
 	<h2>Sign up</h2>
-	<h3>Using your current email address</h3>
 		<div class="form-group">
+		<div class="input-group-prepend">
 			<input class="form-control" type="text" id="userEmail" name="userEmail" placeholder="Email Address"/>
-			<button class="btn btn-default" type="button" id="checkEmail" onclick="checkEmail();" value="N">check email</button>
+			<button class="btn btn-default" type="button" id="checkEmail" onclick="checkEmail();" value="N">check</button>
+		</div>
 		</div>
 		<div class="form-group">
 			<input class="form-control" type="password" id="userPassword" name="usertPassword" placeholder="Password"/>
@@ -125,8 +131,7 @@ function checkEmail(){
 			<input class="userType" type="radio" value="AUTHOR" name="userType"/>Author
 		</div>
 		<div class="form-group">
-			<button class="btn btn-primary" type="button" id="submit">Sign up</button>
-			<button class="cancel btn btn-danger" type="button">Cancel</button>
+			<button class="btn btn-primary btn-block" type="button" id="submit">Sign up</button>
 		</div>
 </main>
 <%@ include file="../layout/footer.jsp"%>

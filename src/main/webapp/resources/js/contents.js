@@ -1,6 +1,3 @@
-/**
- * contents 페이지에 쓸 것들
- */
 var hide = false;
 var footerPositionTop;
 var fullScreen = false;
@@ -46,7 +43,7 @@ function toggleDotple(){
 	$(".dotple").toggle();
 }
 function initShowHide(){
-	console.log(me);
+	console.log("asdf");
 	if(me.showChat == "SHOW"){
 		$("#chatroom").show();
 	}else if(me.showChat == "HIDE"){

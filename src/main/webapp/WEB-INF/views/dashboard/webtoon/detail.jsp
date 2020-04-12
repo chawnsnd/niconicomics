@@ -89,16 +89,16 @@ function getEpisodes(){
 	<script id="myEpisodeListTemplate" type="text/x-handlebars-template">
 	{{#each .}}
 	<tr>
-		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
+		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
 			<img src = "{{thumbnail}}" width = "100px">
 		</td>
-		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
+		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
 			{{no}}
 		</td>
-		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
+		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
 			{{title}}
 		</td>
-		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
+		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
 			{{regDate}}
 		</td>
 		<td>
@@ -106,9 +106,6 @@ function getEpisodes(){
 		</td>
 		<td>
 			<input type = "button" value = "수정" id = "updateEpisode" onclick="updateEpisode({{no}})">
-		</td>
-		<td>
-			<input type = "button" value = "보기" id = "viewWebtoon" onclick="viewWebtoon({{webtoonId}})">
 		</td>
 	</tr>
 	{{/each}}

@@ -89,14 +89,28 @@ function editUser(){
 <%@ include file="../../layout/header.jsp"%>
 <main>
 <%@ include file="./layout/style.jsp"%>
-
-<form id="editUserForm">
-	old password: <input type="password" id="password" name="password"><br>
-	enter new password: <input type="password" id="newPassword" name="newPassword"><br>
-	re-enter new password: <input type="password" id="newPassword2" name="newPassword2"><br>
-</form>
-<button id="submit">submit</button>
-
+<div id = "contentsWrap">
+	<section>
+	<h2>Edit Password</h2><hr>
+	<div class="box">
+		<div class="item">
+			<div class="title">Enter old password</div> 
+			<div class="value"><input type="password" id="password" name="password"></div>
+		</div>
+		<div class="item">
+			<div class="title">Enter new password</div>
+			<div class="value"><input type="password" id="newPassword" name="newPassword"></div>
+		</div>
+		<div class="item">
+			<div class="title">Re-enter new password</div>
+			<div class="value"><input type="password" id="newPassword2" name="newPassword"></div>
+		</div>
+		<div class="item">
+			<button class="btn btn-primary btn-block" id="submit">edit</button>
+		</div>
+	</div>
+	</section>
+</div>
 </main>
 <%@ include file="../../layout/footer.jsp"%>
 </body>

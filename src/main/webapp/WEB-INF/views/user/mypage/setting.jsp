@@ -17,9 +17,6 @@ $(function(){
 	  	return showChat === "SHOW";
 	});
 	getMe();
-	$("#submit").on("click", function(){
-		setUser();
-	})
 })
 function getMe(){
 	$.ajax({
@@ -29,6 +26,9 @@ function getMe(){
 		success: function(data){
 			me = data;
 			bindTemplate($("#settingTemplate"), data);
+			$("#submit").on("click", function(){
+				setUser();
+			})
 		},
 		error: function(err){
 			console.log(err);
@@ -59,28 +59,44 @@ function setUser(){
 <%@ include file="../../layout/header.jsp"%>
 <main>
 <%@ include file="./layout/style.jsp"%>
+<div id = "contentsWrap">
+	<section>
+	<h2>Setting</h2><hr>
 <script id="settingTemplate" type="text/x-handlebars-template">
-	dotple
-		{{#if (showDotple showDotple)}}
-		<input type="radio" name="showDotple" value="SHOW" checked="checked">on
-		<input type="radio" name="showDotple" value="HIDE">off<br>
-		{{/if}}
-		{{#unless (showDotple showDotple)}}
-		<input type="radio" name="showDotple" value="SHOW">on
-		<input type="radio" name="showDotple" value="HIDE" checked="checked">off<br>
-		{{/unless}}
-	chatting
-		{{#if (showChat showChat)}}
-		<input type="radio" name="showChat" value="SHOW" checked="checked">on
-		<input type="radio" name="showChat" value="HIDE">off<br>
-		{{/if}}
-		{{#unless (showChat showChat)}}
-		<input type="radio" name="showChat" value="SHOW">on
-		<input type="radio" name="showChat" value="HIDE" checked="checked">off<br>
-		{{/unless}}
-	<button id="submit">save</button>
+<div class="box">
+		<div class="item">
+			<div class="title">Dotple</div>
+			<div class="value">
+			{{#if (showDotple showDotple)}}
+			<input type="radio" name="showDotple" value="SHOW" checked="checked">on
+			<input type="radio" name="showDotple" value="HIDE">off<br>
+			{{/if}}
+			{{#unless (showDotple showDotple)}}
+			<input type="radio" name="showDotple" value="SHOW">on
+			<input type="radio" name="showDotple" value="HIDE" checked="checked">off<br>
+			{{/unless}}
+			</div>
+		</div>
+		<div class="item">
+			<div class="title">Chatting</div>
+			<div class="value">
+			{{#if (showChat showChat)}}
+			<input type="radio" name="showChat" value="SHOW" checked="checked">on
+			<input type="radio" name="showChat" value="HIDE">off<br>
+			{{/if}}
+			{{#unless (showChat showChat)}}
+			<input type="radio" name="showChat" value="SHOW">on
+			<input type="radio" name="showChat" value="HIDE" checked="checked">off<br>
+			{{/unless}}
+			</div>
+		</div>
+		<div class="item">
+			<button class="btn btn-primary btn-block" id="submit">setting</button>
+		</div>
+</div>
 </script>
-
+	</section>
+</div>
 </main>
 
 </body>

@@ -32,7 +32,7 @@ public class WebtoonViewController {
 			) {
 		model.addAttribute("webtoonId", webtoonId);
 		model.addAttribute("episodeNo", episodeNo);
-		return "webtoon/contents";
+		return "webtoon/contents/contents";
 	}
 	
 }

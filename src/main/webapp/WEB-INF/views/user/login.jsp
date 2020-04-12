@@ -28,6 +28,11 @@ $(document).ready(function(){
 
 		login();
 	})
+	$("#userPassword").on("keyup", function(e){
+		if(e.keyCode == 13){
+			$("#login").trigger("click");
+		}
+	})
 })
 
 function login(){
@@ -40,7 +45,7 @@ function login(){
 		},
 		success: function(result){
 			if(result){
-				history.go(-1);
+				location.href="<c:url value='/'/>"
 			}else{
 				alert("please try again");
 			}
@@ -53,12 +58,15 @@ function login(){
 }
 
 </script>
-
+<style>
+main{
+	width: 500px;
+}
+</style>
 <body>
 <%@ include file="../layout/header.jsp"%>
 <main>
 	<h2>Sign in</h2>
-	<h3>Using your niconicomics account!</h3>
 	<form action="/users/login" method="post" id="loginForm">
 		<div class="form-group">
 			<input type="text" class="form-control" id="userEmail" placeholder="enter your Email">
@@ -67,12 +75,9 @@ function login(){
 			<input type="password" class="form-control" id="userPassword" placeholder="enter your password">
 		</div>
 		<div class="form-group">
-			<button type="button" class="btn btn-pimary btn-block" id="login">sign in</button>
+			<button type="button" class="btn btn-primary btn-block" id="login">sign in</button>
 		</div>
 	</form>
-	
-	 <div id="result">login result</div>
-
 </main>
 <%@ include file="../layout/footer.jsp"%>
 </body>

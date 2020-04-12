@@ -4,21 +4,8 @@
 <script>
 var webtoon;
 $(function(){
-	getWebtoon();
+	bindTemplate($("#modalTemplate"), {webtoon, me});
 })
-function getWebtoon(){
-	$.ajax({
-		url: "<c:url value='/api/webtoons/${webtoonId}'/>",
-		type: "get",
-		success: function(data){
-			webtoon = data;
-			bindTemplate($("#authorTemplate"), data)
-		},
-		error: function(err){
-			console.log(err);
-		}
-	})
-}
 <c:if test="${sessionScope.loginUser != null}">
 function donate(){
 	$.ajax({
@@ -56,24 +43,22 @@ function donate(){
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Donation</h5>
+        <h5 class="modal-title" id="exampleModalLabel">DONATE</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <script id="modalTemplate" type="text/x-handlebars-template">
       <div class="modal-body">
-        <div>후원할 작가</div>
-        <div id="authorTemplate"><div>{{authorId}}</div></div>
-        
-        <div>충전된 금액</div>
-        <div>${sessionScope.loginUser.nico}</div> NICO
-        
-        <div>후원금액</div>
-        <div>
-        <input type="number" id="donateNico"> NICO
-        </div>
-        
+        <div class="author"><h5>To. {{webtoon.authorNickname}}</h5></div>
+		<div class="input-group mb-3">
+			<input type="number" id="donateNico" class="form-control" placeholder="nico">
+			<div class="input-group-prepend">
+				<span class="input-group-text">	/ {{me.nico}} Nico</span>
+			</div>
+		</div>
       </div>
+      </script>
       <div class="modal-footer">
         <button type="button" id="closeModal" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" onclick="donate()">후원하기</button>

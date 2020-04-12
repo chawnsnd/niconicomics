@@ -14,7 +14,9 @@ var searchOption = {
 }
 var currentPage;
 $(function(){
+	$.ajaxSettings.traditional = true;
 	getWebtoonList(1);
+	initRecommandHashtag();
 })
 function getWebtoonList(currentPage){
 	$.ajax({
@@ -30,10 +32,37 @@ function getWebtoonList(currentPage){
 		success: function(data){
 			$("#webtoonList").remove();
 			bindTemplate($("#webtoonListTemplate"), data.webtoonList);
+			imageContainer();
 			$("#navi").remove();
 			bindTemplate($("#naviTemplate"), data.navi);
 			currentPage = data.navi.currentPage;
 		}
+	})
+}
+function initRecommandHashtag(){
+	$("input[name='typeHashtag']").on("change", function(){
+		var value = $(this).val();
+		var idx = searchOption.hashtags.indexOf(value); 
+		if (idx > -1) return;
+		var idx = searchOption.hashtags.indexOf("episode"); 
+		if (idx > -1) searchOption.hashtags.splice(idx, 1);
+		var idx = searchOption.hashtags.indexOf("omnibus"); 
+		if (idx > -1) searchOption.hashtags.splice(idx, 1);
+		var idx = searchOption.hashtags.indexOf("story"); 
+		if (idx > -1) searchOption.hashtags.splice(idx, 1);
+		searchOption.hashtags.push(value);
+		$("#searchOption").remove();
+		bindTemplate($("#searchOptionTemplate"), searchOption);
+		getWebtoonList(currentPage);
+	})
+	$("input[name='checkHashtag']").on("click", function(){
+		var value = $(this).val();
+		var idx = searchOption.hashtags.indexOf(value); 
+		if (idx > -1) searchOption.hashtags.splice(idx, 1);
+		else searchOption.hashtags.push(value);
+		$("#searchOption").remove();
+		bindTemplate($("#searchOptionTemplate"), searchOption);
+		getWebtoonList(currentPage);
 	})
 }
 function addSearchOption(){
@@ -54,7 +83,6 @@ function addSearchOption(){
 function removeSearchOption(key, value){
 	if(key == "hashtag"){
 		var idx = searchOption.hashtags.indexOf(value); 
-		console.log(idx);
 		if (idx > -1) searchOption.hashtags.splice(idx, 1);
 	}else{
 		searchOption[key] = null;
@@ -66,14 +94,6 @@ function removeSearchOption(key, value){
 </script>
 </head>
 <style>
-.card{
-	display: inline-block;
-	width: 150px;
-	height: 100px;
-	margin: 0px 6px;
-	margin-bottom: 6px;
-	cursor: pointer;
-}
 .searchbox{
 	display: inline-block;
 	border: 1px solid #aeaeae;
@@ -95,11 +115,31 @@ function removeSearchOption(key, value){
 	border-radius: 30px;
 	cursor: pointer;
 }
+.image_container{
+	width: 150px;
+	height: 120px;
+}
+.webtoon{
+	display: inline-block;
+	cursor: pointer;
+	margin-right: 15px;
+	margin-top: 15px;
+}
+.webtoon:hover{
+    box-shadow: 0.5px 0.5px 3px 0px black;
+}
+.navibar{
+	line-height: 30px;
+}
+.navibar *{
+	float: right;
+	vertical-align: middle;
+}
 </style>
 <body>
 <%@ include file="../layout/header.jsp"%>
 <main>
-<div class="searchbox">
+<div class="searchbox box">
 	<h3>Search</h3>
 	<select id="searchKey">
 		<option value="title">Title</option>
@@ -108,6 +148,26 @@ function removeSearchOption(key, value){
 	</select>
 	<input type="text" id="searchValue">
 	<button class="btn btn-primary btn-sm" onclick="addSearchOption()">Add & Search</button>
+	<div>
+		<h5>Recommand Hashtag</h5>
+		<div>
+			<label><input type="radio" name="typeHashtag" value="episode">#episode</label>
+			<label><input type="radio" name="typeHashtag" value="omnibus">#omnibus</label>
+			<label><input type="radio" name="typeHashtag" value="story">#story</label>
+		</div>
+		<div>
+			<label><input type="checkbox" name="checkHashtag" value="life">#life</label>
+			<label><input type="checkbox" name="checkHashtag" value="gag">#gag</label>
+			<label><input type="checkbox" name="checkHashtag" value="fantasy">#fantasy</label>
+			<label><input type="checkbox" name="checkHashtag" value="action">#action</label>
+			<label><input type="checkbox" name="checkHashtag" value="drama">#drama</label>
+			<label><input type="checkbox" name="checkHashtag" value="romance">#romance</label>
+			<label><input type="checkbox" name="checkHashtag" value="sensitivity">#sensitivity</label>
+			<label><input type="checkbox" name="checkHashtag" value="thriller">#thriller</label>
+			<label><input type="checkbox" name="checkHashtag" value="costume">#costume</label>
+			<label><input type="checkbox" name="checkHashtag" value="sport">#sport</label>
+		</div>
+	</div>
 </div>
 <div class="line">
 	<script id="searchOptionTemplate" type="text/x-handlebars-template">
@@ -124,18 +184,20 @@ function removeSearchOption(key, value){
 	</div>
 	</script>
 	<script id="naviTemplate" type="text/x-handlebars-template">
-	<div id="navi" class="right btn-group">
-		<div>{{currentPage}} / {{totalPageCount}}</div>
-		<button class="btn btn-light" onclick="getWebtoonList({{currentPage}}-1)">prev</button>
-		<button class="btn btn-light" onclick="getWebtoonList({{currentPage}}+1)">next</button>
+	<div id="navi" class="row navi">
+	<div id="idx">{{currentPage}} / {{totalPageCount}}</div>
+	<div id="btn" class="right btn-group">
+		<button class="btn btn-light btn-sm" onclick="getWebtoonList({{currentPage}}-1)">prev</button>
+		<button class="btn btn-light btn-sm" onclick="getWebtoonList({{currentPage}}+1)">next</button>
+	</div>
 	</div>
 	</script>
 </div>
 <script id="webtoonListTemplate" type="text/x-handlebars-template">
 <div id="webtoonList" class="cards">
 {{#each .}}
-<div class="card" onclick="location.href ='<c:url value='/webtoons/{{webtoonId}}'/>'">
-	<img src="{{thumbnail}}" width="150px;">
+<div class="card webtoon" onclick="location.href ='<c:url value='/webtoons/{{webtoonId}}'/>'">
+	<div class="image_container"><img src="{{thumbnail}}"></div>
 	<div>{{title}}</div>
 	<div>{{hashtag}}</div>
 </div>

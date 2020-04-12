@@ -9,7 +9,5 @@ public class WebtoonSearchOption {
 	private int authorId;
 	private String title;
 	private String[] hashtags;
-	private int currentPage;
-	private int countPerPage;
 	
 }

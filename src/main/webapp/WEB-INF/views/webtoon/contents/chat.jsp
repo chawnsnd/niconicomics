@@ -1,19 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
 <script src="<c:url value="/resources/js/jquery-3.4.1.min.js" />"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script>
-var me = null;
 var sock = new SockJS('<c:url value="/chat" />?webtoonId=${webtoonId}'); //소켓연결
 sock.onmessage = onMessage; //소켓에서 메시지 받음
 sock.onclose = onclose; //연결 끊음
 $(function(){
+	$("#middle").css("height", $(window)[0].innerHeight-110);
+	$("#chat_room").css("height", $("#middle").height()-50);
 	$("#message, #me").on("keyup", function(e){
 		if(e.keyCode == 13){
 			sendMessage();
@@ -24,21 +20,19 @@ $(function(){
 		sendMessage();
 	})
 })
-<c:if test="${sessionScope.loginUser != null}">
 function sendMessage(){
 	message = $("#message").val();
 	if(message==""){
 		return;
 	}else{
 		sock.send(JSON.stringify({
-			userId: ${sessionScope.loginUser.userId},
+			userId: me.userId,
 			webtoonId: ${webtoonId},
 			type: "GENERAL",
 			message: message})) //소켓에다 메시지 보냄
 		$("#message").val("");
 	}
 }
-</c:if>
 function onMessage(evt){
 	var data =JSON.parse(evt.data);
 	var sender = data.nickname;
@@ -47,11 +41,11 @@ function onMessage(evt){
 	var rgb = hashStringToColor(sender);
 	if(type == "GENERAL"){
 		$("#chat_room").append(
-			"<p style='word-break:break-all;'><b style='color: "+rgb+"; margin-right: 10px;'>"+sender+"</b>"+message+"</p>"
+			"<div class='message' style='word-break:break-all;'><b style='color: "+rgb+"; margin-right: 5px;'>"+sender+":</b>"+message+"</div>"
 		);
 	}else if(type == "DONATE" || type == "DOTPLE"){
 		$("#chat_room").append(
-				"<p style='word-break:break-all;'><b>"+message+"</b></p>"
+				"<div class='message' style='word-break:break-all;'><b style='color: #fbc714; margin-right: 5px;'><i class='fas fa-bullhorn'></i> notice:</b>"+message+"</div>"
 		);
 	}
 	scrollDown();
@@ -75,13 +69,41 @@ function hashStringToColor(str) {
 }
 </script>
 <style>
+.message{
+	padding: 5px 20px;
+}
+#top{
+	height: 60px;
+	line-height: 60px;
+	text-align: center;
+	border-bottom: 1px solid #aeaeae;
+	font-weight: bold;
+}
+#bottom{
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	border-top: 1px solid #aeaeae;
+}
 #chat_room{
    	overflow-y: auto;
-   	padding: 1vw;
-   	height: 90vh;
+   	font-size: 12px;
+   	width: 100%;
+   	display: inline-block;
+}
+#middle{
+	display: inline-block;
+	overflow-y: hidden;
 }
 #chat_input{
-	display: inline-flex;
+	display: inline-block;
+	height: 50px;
+	width: 100%;
+}
+.please_login{
+	line-height: 50px;
+	vertical-align: middle;
+	text-align: center;
 }
 #message{
 	flex: 4;
@@ -89,20 +111,30 @@ function hashStringToColor(str) {
 #send_btn{
 	flex: 1;
 }
+.send_form{
+	width: 100%;
+}
 </style>
-</head>
-<body>
-<div id="chat_room">
+<div id="chat">
+<div id="top">
+CHATTING
 </div>
-<div id="chat_input">
-	<c:if test="${sessionScope.loginUser == null}">
-	<div><a href="<c:url value='/users/login'/>">로그인</a> 후 이용해주세요</div>
-	</c:if>
-	<c:if test="${sessionScope.loginUser != null}">
-	<div id="me">${sessionScope.loginUser.nickname }</div>
-	<input id="message" type="text" placeholder="메시지">
-	<button id="send_btn">전송</button>
-	</c:if>
+<div id="middle">
+	<div id="chat_room">
+	</div>
+	<div id="chat_input">
+		<c:if test="${sessionScope.loginUser == null}">
+		<div class="please_login">Please <a href="<c:url value='/users/login'/>">login.</a></div>
+		</c:if>
+		<c:if test="${sessionScope.loginUser != null}">
+		<div class="send_form input-group-prepend">
+			<input class="form-control" id="message" type="text" placeholder="message">
+			<button class="btn btn-default btn-success" id="send_btn">send</button>
+		</div>
+		</c:if>
+	</div>
 </div>
-</body>
-</html>
+<div id="bottom">
+Please keep your manners.
+</div>
+</div>
