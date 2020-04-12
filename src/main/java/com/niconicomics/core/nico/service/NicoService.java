@@ -27,7 +27,7 @@ public class NicoService {
 	public boolean chargeNico(int userId, int nico) {
 		User user = userDao.selectUserByUserId(userId);
 		user.setNico(user.getNico()+nico);
-		if(userDao.editUser(user)) {
+		if(userDao.updateUser(user)) {
 			return true;
 		}else {
 			return false;
@@ -46,7 +46,7 @@ public class NicoService {
 		donate.setAuthorId(authorId);
 		donate.setSponsorId(sponsorId);
 		donate.setWebtoonId(webtoonId);
-		if(userDao.editUser(author) && userDao.editUser(sponsor) && donateDao.insertDonate(donate)) {
+		if(userDao.updateUser(author) && userDao.updateUser(sponsor) && donateDao.insertDonate(donate)) {
 			return true;
 		}else {
 			return false;
@@ -59,7 +59,6 @@ public class NicoService {
 		Account account = accountDao.selectAccountByAuthorId(userId);
 		openBankingService.transfer(account, nico);
 		user.setNico(user.getNico()-nico);
-		// TODO Auto-generated method stub
 		return false;
 	}
 	

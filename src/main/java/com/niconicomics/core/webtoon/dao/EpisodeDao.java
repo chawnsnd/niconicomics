@@ -7,36 +7,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.niconicomics.core.webtoon.vo.Episode;
-import com.niconicomics.core.webtoon.vo.Webtoon;
 
 @Repository
 public class EpisodeDao {
+	
 	@Autowired
 	private SqlSession session;
 	
 	public int insertEpisode(Episode episode) {
 		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
-		int result = mapper.insertEpisode(episode);
-		return result;
+		mapper.insertEpisode(episode);
+		return episode.getEpisodeId();
 	}
-	public ArrayList<Episode> episodeSelectList(int webtoonId){
+	
+	public ArrayList<Episode> selectEpisodeListByWebtoonId(int webtoonId){
 		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
-		ArrayList<Episode> list = mapper.episodeSelectList(webtoonId);
+		ArrayList<Episode> list = mapper.selectEpisodeListByWebtoonId(webtoonId);
 		return list;
 	}
-	public ArrayList<Episode> episodeAllList(){
-		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
-		ArrayList<Episode> list = mapper.episodeAllList();
-		return list;
-	}
+
 	public int updateEpisode(Episode episode) {
 		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
 		int result = mapper.updateEpisode(episode);
 		return result;
 	}
-	public int deleteEpisode(Episode episode) {
+	public int deleteEpisodeByEpisodeId(int episodeId) {
 		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
-		int result = mapper.deleteEpisode(episode);
+		int result = mapper.deleteEpisodeByEpisodeId(episodeId);
 		return result;
 	}
 	public Episode selectEpisodeByEpisodeId(int episodeId) {
@@ -44,14 +41,10 @@ public class EpisodeDao {
 		Episode episode = mapper.selectEpisodeByEpisodeId(episodeId);
 		return episode;
 	}
-	public Episode selectEpisodeByEpisodeNo(int episodeNo) {
+	public Episode selectEpisodeByWebtoonIdAndEpisodeNo(int webtoonId, int episodeNo) {
 		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
-		Episode episode = mapper.selectEpisodeByEpisodeNo(episodeNo);
+		Episode episode = mapper.selectEpisodeByWebtoonIdAndEpisodeNo(webtoonId, episodeNo);
 		return episode;
 	}
-	public ArrayList<Episode> selectEpisodeByWebtoonId(int WebtoonId) {
-		EpisodeMapper mapper = session.getMapper(EpisodeMapper.class);
-		ArrayList<Episode> episodeList = mapper.selectEpisodeByWebtoonId(WebtoonId);
-		return episodeList;
-	}
+
 }

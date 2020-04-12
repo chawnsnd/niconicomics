@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.niconicomics.core.webtoon.dao.DotpleMapper">
+
+	<insert id="insertDotple" parameterType="dotple">
+		insert into tbl_dotple(
+			dotple_id
+			,user_id
+			,contents_id
+			,x_axis
+			,y_axis
+			,contents
+		)values(
+			seq_dotple.nextval
+			,#{userId}
+			,#{contentsId}
+			,#{xAxis}
+			,#{yAxis}
+			,#{contents}
+		)
+	</insert>
+	
+	<select id="selectDotpleListByContentsId" resultType="dotple">
+		select *
+		from tbl_dotple
+		where contents_id = #{contentsId}
+	</select>
+
+</mapper>

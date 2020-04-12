@@ -1,27 +1,31 @@
 package com.niconicomics.core.webtoon.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.niconicomics.core.exception.NotImageException;
+import com.niconicomics.core.user.vo.User;
 import com.niconicomics.core.util.ImageService;
+import com.niconicomics.core.webtoon.dao.ContentsDao;
 import com.niconicomics.core.webtoon.dao.EpisodeDao;
+import com.niconicomics.core.webtoon.dao.WebtoonDao;
+import com.niconicomics.core.webtoon.vo.Contents;
 import com.niconicomics.core.webtoon.vo.Episode;
+import com.niconicomics.core.webtoon.vo.Webtoon;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,80 +35,135 @@ import lombok.extern.slf4j.Slf4j;
 public class EpisodeController {
 
 	@Autowired
-	private EpisodeDao dao;
+	private EpisodeDao episodeDao;
 
-	@ResponseBody
-	@RequestMapping(value = "/{webtoonId}/episodes", method = RequestMethod.GET)
-	public ArrayList<Episode> myEpisodeList(@PathVariable(value = "webtoonId") int webtoonId) {
-		log.debug(Integer.toString(webtoonId));
-		ArrayList<Episode> getEpisodeList = dao.episodeSelectList(webtoonId);
-		return getEpisodeList;
+	@Autowired
+	private WebtoonDao webtoonDao;
+
+	@Autowired
+	private ContentsDao contentsDao;
+
+	@GetMapping(value = "/{webtoonId}/episodes")
+	public ArrayList<Episode> getEpisodeList(@PathVariable(value = "webtoonId") int webtoonId) {
+		ArrayList<Episode> episodeList = episodeDao.selectEpisodeListByWebtoonId(webtoonId);
+		return episodeList;
 	}
 	
-	
-	@ResponseBody
-	@RequestMapping(value = "/{webtoonId}/episodes/{lastNo}/insert", method = RequestMethod.POST)
-	public void EpisodeInsert(Episode episode, HttpSession session,@PathVariable(value ="lastNo") int no) {
-		System.out.println(no);
-		//dao.insertEpisode(episode);
-		ArrayList<Episode> getAllEpiosdeList = dao.episodeAllList();
-		int max = getAllEpiosdeList.get(0).getEpisodeId();
-		System.out.println(max);
-		for (int i = 0; i < getAllEpiosdeList.size(); i++) {
-			if (max < getAllEpiosdeList.get(i).getEpisodeId()) {
-				max = getAllEpiosdeList.get(i).getEpisodeId();
+	@GetMapping(value = "/{webtoonId}/episodes/{episodeNo}")
+	public Map<String, Object> getEpisode(
+			@PathVariable(name = "webtoonId") int webtoonId,
+			@PathVariable(name = "episodeNo") int episodeNo) {
+		Episode episode = episodeDao.selectEpisodeByWebtoonIdAndEpisodeNo(webtoonId, episodeNo);
+		ArrayList<Contents> contentsList = contentsDao.selectContentsListByEpisodeId(episode.getEpisodeId());
+		Map<String, Object> result = new HashMap<>();
+		result.put("episode", episode);
+		result.put("contentsList", contentsList);
+		return result;
+	}
+
+	@PostMapping(value = "/{webtoonId}/episodes/{episodeNo}")
+	public void insertEpisode(
+			Episode episode, 
+			MultipartFile thumbnailImage, 
+//			ArrayList<MultipartFile> contentsImage,
+			MultipartHttpServletRequest multipartRequest,
+			@PathVariable(name = "webtoonId") int webtoonId,
+			@PathVariable(name = "episodeNo") int episodeNo,
+			HttpSession session) throws NotImageException {
+		
+		//사용자 인증
+		Webtoon webtoon = webtoonDao.selectWebtoonByWebtoonId(webtoonId);
+		User user = (User) session.getAttribute("loginUser");
+		if(webtoon.getAuthorId() != user.getUserId()) return;
+		
+		//에피소드 등록
+		episode.setWebtoonId(webtoonId);
+		episode.setNo(episodeNo);
+		String savedThumbnail = ImageService.saveImage(thumbnailImage, "/webtoons/" + Integer.toString(webtoonId) +"/episodes/"
+				+ Integer.toString(episodeNo), "thumbnail");
+		episode.setThumbnail(savedThumbnail);
+		int episodeId = episodeDao.insertEpisode(episode);
+		Iterator<String> fileNames = multipartRequest.getFileNames();
+		while(fileNames.hasNext()) {
+			String fileName = fileNames.next();
+			if(!fileName.equals("thumbnailImage")) {
+				String savedContents = ImageService.saveImage(multipartRequest.getFile(fileName), "/webtoons/" + Integer.toString(webtoonId) +"/episodes/"
+						+ Integer.toString(episodeNo), "contents");
+				Contents contents = new Contents();
+				contents.setEpisodeId(episodeId);
+				contents.setIdx(Integer.parseInt(fileName));
+				contents.setImage(savedContents);
+				contentsDao.insertContents(contents);
 			}
 		}
-		Episode lastestEpisode = dao.selectEpisodeByEpisodeId(max);
-		lastestEpisode.setNo(no);
-		System.out.println(lastestEpisode);
-		session.setAttribute("newEpisode", lastestEpisode);
 	}
-
 	
-	@ResponseBody
-	@PatchMapping(value = "/{webtoonId}/episodes/{no}")
-	public String updateEpisode(
-			@PathVariable(value = "webtoonId") int webtoonId,
-			@PathVariable(value = "no") int no,
-			@RequestBody Episode episode) {
-		episode.setWebtoonId(webtoonId);
-		int result = dao.updateEpisode(episode);
-		return "home";
-	}
-
-	@RequestMapping(value = "/{webtoonId}/episodes/{no}", method = RequestMethod.DELETE)
-	public void deleteEpisode(@PathVariable(value = "no") int no) {
-		System.out.println(no);
-		//int result = dao.deleteEpisode(episode)
-	}
-
-	// 이미지를 등록할때 쓰이는 서버경로를 만들어주는 메서드
-	@ResponseBody
-	@PostMapping(value = "/{webtoonId}/episodes/{no}/thumbnail")
-	public String postThumbnail(@PathVariable(value = "webtoonId") int webtoonId, MultipartFile image,
-			HttpServletResponse res, @PathVariable(value = "no") int no) {
-		/*
-		 * 보내는 쪽 HTML의 Form에서 <input type="file" name="image"><input type="file"
-		 * name="image"><input type="file" name="image"> 이런식을 name이 같은 input태그가 여러개일때
-		 * ArrayList<MultipartFile> image 로 받는다
-		 */
-		String savedFile = "";
-		log.debug(image.getOriginalFilename());
-		try {
-			savedFile = ImageService.saveImage(image, "/webtoons/" + Integer.toString(webtoonId) +"/episodes/"
-					+ Integer.toString(no), "thumbnail");
-		} catch (NotImageException e) {
-			e.printStackTrace();
-			res.setStatus(406);
+	@PostMapping(value = "/{webtoonId}/episodes/{episodeNo}/put")
+	public void updateEpisode(
+			Episode newEpisode, 
+			MultipartFile thumbnailImage, 
+			MultipartHttpServletRequest multipartRequest,
+			@PathVariable(name = "webtoonId") int webtoonId,
+			@PathVariable(name = "episodeNo") int episodeNo,
+			HttpSession session) throws NotImageException {
+		
+		//사용자 인증
+		Webtoon webtoon = webtoonDao.selectWebtoonByWebtoonId(webtoonId);
+		User user = (User) session.getAttribute("loginUser");
+		if(webtoon.getAuthorId() != user.getUserId()) return;
+		
+		//전반적인 에피소드 수정
+		Episode oldEpisode = episodeDao.selectEpisodeByWebtoonIdAndEpisodeNo(webtoonId, episodeNo);
+		newEpisode.setWebtoonId(webtoonId);
+		newEpisode.setNo(episodeNo);
+		newEpisode.setEpisodeId(oldEpisode.getEpisodeId());
+		if(thumbnailImage.getSize() != 0) {
+			ImageService.deleteImage(oldEpisode.getThumbnail());
+			String savedThumbnail = ImageService.saveImage(thumbnailImage, "/webtoons/" + Integer.toString(webtoonId) +"/episodes/"
+					+ Integer.toString(episodeNo), "thumbnail");
+			newEpisode.setThumbnail(savedThumbnail);
 		}
-		return savedFile;
+		episodeDao.updateEpisode(newEpisode);
+		
+		//컨텐츠수정
+		Iterator<String> fileNames = multipartRequest.getFileNames();
+		ArrayList<Contents> contentsList = contentsDao.selectContentsListByEpisodeId(oldEpisode.getEpisodeId());
+		while(fileNames.hasNext()) {
+			String fileName = fileNames.next();
+			if(!fileName.equals("thumbnailImage")) {
+				Contents newContents;
+				String savedContents = ImageService.saveImage(multipartRequest.getFile(fileName), "/webtoons/" + Integer.toString(webtoonId) +"/episodes/"
+						+ Integer.toString(episodeNo), "contents");
+				for (Contents contents : contentsList) {					
+					if(contents.getIdx() == Integer.parseInt(fileName)) {
+						ImageService.deleteImage(contents.getImage());
+						newContents = contents;
+						newContents.setImage(savedContents);
+						contentsDao.updateContents(contents);
+						break;
+					}else {
+						newContents = new Contents();
+						newContents.setImage(savedContents);
+						newContents.setEpisodeId(oldEpisode.getEpisodeId());
+						newContents.setIdx(Integer.parseInt(fileName));
+						contentsDao.insertContents(newContents);
+						break;
+					}
+				}
+			}
+		}
 	}
-	
-	@DeleteMapping(value="/{webtoonId}/episodes/{no}/thumbnail")
-	public void deleteThumbnail(
-			@PathVariable(name = "webtoonId") int webtoonId, @RequestBody String path, HttpServletResponse res
-			, @PathVariable(value = "no") int no) {
-		ImageService.deleteImage(path);
+
+	@DeleteMapping(value = "/{webtoonId}/episodes/{episodeNo}")
+	public void deleteEpisode(
+			@PathVariable(value = "webtoonId") int webtoonId,
+			@PathVariable(value = "episodeNo") int episodeNo,
+			HttpSession session) {
+		Webtoon webtoon = webtoonDao.selectWebtoonByWebtoonId(webtoonId);
+		User user = (User) session.getAttribute("loginUser");
+		if(webtoon.getAuthorId() != user.getUserId()) return;
+		int episodeId = episodeDao.selectEpisodeByWebtoonIdAndEpisodeNo(webtoonId, episodeNo).getEpisodeId();
+		episodeDao.deleteEpisodeByEpisodeId(episodeId);
 	}
+
 }

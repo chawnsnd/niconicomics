@@ -35,19 +35,19 @@ function login(){
 		url: "<c:url value='/api/users/login'/>",
 		type: "post",
 		data: {
-			email : $("#userEmail").val()
-			, password : $("#userPassword").val()
+			email : $("#userEmail").val(),
+			password : $("#userPassword").val()
 		},
-		success: function(data){
-			if(data=='yes'){
-				location.href="<c:url value='/'/>";
+		success: function(result){
+			if(result){
+				history.go(-1);
 			}else{
 				alert("please try again");
-				$("#userEmail").val("");
-				$("#userPassword").val("");
 			}
 		},
-		error: function(error){console.log(error);}
+		error: function(err){
+			console.log(err);
+		}
 	})
 	
 }

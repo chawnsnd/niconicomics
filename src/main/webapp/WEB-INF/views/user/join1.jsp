@@ -58,26 +58,26 @@ function join1(){
 			, type : $(".userType:checked").val()
 		},
 		success: function(data){
-			console.log(data);
 			if(data){
-				location.href = "<c:url value='/api/users/join2'/>";
+				location.href = "<c:url value='/users/join2'/>";
 			}else{
-				alert("Fail")
+				alert("Fail");
 			}
 		},
-		error: function(error){console.log(error);
+		error: function(error){
+			console.log(error);
 		}
 	})
 }
 
-function fn_checkEmail(){
+function checkEmail(){
 	$.ajax({
 		url: "<c:url value='/api/users/check-email'/>",
 		type: "post",
 		dataType: "text",
 		data: {email : $("#userEmail").val()},
-		success: function(data){
-			if(data == 'yes'){
+		success: function(result){
+			if(result){
 				$("#checkEmail").attr("value", "Y");
 				alert("This Email is available.");
 			}else{
@@ -86,7 +86,9 @@ function fn_checkEmail(){
 				$("#userEmail").focus();
 			}
 		},
-		error: function(error){console.log(error);}
+		error: function(err){
+			console.log(err);
+		}
 	})
 }
 </script>
@@ -100,7 +102,7 @@ function fn_checkEmail(){
 	<h3>Using your current email address</h3>
 		<div class="form-group">
 			<input class="form-control" type="text" id="userEmail" name="userEmail" placeholder="Email Address"/>
-			<button class="btn btn-default" type="button" id="checkEmail" onclick="fn_checkEmail();" value="N">check email</button>
+			<button class="btn btn-default" type="button" id="checkEmail" onclick="checkEmail();" value="N">check email</button>
 		</div>
 		<div class="form-group">
 			<input class="form-control" type="password" id="userPassword" name="usertPassword" placeholder="Password"/>

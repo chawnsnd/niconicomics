@@ -1,6 +1,43 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script>
+$(function(){
+	Handlebars.registerHelper('isAuthor', function (type) {
+	  	return type === "AUTHOR";
+	});
+	Handlebars.registerHelper('isLogin', function (me) {
+	  	return me !== "";
+	});
+	getHeaderMe();
+});
+function getHeaderMe(){
+	$.ajax({
+		url: "<c:url value='/api/users/me'/>",
+		method: "get",
+		success: function(data){
+			var me = {};
+			me["me"] = data;
+			bindTemplate($("#headerUserTemplate"), me);
+		},
+		error: function(err){
+			console.log(err);
+		}
+	})
+}
+function logout(){
+	$.ajax({
+		url: "<c:url value='/api/users/logout'/>",
+		method: "get",
+		success: function(){
+			location.href = "<c:url value='/'/>"			
+		},
+		error: function(err){
+			console.log(err);
+		}
+	})
+}
+</script>
 <header>
 <div class="header_wrap">
 	<div class="header_left">
@@ -14,18 +51,20 @@
 			<input type="text" placeholder="Author | Webtoon | Hashtag">
 		</div>
 		<div>
-			<c:if test="${sessionScope.loginUser == null}">
+			<script id="headerUserTemplate" type="text/x-handlebars-template">
+			{{#unless (isLogin me)}}
 			<a href="<c:url value="/users/login"/>">Sign in</a>
 			<a href="<c:url value="/users/join"/>">Sign up</a>
-			</c:if>
-			<c:if test="${sessionScope.loginUser != null}">
-			<b>${sessionScope.loginUser.nickname}(${sessionScope.loginUser.email})</b>
-			<a href="<c:url value="/users/me/profile"/>">MyPage</a>
-				<c:if test="${sessionScope.loginUser.type == 'AUTHOR'}">
+			{{/unless}}			
+			{{#if (isLogin me)}}
+			<b>{{me.nickname}}({{me.email}})</b>
+			<a href="<c:url value="/users/mypage/profile"/>">MyPage</a>
+				{{#if (isAuthor me.type)}}
 				<a href="<c:url value="/dashboard"/>">Dashboard</a>
-				</c:if>
-			<a href="<c:url value="/users/logout"/>">Sign out</a>
-			</c:if>
+				{{/if}}
+			<a onclick="logout()" href="#">Sign out</a>
+			{{/if}}
+			</script>
 		</div>
 	</div>
 </div>

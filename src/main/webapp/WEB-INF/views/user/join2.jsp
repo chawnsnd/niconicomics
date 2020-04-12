@@ -22,7 +22,7 @@ $(document).ready(function(){
 
 function fn_sendEmail(){
 	$.ajax({
-		url : "./join2",
+		url : "<c:url value='/api/users/join2'/>",
 		type: "post",
 		data : {
 			random: $("#random").val()
@@ -58,10 +58,9 @@ function fn_sendEmail(){
 	Still, can't find the email?
 	</div>
 	<div class="form-group">
-<!-- 		<button class="btn btn-primary" type="button" id="sendEmail">Resend Email</button> -->
-		<button class="btn btn-primary" type="button" id="checkRandom">random check</button>
+		<input type="text" id="random" />
+		<button class="btn btn-primary" type="button" id="checkRandom">check</button>
 	</div>
-	<input type="text" path="random" id="random" />
 	
 
 </main>

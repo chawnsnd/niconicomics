@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,69 +8,49 @@
 <%@ include file="../layout/global.jsp"%>
 <script>
 $(document).ready(function() {
-	$('#insert').on('click', insertWebtoons);
-	myWebtoons();
+	$('#insert').on('click', insertWebtoon);
+	getWebtoons(1);
 });
-function insertWebtoons(){
-	$.ajax({
-		url: "../api/webtoons", // core/webtoons
-		type: "POST",
-		data:{
-			title : "def"
-			,summary : "def"
-			,hashtag : "def"
-			,mgrHashtag : "def"
-			,thumbnail : "def"
-		},
-		success: function(){
-			location.href="<c:url value='/dashboard/webtoons/insert'/>"
-		},
-		error: function(data){
-			console.log("err", data);
-		}
-// 		,complete: function(){
-// 			console.log("complete");
-// 		}
-	})
+
+function insertWebtoon(){
+	location.href="<c:url value='/dashboard/webtoons/insert'/>"
 }
-function deleteWebtoons(webtoonId){
+
+function deleteWebtoon(webtoonId){
 	$.ajax({
-		url : "../api/webtoons/"+webtoonId,
+		url : "<c:url value='/api/webtoons/'/>"+webtoonId,
 		method : "delete",
 		success : function(){
-			location.href = "<c:url value='../dashboard/webtoons'/>"
+			location.reload();
 		},
-		error : function(data){
-			console.log("err", data)
+		error : function(err){
+			console.log(err)
 		}
 	})
-	
 }
-function updateWebtoons(webtoonId){
+
+function updateWebtoon(webtoonId){
 	location.href = "<c:url value='/dashboard/webtoons/"+webtoonId+"/update'/>"
 }
-function myWebtoons(){
+
+function getWebtoons(curPage){
 	$.ajax({
-		url: "../api/webtoons", // core/webtoons
+		url: "<c:url value='/api/webtoons'/>", // core/webtoons
 		type: "GET",
 		data:{
-			authorId : "${sessionScope.loginUser.userId}" 
+			authorId : "${sessionScope.loginUser.userId}",
+			currentPage : curPage,
+			countPerPage : 10
 		},
 		success: function(data){
 			console.log(data);
-			output(data);
+			var template = $('#myWebtoonListTemplate');
+			bindTemplate(template, data.webtoonList);
 		},
-		error: function(data){
-			console.log("err", data);
-		},
-		complete: function(){
-			console.log("complete");
+		error: function(err){
+			console.log(err);
 		}
 	})
-}
-function output(data){
-	var template = $('#myWebtoonList');
-	bindTemplates(template, data)
 }
 </script>
 </head>
@@ -78,10 +59,11 @@ function output(data){
 <%@ include file="../layout/nav.jsp"%>
 <main>
 <input type = "button" class="btn btn-primary" id = "insert" value ="웹툰등록">
-<div id = "webtoonList">
-</div>
 <table>
 	<tr>
+		<th>
+			Thumbnail
+		</th>
 		<th>
 			Title
 		</th>
@@ -91,9 +73,7 @@ function output(data){
 		<th>
 			Hashtag
 		</th>
-		<th>
-			Thumbnail
-		</th>
+
 		<th>
 			Delete
 		</th>
@@ -101,27 +81,29 @@ function output(data){
 			Update
 		</th>
 	</tr>
-	<script id="myWebtoonList">
-	<tr onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
-		<td>
+	<script id="myWebtoonListTemplate" type="text/x-handlebars-template">
+	{{#each .}}
+	<tr>
+		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
+			<img src = "{{thumbnail}}" width = "100px">
+		</td>
+		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
 			{{title}}
 		</td>
-		<td>
+		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
 			{{summary}}
 		</td>
-		<td>
+		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
 			{{hashtag}}
 		</td>
 		<td>
-			<img src = "{{thumbnail}}" width = "100px">
+			<input type = "button" value = "삭제" id = "deleteWebtoon" onclick="deleteWebtoon({{webtoonId}})">
 		</td>
 		<td>
-			<input type = "button" value = "삭제" id = "deleteWebtoon" onclick="deleteWebtoons({{webtoonId}})">
-		</td>
-		<td>
-			<input type = "button" value = "수정" id = "updateWebtoon" onclick="updateWebtoons({{webtoonId}})">
+			<input type = "button" value = "수정" id = "updateWebtoon" onclick="updateWebtoon({{webtoonId}})">
 		</td>
 	</tr>
+	{{/each}}
 	</script>
 </table>
 </main>

@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(value = "/webtoons")
-public class WebtoonRouteController {
+public class WebtoonViewController {
 
 	@GetMapping(value = "")
 	public String goWebtoonList() {
-		return "webtoon/webtoonList";
+		return "webtoon/list";
 	}
 
 	@GetMapping(value = "/{webtoonId}")
@@ -21,7 +21,7 @@ public class WebtoonRouteController {
 			Model model
 			) {
 		model.addAttribute("webtoonId", webtoonId);
-		return "webtoon/webtoon";
+		return "webtoon/detail";
 	}
 	
 	@GetMapping(value = "/{webtoonId}/episodes/{episodeNo}")

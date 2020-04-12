@@ -45,16 +45,14 @@
 </insert>
 
 <!-- 회원 정보 수정 -->
-<update id="editUser" parameterType="user">
+<update id="updateUser" parameterType="user">
 	update tbl_user
 	<set>
-		user_id = #{userId}
-		,email = #{email}
-		<if test="password != null">,password = #{password}</if>
-		<if test="nickname != null">,nickname = #{nickname}</if>
-		<if test="type != null">,type = #{type}</if>
-		<if test="showDotple != null">,show_dotple = #{showDotple}</if>
-		<if test="showChat != null">,show_chat = #{showChat}</if>
+		<if test="password != null">password = #{password},</if>
+		<if test="nickname != null">nickname = #{nickname},</if>
+		<if test="type != null">type = #{type},</if>
+		<if test="showDotple != null">show_dotple = #{showDotple},</if>
+		<if test="showChat != null">show_chat = #{showChat},</if>
 	</set>
 	where user_id = #{userId}
 </update>

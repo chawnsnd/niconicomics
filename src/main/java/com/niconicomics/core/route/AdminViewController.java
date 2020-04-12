@@ -13,7 +13,7 @@ import com.niconicomics.core.nico.vo.Account;
 
 @RequestMapping("/admin")
 @Controller
-public class AdminController {
+public class AdminViewController {
 
 	@Autowired
 	private AccountDao accountDao;

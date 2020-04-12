@@ -20,16 +20,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/dashboard")
 @Controller
-public class DashboardController {
-	@Autowired
-	private WebtoonDao dao;
-	@Autowired
-	private EpisodeDao episodeDao;
+public class DashboardViewController {
+
 	@GetMapping("")
 	public String goDashboard() {
 		return "dashboard/home";
 	}
 	
+	//account
 	@GetMapping(value = "/account")
 	public String goAccount() {
 		return "dashboard/account/account";
@@ -45,61 +43,51 @@ public class DashboardController {
 		return "dashboard/account/modifyAccount";
 	}
 	
+	//webtoon - webtoon
 	@GetMapping(value = "/webtoons")
 	public String goWebtoons() {
-		log.debug("저쪽");
 		return "dashboard/webtoon/list";
 	}
-	//뷰 컨트롤러에서 페이지를 반환함
 	@GetMapping(value = "/webtoons/insert")
 	public String goInsertWebtoon() {
-		log.debug("이쪽");
 		return "dashboard/webtoon/insert";
 	}
 	@GetMapping(value = "/webtoons/{webtoonId}/update")
-	public String updateWebtoon(
+	public String goUpdateWebtoon(
 		@PathVariable(value = "webtoonId") int webtoonId,
 		Model model) {
 		model.addAttribute("webtoonId", webtoonId);
 		return "dashboard/webtoon/update";
 	}
 	@GetMapping(value = "/webtoons/{webtoonId}")
-	public String GetMyWebtoon(
+	public String goWebtoon(
 		@PathVariable(value = "webtoonId") int webtoonId,
 		Model model) {
 		model.addAttribute("webtoonId", webtoonId);
-		return "dashboard/webtoon/episodeFront";
-	}
-
-	@GetMapping(value = "/webtoons/{webtoonId}/episodes")
-	public String goEpisodeFront(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
-		log.debug("이쪽");
-		model.addAttribute("webtoonId", webtoonId);
-		return "dashboard/webtoon/insertEpisode";
-	}					
-	@GetMapping(value = "/webtoons/{webtoonId}/episodes/{episodeNo}/insert")
-	public String goInsertEpisode(@PathVariable(name = "webtoonId") int webtoonId, Model model) {
-		log.debug(Integer.toString(webtoonId));
-		ArrayList<Episode> episodeList = episodeDao.selectEpisodeByWebtoonId(webtoonId);
-		int max = episodeList.get(0).getEpisodeId();
-		for (int i = 0; i < episodeList.size(); i++) {
-			if (max<episodeList.get(i).getEpisodeId()) {
-				max = episodeList.get(i).getEpisodeId();
-			}
-		}
-		Episode episode = episodeDao.selectEpisodeByEpisodeId(max);
-		model.addAttribute("myWebtoonLastestEpisode", episode);
-		log.debug("이쪽");
-		return "dashboard/webtoon/insertEpisode";
-	}
-	@GetMapping(value = "/webtoons/{webtoonId}/update")
-	public String webtoonUpdate(
-		@PathVariable(value = "webtoonId") int webtoonId,
-		Model model) {
-		model.addAttribute("webtoonId", webtoonId);
-		return "dashboard/webtoon/update";
+		return "dashboard/webtoon/detail";
 	}
 	
+	//webtoon - episode
+	@GetMapping(value = "/webtoons/{webtoonId}/episodes/{episodeNo}/insert")
+	public String goInsertEpisode(
+			@PathVariable(name = "webtoonId") int webtoonId, 
+			@PathVariable(name = "episodeNo") int episodeNo,
+			Model model) {
+		model.addAttribute("webtoonId", webtoonId);
+		model.addAttribute("episodeNo", episodeNo);
+		return "dashboard/webtoon/episode/insert";
+	}
+	@GetMapping(value = "/webtoons/{webtoonId}/episodes/{episodeNo}/update")
+	public String goUpdateEpisode(
+			@PathVariable(name = "webtoonId") int webtoonId, 
+			@PathVariable(name = "episodeNo") int episodeNo,
+			Model model) {
+		model.addAttribute("webtoonId", webtoonId);
+		model.addAttribute("episodeNo", episodeNo);
+		return "dashboard/webtoon/episode/update";
+	}
+
+	//exchange
 	@GetMapping(value = "/exchange")
 	public String exchage() {
 		return "dashboard/exchage/exchage";

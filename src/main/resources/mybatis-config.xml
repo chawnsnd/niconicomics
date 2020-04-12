@@ -4,13 +4,14 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<settings>
-		<!-- 자동으로 카멜케이스 규칙으로 변환 -->
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings> 
 	<typeAliases>
 		<typeAlias type="com.niconicomics.core.webtoon.vo.Webtoon" alias="webtoon"/>
+		<typeAlias type="com.niconicomics.core.webtoon.vo.WebtoonSearchOption" alias="webtoonSearchOption"/>
 		<typeAlias type="com.niconicomics.core.webtoon.vo.Episode" alias="episode"/>
 		<typeAlias type="com.niconicomics.core.webtoon.vo.Contents" alias="contents"/>
+		<typeAlias type="com.niconicomics.core.webtoon.vo.Dotple" alias="dotple"/>
 		<typeAlias type="com.niconicomics.core.chat.vo.Chat" alias="chat"/>
 		<typeAlias type="com.niconicomics.core.nico.vo.Account" alias="account"/>
 		<typeAlias type="com.niconicomics.core.nico.vo.Donate" alias="donate"/>
@@ -23,7 +24,7 @@
 		<mapper resource="mapper/webtoon/webtoonMapper.xml"/>
 		<mapper resource="mapper/webtoon/episodeMapper.xml"/>
 		<mapper resource="mapper/webtoon/contentsMapper.xml"/>
-		<mapper resource="mapper/user/userMapper.xml"/>
+		<mapper resource="mapper/webtoon/dotpleMapper.xml"/>
 		<mapper resource="mapper/user/userMapper.xml"/>
 	</mappers>
 </configuration>

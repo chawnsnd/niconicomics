@@ -16,10 +16,9 @@ $(function(){
 })
 function getMe(){
 	$.ajax({
-		url: "<c:url value='/api/users'/>"+"/${sessionScope.loginUser.userId}",
+		url: "<c:url value='/api/users/me'/>",
 		type: "get",
 		success: function(data){
-			console.log(data);	
 			bindTemplate($("#userTemplate"), data);
 		},
 		error: function(err){
@@ -55,7 +54,7 @@ function getMe(){
 
 	<div id = "contentsWrap">
 	<section>
-		<script id="userTemplate">
+		<script id="userTemplate" type="text/x-handlebars-template">
 		<div class="box">
 			<div class="item">
 				<div class="title">User Email</div>			
@@ -68,6 +67,22 @@ function getMe(){
 			<div class="item">
 				<div class="title">Birthday</div>
 				<div class="value">{{birthdate}}</div>
+			</div>
+			<div class="item">
+				<div class="title">Type</div>
+				<div class="value">{{type}}</div>
+			</div>
+			<div class="item">
+				<div class="title">Dotple Setting</div>
+				<div class="value">{{showDotple}}</div>
+			</div>
+			<div class="item">
+				<div class="title">Chat Setting</div>
+				<div class="value">{{showChat}}</div>
+			</div>
+			<div class="item">
+				<div class="title">Nico</div>
+				<div class="value">{{nico}} Nico</div>
 			</div>
 		</div>
 		</script>

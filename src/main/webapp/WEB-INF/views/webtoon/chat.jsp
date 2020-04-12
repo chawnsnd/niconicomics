@@ -49,7 +49,7 @@ function onMessage(evt){
 		$("#chat_room").append(
 			"<p style='word-break:break-all;'><b style='color: "+rgb+"; margin-right: 10px;'>"+sender+"</b>"+message+"</p>"
 		);
-	}else if(type == "DONATE"){
+	}else if(type == "DONATE" || type == "DOTPLE"){
 		$("#chat_room").append(
 				"<p style='word-break:break-all;'><b>"+message+"</b></p>"
 		);
