@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.niconicomics.core.webtoon.dao.WebtoonMapper">
+
+	<insert id="insertWebtoon" parameterType="webtoon">
+		<selectKey keyProperty="webtoonId" resultType="int" order="BEFORE">
+	    	select seq_webtoon.nextval from dual
+	  	</selectKey>
+		insert into tbl_webtoon(
+			webtoon_id
+			,title
+			,summary
+			,author_id
+			,hashtag
+			<if test="thumbnail != null">
+			,thumbnail
+			</if>
+		)values(
+			#{webtoonId}
+			,#{title}
+			,#{summary}
+			,#{authorId}
+			,#{hashtag}
+			<if test="thumbnail != null">
+			,#{thumbnail}
+			</if>
+		)
+	</insert>
+
+	<select id="selectWebtoonByWebtoonId" parameterType="int" resultType="webtoon">
+		select webtoon_id 
+			,title 
+			,summary 
+			,author_id 
+			,hashtag 
+			,mgr_hashtag 
+			,thumbnail 
+			,hits 
+			,end
+			,(select max(no) from tbl_episode where webtoon_id = #{webtoonId}) as "max_no"
+		from tbl_webtoon
+		where webtoon_id = #{webtoonId}
+	</select>	
+
+	<update id="updateWebtoon" parameterType="webtoon">
+		update
+			tbl_webtoon
+		<set>
+			<if test="title != null">
+				title = #{title},
+			</if>
+			<if test="summary != null">
+				summary = #{summary},
+			</if>
+			<if test="hashtag != null">
+				hashtag = #{hashtag},
+			</if>
+			<if test="mgrHashtag != null">
+				mgr_hashtag = #{mgrHashtag},
+			</if>
+			<if test="thumbnail != null">
+				thumbnail =#{thumbnail},
+			</if>
+			<if test="hits != null">
+				hits = #{hits},
+			</if>
+		</set>
+		where
+			webtoon_id = #{webtoonId}
+	</update>
+
+	<delete id="deleteWebtoonByWebtoonId" parameterType="int">
+		delete 
+			from tbl_webtoon 
+		where
+			webtoon_id = #{webtoonId}
+	</delete>
+
+	<select id="selectWebtoonList" resultType="webtoon" parameterType="webtoonSearchOption">
+		select * from tbl_webtoon
+		<trim prefix="WHERE" suffixOverrides="and">
+		<if test="authorId != null and authorId != 0">
+			author_id = #{authorId} and
+		</if>
+		<if test="author != '' and author != null">
+			author_id = (
+				select user_id 
+				from tbl_user
+				where nickname = #{author}
+			) and
+		</if>
+		<if test="title != '' and title != null">
+			title like '%'||#{title}||'%' and
+		</if>
+		<if test="hashtags != null">
+			<foreach item="hashtag" collection="hashtags" separator="and">
+			hashtag like '%'||#{hashtag}||'%'
+			</foreach>
+		</if>
+		</trim>
+	</select>
+
+	<select id="selectCountWebtoonList" resultType="int" parameterType="webtoonSearchOption">
+		select count(*) from tbl_webtoon
+		<trim prefix="WHERE" suffixOverrides="and">
+		<if test="authorId != null and authorId != 0">
+			author_id = #{authorId} and
+		</if>
+		<if test="author != '' and author != null">
+			author_id = (
+				select user_id 
+				from tbl_user
+				where nickname = #{author}
+			) and
+		</if>
+		<if test="title != '' and title != null">
+			title like '%'||#{title}||'%' and
+		</if>
+		<if test="hashtags != null">
+			<foreach item="hashtag" collection="hashtags" separator="and">
+			hashtag like '%'||#{hashtag}||'%'
+			</foreach>
+		</if>
+		</trim>
+	</select>
+
+</mapper>

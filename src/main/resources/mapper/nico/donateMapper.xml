@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.niconicomics.core.nico.dao.DonateMapper">
+
+	<insert id="insertDonate" parameterType="donate">
+		insert into tbl_donate(
+			donate_id,
+			nico,
+			sponsor_id,
+			author_id,
+			webtoon_id
+			<if test="dotpleId != 0">
+			,dotple_id
+			</if>
+		) values (
+			seq_donate.nextval,
+			#{nico},
+			#{sponsorId},
+			#{authorId},
+			#{webtoonId}
+			<if test="dotpleId != 0">
+			,#{dotpleId}
+			</if>
+		)
+	</insert>
+
+</mapper>

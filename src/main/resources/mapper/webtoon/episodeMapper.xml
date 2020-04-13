@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.niconicomics.core.webtoon.dao.EpisodeMapper">
+
+	<insert id="insertEpisode" parameterType="episode">
+		<selectKey keyProperty="episodeId" resultType="int" order="BEFORE">
+			select seq_episode.nextval from dual
+		</selectKey>
+		insert into tbl_episode(
+			episode_id
+			,no
+			,title
+			,webtoon_id
+			<if test="thumbnail != null">
+			,thumbnail
+			</if>
+		)values(
+			#{episodeId}
+			,#{no}
+			,#{title}
+			,#{webtoonId}
+			<if test="thumbnail != null">
+			,#{thumbnail}
+			</if>
+		)
+	</insert>
+	
+	<select id="selectEpisodeListByWebtoonId" resultType="episode" parameterType="int">
+		select
+			episode_id
+			,no
+			,title
+			,regdate
+			,webtoon_id
+			,thumbnail
+		from 
+			tbl_episode
+		where
+			webtoon_id = #{webtoonId}
+		order by
+			episode_id
+	</select>
+	
+	<update id="updateEpisode" parameterType="episode">
+		update
+			tbl_episode
+		<set>
+			<if test="no != null">
+				no = #{no},
+			</if>
+			<if test="title != null">
+				title = #{title},
+			</if>
+			<if test="thumbnail != null">
+				thumbnail = #{thumbnail},
+			</if>
+		</set>
+		where
+			episode_id = #{episodeId}
+	</update>
+	
+	<delete id="deleteEpisodeByEpisodeId" parameterType="int">
+		delete from
+			tbl_episode
+		where
+			episode_id = #{episodeId}
+	</delete>
+
+	<select id="selectEpisodeByEpisodeId" parameterType="episode" resultType="Episode">
+		select * from
+			tbl_episode
+		where
+			episode_id = #{episodeId}
+	</select>
+	
+	<select id="selectEpisodeByWebtoonIdAndEpisodeNo" resultType="episode">
+		select
+			episode_id
+			,no
+			,title
+			,regdate
+			,webtoon_id
+			,thumbnail
+		from
+			tbl_episode
+		where
+			webtoon_id = #{webtoonId} and no = #{episodeNo}
+	</select>
+
+</mapper>

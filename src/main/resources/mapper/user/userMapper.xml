@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 회원 관리 SQL -->
+<mapper namespace="com.niconicomics.core.user.dao.UserMapper">
+
+<select id="selectUserByUserId" parameterType="int" resultType="user">
+	select *  from tbl_user
+	where user_id = #{userId}
+</select>
+
+<select id="selectUserByEmail" parameterType="String" resultType="user">
+	select * from tbl_user
+	where email = #{email}
+</select>
+
+<!-- 회원 가입 -->
+<insert id="insertUser" parameterType="user">
+	insert into tbl_user(
+		user_id
+		,email
+		,password
+		,type
+		,nickname
+		,birthdate
+		<if test="gender=='MALE'|| gender=='FEMALE'">
+		,gender
+		</if>
+		,salt
+	)
+	values(
+		seq_user.nextval
+		,#{email}
+		,#{password}
+		,#{type}
+		,#{nickname}
+		,#{birthdate}
+		<if test="gender=='MALE'|| gender=='FEMALE'">
+		,#{gender}
+		</if>
+		,#{salt}
+	)
+</insert>
+
+<!-- 회원 정보 수정 -->
+<update id="updateUser" parameterType="user">
+	update tbl_user
+	<set>
+		<if test="password != null">password = #{password},</if>
+		<if test="nickname != null">nickname = #{nickname},</if>
+		<if test="type != null">type = #{type},</if>
+		<if test="showDotple != null">show_dotple = #{showDotple},</if>
+		<if test="showChat != null">show_chat = #{showChat},</if>
+	</set>
+	where user_id = #{userId}
+</update>
+
+<!-- 이메일 중복 체크 -->
+<select id="selectCountByEmail" resultType="int">
+	select count(*) from tbl_user
+	where email = #{email}
+</select>
+
+</mapper>

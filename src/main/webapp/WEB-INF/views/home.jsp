@@ -1,250 +1,235 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<title>니코니코믹스 웹서버</title>
-</head>
-
-<script src="./resources/js/jquery-3.4.1.min.js"></script>
-
-<body>
-<!-- API 테스트 -->
+<title>NICONICOMICS</title>
+<%@ include file="./layout/global.jsp"%>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
 <script>
-var str = "pingpong";
-function test(){
-	$.ajax({
-		url: "<c:url value='/test' />",
-		type: "get",
-		data: {
-			str: str
-		},
-		success: function(data){
-			if(data==str){
-				alert("성공");
-			}else{
-				alert("실패");
-			}
-		},
-		error: function(e){
-			alert(JSON.stringify(e));
-		}
-	})
-}
-</script>
-<h1>니코니코믹스 API 서버</h1>
-<p> 현재시간 :  ${serverTime} </p>
-<button onclick="test()">API 테스트</button>
-
-
-
-<br>
-<br>
-
-
-<!-- 이미지 업로드 -->
-<script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
-<script src="./resources/js/aws-s3.js"></script>
-<script>
-//이미지 저장
-function uploadButton(){
-    // 1. 파일객체를 가져와서
-    var file = $("#file1");
-    // 2. 첫번째매개변수에는 저장하고 싶은 경로
-    //    두번째매개변수에는 저장하고 싶은 경로
-    //    세번쨰 매개변수에는 아까 가져온 파일객체
-    uploadImage("tests/test", file)
-    // 3. 요런식을 쓴다. 몰라도 외워서 익숙해지면 됨
-    .then(data => {
-        console.log(data);
-        $("#output").html(
-            "<div data-key='"+data.Key+"'>"+
-            "<img src='"+data.Location+"'>"+
-            "<input type='file'>"+
-            "<button onclick='modifyButton(`"+data.Key+"`)'>수정</button>"+
-            "<button onclick='deleteButton(`"+data.Key+"`)'>삭제</button>"+
-            "</div>"
-        );
-    }).catch(err => {
-        console.log(err);
-    })
-    // 4) 결과 data.Location은 아마
-    //    https://niconicomics-images.s3.ap-northeast-2.amazonaws.com/webtoon/2341/temp.jpg
-    //    요런느낌으로 얻을 수 있을 거임
-}
-
-// 이미지 여러개 저장
-function uploadsButton(){
-    var files = $(".file")
-    uploadImages("tests/test", files)
-    .then(data => {
-        console.log(data);
-        $("#output").html("");
-        data.forEach(img => {
-            $("#output").append(
-        		"<div data-key='"+img.Key+"'>"+
-                "<img src='"+img.Location+"'>"+
-                "<input type='file'>"+
-                "<button onclick='modifyButton(`"+img.Key+"`)'>수정</button>"+
-                "<button onclick='deleteButton(`"+img.Key+"`)'>삭제</button>"+
-                "</div>"
-            ); 
-        });
-    }).catch(err =>{
-        console.log(err);
-    })
-}
-
-// 이미지 삭제
-function deleteButton(key){
-    deleteImage(key)
-    .then(data => {
-        console.log(data);
-        $("div[data-key='"+key+"']").remove();
-    }).catch(err => {
-        console.log(err);
-    })
-}
-
-//이미지 수정
-function modifyButton(key){
-    var file = $("div[data-key='"+key+"']").find("input[type='file']");
-    modifyImage(key, file)
-    .then(data => {
-        console.log(data);
-        $("div[data-key='"+key+"']").replaceWith(
-       		"<div data-key='"+data.Key+"'>"+
-    		"<img src='"+data.Location+"'>"+
-            "<input type='file'>"+
-            "<button onclick='modifyButton(`"+data.Key+"`)'>수정</button>"+
-            "<button onclick='deleteButton(`"+data.Key+"`)'>삭제</button>"+
-            "</div>"
-        )
-    }).catch(err => {
-        console.log(err);
-
-    })
-}
-</script>
-<style>
-#output img{
-	width: 300px;
-}
-</style>
-<h1>이미지 업로드 테스트</h1>
-<div>
-    <input id="file1" type="file" />
-    <input type="button" onclick="uploadButton()" value="업로드"/>
-</div>
-<hr>
-<div>
-    <input class="file" id="file2" type="file" />
-    <input class="file" id="file3" type="file" />
-    <input class="file" id="file4" type="file" />
-    <input type="button" onclick="uploadsButton()" value="단체업로드"/>
-</div>
-<hr>
-<div id="output"></div>
-
-
-
-<br>
-<br>
-
-
-
-<!-- 채팅 -->
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script>
-var sock = new SockJS('<c:url value="/chat" />'); //소켓연결
-sock.onmessage = onMessage; //소켓에서 메시지 받음
-sock.onclose = onclose; //연결 끊음
-var me = null;
+var webtoons;
 $(function(){
-	$("#message, #me").on("keyup", function(e){
-		if(e.keyCode == 13){
-			sendMessage();
-			$("#message").val("");
-		}
-	})
-// 	$("#me").on("keyup", function(e){
-// 		if(e.keyCode == 13){
-// 			sendMessage();
-// 			$(this).val("");
-// 		}
-// 	})
-	$("#send_btn").on("click", function(){
-		sendMessage();
+	bannerSliderSetting();
+	getWebtoons().then(function(){
+		imageContainer();
+	});
+	getNewWebtoons();
+	$(".type").on("click", function(){
+		getWebtoons($(this).data("type")).then(function(){
+			imageContainer();
+		});
+		$(".type").removeClass("active");
+		$(this).addClass("active");
 	})
 })
-function sendMessage(){
-	me = $("#me").val();
-	message = $("#message").val();
-	if(me==""||message==""){
-		return;
-	}else{
-		sock.send(me+"|"+message) //소켓에다 메시지 보냄
-		$("#message").val("");
-	}
+function getNewWebtoons(){
+	$.ajax({
+		url: "<c:url value='/api/webtoons'/>",
+		method: "get",
+		async: false,
+		data:{
+			currentPage: 1,
+			CountPerPage: 10,
+		},
+		success: function(data){
+			$("#newWebtoons").remove();
+			bindTemplate($("#newWebtoonsTemplate"), data.webtoonList);
+		},
+		error: function(err){
+			console.log(err);
+		}
+	})
 }
-function onMessage(evt){
-	var data = evt.data;
-	var strArray = data.split("|");
-	var sender = strArray[0];
-	var message = strArray[1];
-	if(sender == me){
-		$("#chat_room").append(
-			"<p style='text-align: right;'><b>"+sender+"</b><br>"+message+"</p>"
-		);
-	}else{
-		$("#chat_room").append(
-			"<p><b>"+sender+"</b><br>"+message+"</p>"
-		);
-	}
-	scrollDown();
+function getWebtoons(type){
+	return new Promise(function(resolve, reject){
+		$.ajax({
+			url: "<c:url value='/api/webtoons'/>",
+			method: "get",
+			async: false,
+			data:{
+				currentPage: 1,
+				CountPerPage: 30,
+				hashtags: type
+			},
+			success: function(data){
+				$("#webtoons").remove();
+				bindTemplate($("#webtoonsTemplate"), data.webtoonList);
+				resolve();
+			},
+			error: function(err){
+				console.log(err);
+				reject();
+			}
+		})
+	})
 }
-function scrollDown(){
-	$("#chat_room").scrollTop($("#chat_room")[0].scrollHeight);
+</script>
+<script>
+function bannerSliderSetting(){
+	var bannerSlider = new Swiper('#banner-slider', {
+		navigation: {
+			nextEl: '.swiper-button-next',
+			prevEl: '.swiper-button-prev',
+		},
+		pagination: {
+	        el: '.swiper-pagination',
+      	}
+	});
 }
 </script>
 <style>
-#chat_room{
-	width: 92vw;
-	height: 60vh;
-	border: 3px solid gray;	
-   	overflow-y: auto;
-   	padding: 0 3vw;
-   	font-size: 4vmin;
+.swiper-container {
+	width: 100%;
+	height: 200px;
 }
-#chat_input{
-	border: 3px solid gray;
-	width: 98vw;
-	display: inline-flex;
-}
-#me{
-	min-width: 0px;	
-	flex: 2;
-	font-size: 4vmin;
-}
-#message{
-	min-width: 0px;	
-	flex: 5;
-	font-size: 4vmin;
-}
-#send_btn{
-	min-width: 0px;
-	flex: 1;
-	font-size: 4vmin;
+.swiper-slide {
+	text-align: center;
+	font-size: 18px;
+	background: #fff;
+	display: flex;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+	cursor: pointer;
 }
 </style>
-<h1>채팅</h1>
-<div id="chat_room">
+<style>
+.item>img{
+	max-height: 200px;
+}
+.left_item{
+	padding: 30px 0 15px 0;
+}
+.item_title{
+	font-size: 30px;
+	font-weight: bold;
+}
+.types{
+	margin-top: 50px;
+}
+.type{
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	padding: 0 10px;
+}
+.type.active{
+	color: #e83d3d
+}
+.webtoons{
+	display: inline-block;
+	margin-top: 10px;
+	width: 680px;
+}
+.webtoon{
+	display: inline-block;
+	cursor: pointer;
+	margin-right: 15px;
+	margin-top: 15px;
+}
+.webtoon:hover{
+    box-shadow: 0.5px 0.5px 3px 0px black;
+}
+.image_container{
+	width: 150px;
+	height: 120px;
+}
+.title{
+	font-weight: bold;
+	font-size: 16px;
+	padding: 5px;
+	padding-bottom: 0px;
+}
+.author{
+	padding-left: 5px;
+	padding-bottom: 5px;
+}
+.newWebtoon{
+    display: inline-block;
+    width: 310px;
+    margin-top: 25px;
+    margin-left: 30px;
+    height: 400px;
+}
+.newWebtoon .title{
+	color: #e83d3d
+}
+.newWebtoon ol{
+	list-style:none;
+	margin: 0;
+	padding: 5px;
+	width: 100%;
+}
+.newWebtoon ol li{
+	padding: 5px 0;
+	padding-top: 10px;
+	border-bottom: 1px solid #aeaeae;
+	cursor: pointer;
+}
+.newWebtoon ol li:hover{
+	color: #a3a3a3;
+}
+</style>
+</head>
+<body>
+<%@ include file="./layout/header.jsp"%>
+<main>
+<div class="swiper-container" id="banner-slider">
+	<div class="swiper-wrapper">
+		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 1</div></div>
+		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 2</div></div>
+		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 3</div></div>
+		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 4</div></div>
+	</div>
+	<div class="swiper-button-next"></div>
+	<div class="swiper-button-prev"></div>
+	<div class="swiper-pagination"></div>
 </div>
-<div id="chat_input">
-	<input id="me" type="text" placeholder="이름">
-	<input id="message" type="text" placeholder="메시지">
-	<button id="send_btn">전송</button>
+
+<div class="row types">
+	<span class="type active" data-type="">all</span>|
+	<span class="type" data-type="episode">#episode</span>|
+	<span class="type" data-type="omnibus">#omnibus</span>|
+	<span class="type" data-type="story">#story</span>
 </div>
+<script id="webtoonsTemplate" type="text/x-handlebars-template">
+<div id="webtoons" class="row webtoons">
+	{{#each .}}
+	<div class="card webtoon" onclick="location.href = '<c:url value='/webtoons/'/>{{webtoonId}}'">
+		<div class="image_container">
+			<img src="{{thumbnail}}">
+		</div>
+		<div class="title">{{title}}</div>
+		<div class="author">{{authorNickname}}</div>
+	</div>
+	{{/each}}
+</div>
+</script>
+<script id="newWebtoonsTemplate" type="text/x-handlebars-template">
+<div id="newWebtoons" class="newWebtoon box">
+	<div class="title">
+		New Webtoon
+	</div>
+	<ol class="webtoons">
+		{{#each .}}
+		<li onclick="location.href = '<c:url value='/webtoons/'/>{{webtoonId}}'">{{title}}</li>
+		{{/each}}
+	<ol>
+</div>
+</div>
+</script>
+</main>
+<%@ include file="./layout/footer.jsp"%>
 </body>
 </html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.niconicomics.core.webtoon.dao.ContentsMapper">
+
+	<insert id="insertContents" parameterType="contents">
+		insert into tbl_contents(
+			contents_id
+			,episode_id
+			,idx
+			,image
+		)values(
+			seq_contents.nextval
+			,#{episodeId}
+			,#{idx}
+			,#{image}
+		)
+	</insert>
+
+	<select id="selectContentsListByEpisodeId" resultType="contents">
+		select
+			contents_id
+			,episode_id
+			,idx
+			,image
+		from
+			tbl_contents
+		where	
+			episode_id = #{episodeId}
+	</select>	
+
+	<select id="selectContentsByEpsodeIdAndIdx" resultType="contents">
+		select *
+		from tbl_contents
+		where
+			episode_id = #{episodeId} and idx = #{idx}
+	</select>
+
+	<update id="updateContents" parameterType="contents">
+		update
+			tbl_contents
+		set
+			<if test="idx != null">
+				idx = #{idx},
+			</if>
+			<if test="image != null">
+				image = #{image},
+			</if>
+				episode_id = #{episodeId}
+		where
+			contents_id = #{contentsId}
+	</update>
+
+</mapper>
