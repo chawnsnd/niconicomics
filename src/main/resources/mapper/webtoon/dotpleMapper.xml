@@ -6,6 +6,9 @@
 <mapper namespace="com.niconicomics.core.webtoon.dao.DotpleMapper">
 
 	<insert id="insertDotple" parameterType="dotple">
+		<selectKey keyProperty="dotpleId" resultType="int" order="BEFORE">
+			select seq_dotple.nextval from dual
+		</selectKey>
 		insert into tbl_dotple(
 			dotple_id
 			,user_id
@@ -14,7 +17,7 @@
 			,y_axis
 			,contents
 		)values(
-			seq_dotple.nextval
+			#{dotpleId}
 			,#{userId}
 			,#{contentsId}
 			,#{xAxis}
@@ -28,5 +31,23 @@
 		from tbl_dotple
 		where contents_id = #{contentsId}
 	</select>
+
+	<select id="selectDotpleListByEpisodeId" resultType="dotple">
+		select 
+			tbl_dotple.dotple_id
+			,tbl_dotple.user_id
+			,tbl_dotple.contents_id
+			,tbl_dotple.x_axis
+			,tbl_dotple.y_axis
+			,tbl_dotple.contents
+			,tbl_contents.idx as idx
+		from tbl_dotple join tbl_contents
+		on tbl_dotple.contents_id = tbl_contents.contents_id
+		where tbl_contents.episode_id = #{episodeId}
+	</select>
+	
+	<delete id="deleteDotpleByDotpleId">
+		delete from tbl_dotple where dotple_id = #{dotpleId}
+	</delete>
 
 </mapper>

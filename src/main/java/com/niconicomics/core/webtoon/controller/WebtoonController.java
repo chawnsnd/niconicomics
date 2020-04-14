@@ -48,10 +48,6 @@ public class WebtoonController {
 		int webtoonListSize = webtoonDao.selectCountWebtoonList(option);
 		PageNavigator navi = new PageNavigator(countPerPage, pagePerGroup, currentPage, webtoonListSize);
 		ArrayList<Webtoon> webtoonList = webtoonDao.selectWebtoonList(option, navi);
-		for (Webtoon webtoon : webtoonList) {
-			User author = userDao.selectUserByUserId(webtoon.getAuthorId());
-			webtoon.setAuthorNickname(author.getNickname());
-		}
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("webtoonList", webtoonList);
 		result.put("navi", navi);
@@ -71,8 +67,6 @@ public class WebtoonController {
 	@GetMapping(value = "/{webtoonId}")
 	public Webtoon getWebtoon(@PathVariable(value = "webtoonId") int webtoonId) {
 		Webtoon webtoon = webtoonDao.selectWebtoonByWebtoonId(webtoonId);
-		User author = userDao.selectUserByUserId(webtoon.getAuthorId());
-		webtoon.setAuthorNickname(author.getNickname());
 		return webtoon;
 	}
 

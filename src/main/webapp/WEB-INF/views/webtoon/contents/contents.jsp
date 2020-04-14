@@ -109,25 +109,40 @@ function clickImage(t, e){
 	showDotpleForm = true;
 }
 
+function deleteDotple(dotpleId){
+	$.ajax({
+		url: "<c:url value='/api/webtoons/${webtoonId}/episodes/${episodeNo}/dotples/'/>"+dotpleId,
+		method: "delete",
+		success: function(data){
+			$(".dotple[data-dotpleid="+dotpleId+"]").remove();
+		}
+	})
+}
+
+function createDotple(dotple){
+	$(".image").eq(dotple.idx-1).css("position", "relative");
+	var html = "<div "+
+		"style='position: absolute; top: "+dotple.yaxis+"px; left: "+dotple.xaxis+"px;'"+
+		"class='dotple' data-dotpleid="+dotple.dotpleId+">"+dotple.contents+"</div>";
+	if(dotple.userId == me.userId){
+		html = "<div "+
+		"style='position: absolute; top: "+dotple.yaxis+"px; left: "+dotple.xaxis+"px;'"+
+		"class='dotple mydotple' onclick=deleteDotple("+dotple.dotpleId+") data-dotpleid="+dotple.dotpleId+">"+dotple.contents+" <i class='far fa-times-circle'></i></div>";
+	}
+	$(".image").eq(dotple.idx-1).prepend(html);
+	$(".image").eq(dotple.idx-1).css("position", "relative");
+	$(".dotple").on("click", function(e){e.stopPropagation();})
+}
+
 function initDotple(){
 	return new Promise(function(resolve, reject){
 		$.ajax({
 			url: "<c:url value='/api/webtoons/${webtoonId}/episodes/${episodeNo}/dotples'/>",
 			method: "get",
 			success: function(data){
-				for(var i=0; i<contentsList.length; i++){
-					$.each(data[i], function(index, dotple){
-						$(".image").eq(i-1).css("position", "relative");
-						var html = "<div "+
-							"style='position: absolute; top: "+dotple.yaxis+"px; left: "+dotple.xaxis+"px;'"+
-							"class='dotple'>"+dotple.contents+"</div>";
-						$(".image").eq(i-1).prepend(html);
-						$(".image").eq(i-1).css("position", "relative");
-						$(".dotple").data("num", index).on("click", function(e){
-							e.stopPropagation();
-						})
-					});
-				}
+				$.each(data, function(index, dotple){
+					createDotple(dotple);
+				});
 				resolve();
 			},
 			error: function(err){
@@ -157,6 +172,7 @@ function getEpisode(){
 	})
 }
 function submitDotple(idx, xAxis, yAxis){
+	var contents = $("#dotpleContents").val();
 	if(me == ''){
 		alert("Please login.");
 		return;
@@ -169,17 +185,16 @@ function submitDotple(idx, xAxis, yAxis){
 				idx: idx,
 				xAxis: xAxis,
 				yAxis: yAxis,
-				contents: $("#dotpleContents").val(),
+				contents: contents,
 			},
-			success: function(result){
+			success: function(data){
 				sock.send(JSON.stringify({
 					userId: me.userId,
 					webtoonId: ${webtoonId},
 					type: "DOTPLE",
 					message: "${sessionScope.loginUser.nickname}님이 닷플을 남겼습니다."
 				}))
-				$(".dotple").remove();
-				initDotple();
+				createDotple(data);
 			},
 			error: function(err){
 				console.log(err);
@@ -238,6 +253,10 @@ main{
 	border-radius: 5px;
 	cursor: default;
 }
+.mydotple{
+	border: 1px solid #fbc714;
+	cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -259,9 +278,6 @@ main{
 	</div>
 	{{/each}}
 </div>
-</script>
-<script id="dotpleTemplate" type="text/x-handlebars-template">
-	<div class="dotple">{{contents}}</div>
 </script>
 <div class="chatroom" id="chatroom">
 <%@ include file="./chat.jsp"%>

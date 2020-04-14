@@ -146,7 +146,7 @@ function initRecommandHashtag(){
 					<script id="hashtagsTemplate" type="text/x-handlebars-template">
 					<div id="hashtags">
 						{{#each .}}
-				 		<div class="hashtag" onclick="removeHashtag('{{this}}')">#<span>{{this}}</span> X</div>
+				 		<div class="hashtag" onclick="removeHashtag('{{this}}')">#<span>{{this}}</span> <i class='far fa-times-circle'></i></div>
 						{{/each}}
 					</div>
 					</script>

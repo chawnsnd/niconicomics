@@ -43,7 +43,6 @@ function toggleDotple(){
 	$(".dotple").toggle();
 }
 function initShowHide(){
-	console.log("asdf");
 	if(me.showChat == "SHOW"){
 		$("#chatroom").show();
 	}else if(me.showChat == "HIDE"){

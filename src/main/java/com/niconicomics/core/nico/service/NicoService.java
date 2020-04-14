@@ -6,60 +6,52 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.niconicomics.core.nico.dao.AccountDao;
 import com.niconicomics.core.nico.dao.DonateDao;
+import com.niconicomics.core.nico.dao.TransferDao;
 import com.niconicomics.core.nico.vo.Account;
 import com.niconicomics.core.nico.vo.Donate;
+import com.niconicomics.core.nico.vo.Transfer;
+import com.niconicomics.core.nico.vo.TransferDepositReqItem;
 import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.vo.User;
 
 @Service
 public class NicoService {
+	
+	private static final double FEES = 0.03;
 
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private DonateDao donateDao;
-	@Autowired
 	private OpenBankingService openBankingService;
 	@Autowired
 	private AccountDao accountDao;
+	@Autowired
+	private TransferDao transferDao;
 	
 	@Transactional
 	public boolean chargeNico(int userId, int nico) {
 		User user = userDao.selectUserByUserId(userId);
 		user.setNico(user.getNico()+nico);
-		if(userDao.updateUser(user)) {
-			return true;
-		}else {
-			return false;
-		}
-	}
-
-	@Transactional
-	public boolean donateNico(int authorId, int sponsorId, int webtoonId, int nico) {
-		User author = userDao.selectUserByUserId(authorId);
-		User sponsor = userDao.selectUserByUserId(sponsorId);
-		if(sponsor.getNico()-nico < 0) return false;
-		author.setNico(author.getNico()+nico);
-		sponsor.setNico(sponsor.getNico()-nico);
-		Donate donate = new Donate();
-		donate.setNico(nico);
-		donate.setAuthorId(authorId);
-		donate.setSponsorId(sponsorId);
-		donate.setWebtoonId(webtoonId);
-		if(userDao.updateUser(author) && userDao.updateUser(sponsor) && donateDao.insertDonate(donate)) {
-			return true;
-		}else {
-			return false;
-		}
+		return userDao.updateUser(user);
 	}
 
 	@Transactional
 	public boolean exchageNico(int userId, int nico) {
 		User user = userDao.selectUserByUserId(userId);
 		Account account = accountDao.selectAccountByAuthorId(userId);
-		openBankingService.transfer(account, nico);
+		int amount = (int) (nico * (1-FEES));
+		if(user.getNico()-amount < 0) return false;
+		if(!openBankingService.transfer(account, amount)) return false;
 		user.setNico(user.getNico()-nico);
-		return false;
+		Transfer transfer = new Transfer();
+		transfer.setAccountId(userId);
+		transfer.setNico(nico);
+		transfer.setAmount(amount);
+		if(userDao.updateUser(user) && transferDao.insertTransfer(transfer)) {
+			return true;
+		}else {			
+			return false;
+		}
 	}
 	
 }

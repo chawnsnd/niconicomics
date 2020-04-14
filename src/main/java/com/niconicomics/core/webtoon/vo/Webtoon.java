@@ -13,7 +13,6 @@ public class Webtoon {
 	private String hashtag;
 	private String mgrHashtag;
 	private String thumbnail;
-	private int hits;
 	private String end;
 	private int maxNo;
 	

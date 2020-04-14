@@ -98,6 +98,6 @@ function setUser(){
 	</section>
 </div>
 </main>
-
+<%@ include file="../../layout/footer.jsp"%>
 </body>
 </html>

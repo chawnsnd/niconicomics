@@ -16,6 +16,9 @@
 	padding: 0;
 }
 </style>
+<script>
+
+</script>
 <nav class="sidebar">
     <ul class="nav flex-column">
       <li class="nav-item">

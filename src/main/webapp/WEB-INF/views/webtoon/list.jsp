@@ -173,13 +173,13 @@ function removeSearchOption(key, value){
 	<script id="searchOptionTemplate" type="text/x-handlebars-template">
 	<div id="searchOption">
 		{{#each hashtags}}
- 		<div class="keyword" onclick="removeSearchOption('hashtag', '{{this}}')">#<span>{{this}}</span> X</div>
+ 		<div class="keyword" onclick="removeSearchOption('hashtag', '{{this}}')">#<span>{{this}}</span> <i class='far fa-times-circle'></i></div>
 		{{/each}}
 		{{#if title}}
- 		<div class="keyword" onclick="removeSearchOption('title', '{{title}}')">Title : {{title}} X</div>
+ 		<div class="keyword" onclick="removeSearchOption('title', '{{title}}')">Title : {{title}} <i class='far fa-times-circle'></i></div>
  		{{/if}}
 		{{#if author}}
-		<div class="keyword" onclick="removeSearchOption('author', '{{author}}')">Author : {{author}} X</div>
+		<div class="keyword" onclick="removeSearchOption('author', '{{author}}')">Author : {{author}} <i class='far fa-times-circle'></i></div>
 		{{/if}}
 	</div>
 	</script>

@@ -14,19 +14,29 @@ public class DotpleDao {
 	@Autowired
 	private SqlSession session;
 	
-	public boolean insertDotple(Dotple dotple) {
+	public Dotple insertDotple(Dotple dotple) {
 		DotpleMapper mapper = session.getMapper(DotpleMapper.class);
-		if(mapper.insertDotple(dotple) == 1) {
-			return true;
-		}else {
-			return false;
-		}
+		mapper.insertDotple(dotple);
+		return dotple;
 	}
 
 	public ArrayList<Dotple> selectDotpleListByContentsId(int contentsId) {
 		DotpleMapper mapper = session.getMapper(DotpleMapper.class);
 		return mapper.selectDotpleListByContentsId(contentsId);
-		
+	}
+
+	public ArrayList<Dotple> selectDotpleListByEpisodeId(int episodeId) {
+		DotpleMapper mapper = session.getMapper(DotpleMapper.class);
+		return mapper.selectDotpleListByEpisodeId(episodeId);
+	}
+
+	public boolean deleteDotpleByDotpleId(int dotpleId) {
+		DotpleMapper mapper = session.getMapper(DotpleMapper.class);
+		if(mapper.deleteDotpleByDotpleId(dotpleId) == 1) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 }

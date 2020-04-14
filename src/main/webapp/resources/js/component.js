@@ -14,7 +14,7 @@ function imageContainer(){
 			image.css("max-height", height);
 			image.css("margin-left", -((image.width()-width)/2));
 		}else{
-			image.css("max-width", widht);			
+			image.css("max-width", width);			
 			image.css("margin-top", -((image.height()-height)/2));
 		}
 	})

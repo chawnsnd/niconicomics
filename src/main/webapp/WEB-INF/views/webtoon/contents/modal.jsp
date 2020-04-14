@@ -9,7 +9,7 @@ $(function(){
 <c:if test="${sessionScope.loginUser != null}">
 function donate(){
 	$.ajax({
-		url: "<c:url value='/api/nico/donate'/>",
+		url: "<c:url value='/api/donates'/>",
 		type: "post",
 		data: {
 			authorId: webtoon.authorId,

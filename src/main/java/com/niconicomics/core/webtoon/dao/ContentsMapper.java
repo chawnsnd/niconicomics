@@ -10,6 +10,9 @@ public interface ContentsMapper {
 
 	public int insertContents(Contents contents);
 	public ArrayList<Contents> selectContentsListByEpisodeId(int episodeId); 
+	public ArrayList<Contents> selectContentsListByWebtoonIdAndEpisodeNo(
+			@Param("webtoonId") int webtoonId,
+			@Param("episodeNo") int episodeNo);
 	public Contents selectContentsByEpsodeIdAndIdx(
 			@Param("episodeId") int episodeId,
 			@Param("idx") int idx);
