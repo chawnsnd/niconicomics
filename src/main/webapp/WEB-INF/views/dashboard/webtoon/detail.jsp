@@ -11,8 +11,29 @@ var episodes = [];
 
 $(document).ready(function() {
 	$('#insert').on('click', insertEpisode);
+	getWebtoon();
 	getEpisodes();
 });
+
+function getWebtoon(){
+	$.ajax({
+		url: "<c:url value='/api/webtoons/${webtoonId}'/>", // core/webtoons
+		type: "GET",
+		data:{
+			authorId : "${sessionScope.loginUser.userId}"
+		},
+		success: function(data){
+			console.log(data)
+			data["hashtags"] = splitHashtag(data.hastag);
+			console.log(data)
+			bindTemplate($('#webtoonTemplate'), data);
+			imageContainer();
+		},
+		error: function(err){
+			console.log(err);
+		}
+	})
+}
 
 function insertEpisode(){
 	console.log(episodes);
@@ -58,12 +79,52 @@ function getEpisodes(){
 		}
 	})
 }
+function splitHashtag(hashtags){
+	var hashtagArr = hashtags.split("#");
+	$(hashtagArr).each(function(idx, hashtag){
+		hashtag = "#"+hashtag;
+	})
+	return hashtag
+}
 </script>
+<style>
+#webtoon_thumbnail{
+	width: 150px;
+	height: 150px;
+}
+</style>
 </head>
 <body>
 <%@ include file="../layout/header.jsp"%>
 <%@ include file="../layout/nav.jsp"%>
 <main>
+<h2>Webtoon</h2><hr>
+<div class="card">
+<!-- 	<script id="webtoonTemplate" type="text/x-handlebars-template"> -->
+	<div class="row">
+		<div class="col-md-auto">
+			<div id="webtoon_thumbnail" class="image_container col-md-auto">
+				<img src="{{thumbnail}}">
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-body">
+				<h5 class="card-title">{{title}}</h5>
+				<p class="card-text">{{summary}}</p>
+				
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<div class="card-footer text-right">
+				<button class="btn btn-warning btn-sm">EDIT</button>
+				<button class="btn btn-danger btn-sm">DELETE</button>
+			</div>
+		</div>
+	</div>
+<!-- 	</script> -->
+</div>
 <input type = "button" class="btn btn-primary" id = "insert" value ="회차등록">
 <table>
 	<tr>

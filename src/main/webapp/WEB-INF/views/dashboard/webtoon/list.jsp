@@ -41,9 +41,9 @@ function getWebtoons(curPage){
 			authorId : "${sessionScope.loginUser.userId}"
 		},
 		success: function(data){
-			console.log(data);
-			var template = $('#myWebtoonListTemplate');
-			bindTemplate(template, data.webtoonList);
+			console.log(data)
+			bindTemplate($('#webtoonListTemplate'), data.webtoonList);
+			imageContainer();
 		},
 		error: function(err){
 			console.log(err);
@@ -51,60 +51,55 @@ function getWebtoons(curPage){
 	})
 }
 </script>
+<style>
+.thumbnail{
+	width: 80px;
+	height: 50px;
+}
+</style>
 </head>
 <body>
 <%@ include file="../layout/header.jsp"%>
 <%@ include file="../layout/nav.jsp"%>
 <main>
 <h2>Webtoon</h2><hr>
-<input type = "button" class="btn btn-primary" id = "insert" value ="웹툰등록">
-<table>
-	<tr>
-		<th>
-			Thumbnail
-		</th>
-		<th>
-			Title
-		</th>
-		<th>
-			Summary
-		</th>
-		<th>
-			Hashtag
-		</th>
-
-		<th>
-			Delete
-		</th>
-		<th>
-			Update
-		</th>
-	</tr>
-	<script id="myWebtoonListTemplate" type="text/x-handlebars-template">
-	{{#each .}}
-	<tr>
-		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
-			<img src = "{{thumbnail}}" width = "100px">
-		</td>
-		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
-			{{title}}
-		</td>
-		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
-			{{summary}}
-		</td>
-		<td onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
-			{{hashtag}}
-		</td>
-		<td>
-			<input type = "button" value = "삭제" id = "deleteWebtoon" onclick="deleteWebtoon({{webtoonId}})">
-		</td>
-		<td>
-			<input type = "button" value = "수정" id = "updateWebtoon" onclick="updateWebtoon({{webtoonId}})">
-		</td>
-	</tr>
-	{{/each}}
-	</script>
-</table>
+<div class="card container">
+	<div class="card-body">
+		<p class="card-title text-right">
+			<input type = "button" class="btn btn-primary" id = "insert" value ="Enroll">
+		</p>
+		<script id="webtoonListTemplate" type="text/x-handlebars-template">
+		<table class="table">
+			<tr>
+				<th>
+					Thumbnail
+				</th>
+				<th width="70%">
+					Title
+				</th>
+				<th>
+					Reg Date
+				</th>
+			</tr>
+			{{#each .}}
+			<tr onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
+				<td>
+					<div class="thumbnail image_container">
+						<img src = "{{thumbnail}}" width = "100px">
+					</div>
+				</td>
+				<td>
+					{{title}}
+				</td>
+				<td>
+					{{regDate}}
+				</td>
+			</tr>
+			{{/each}}
+		</table>
+		</script>
+	</div>
+</div>
 </main>
 <%@ include file="../layout/footer.jsp"%>
 </body>

@@ -14,6 +14,7 @@ public class Webtoon {
 	private String mgrHashtag;
 	private String thumbnail;
 	private String end;
+	private String regDate;
 	private int maxNo;
 	
 }
