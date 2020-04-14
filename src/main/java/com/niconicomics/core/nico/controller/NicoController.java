@@ -30,20 +30,13 @@ public class NicoController {
 	private NicoService nicoService;
 	@Autowired
 	private KakaopayService kakaopayService;
-	@Autowired
-	private OpenBankingService openBankingService;
 	
-	@GetMapping(value = "/charge1")
 	@ResponseBody
+	@GetMapping(value = "/charge1")
 	public String charge1(int userId, String item, HttpSession session) {
-		log.debug(Integer.toString(userId));
-		log.debug(item);
 		User loginUser = (User) session.getAttribute("loginUser"); 
-		if(userId != loginUser.getUserId()) {
-			return "";
-		}
+		if(userId != loginUser.getUserId()) return "";
 		KakaoPayReady ready = kakaopayService.kakaoPayReady(item);
-		log.debug(ready.toString());
 		session.setAttribute("chargeUserId", userId);
 		return ready.getNext_redirect_pc_url();
 	}
@@ -53,28 +46,15 @@ public class NicoController {
 		int userId = (int) session.getAttribute("chargeUserId"); 
 		KakaoPayApprove approve = kakaopayService.kakaoPayApprove(pg_token);
 		int nico = Integer.parseInt(approve.getAmount().get("total"));
-		log.debug(Integer.toString(nico));
 		nicoService.chargeNico(userId, nico);
 		return "redirect:/users/me/charge-nico";
 	}
 	
-	@PostMapping(value = "/donate")
 	@ResponseBody
-	public boolean donate(int authorId, int sponsorId, int webtoonId, int nico, HttpSession session) {
-		User loginUser = (User) session.getAttribute("loginUser"); 
-		if(sponsorId == loginUser.getUserId()) {
-			return nicoService.donateNico(authorId, sponsorId, webtoonId, nico);			
-		}
-		return false;
-	}
-	
 	@PostMapping(value = "/exchage")
-	@ResponseBody
 	public boolean exchage(int userId, int nico, HttpSession session) {
 		User loginUser = (User) session.getAttribute("loginUser"); 
-		if(userId == loginUser.getUserId()) {
-			return nicoService.exchageNico(userId, nico);
-		}
-		return false;
+		if(userId != loginUser.getUserId()) return false;
+		return nicoService.exchageNico(userId, nico);
 	}
 }

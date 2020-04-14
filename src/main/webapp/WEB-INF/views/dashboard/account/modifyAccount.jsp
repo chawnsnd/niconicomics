@@ -37,8 +37,8 @@ function modifyAccount(){
 	var form = $('#accountForm')[0];
     var formData = new FormData(form);
 	$.ajax({
-		url: "../account/${sessionScope.loginUser.userId}",
-		type: "patch",
+		url: "../account/${sessionScope.loginUser.userId}/put",
+		type: "post",
 		data: formData,
 		dataType: 'json',
         contentType : false,

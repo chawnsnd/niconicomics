@@ -36,6 +36,7 @@
 			,regdate
 			,webtoon_id
 			,thumbnail
+			,hits
 		from 
 			tbl_episode
 		where
@@ -56,6 +57,9 @@
 			</if>
 			<if test="thumbnail != null">
 				thumbnail = #{thumbnail},
+			</if>
+			<if test="thumbnail != null">
+				hits = #{hits},
 			</if>
 		</set>
 		where
@@ -84,6 +88,7 @@
 			,regdate
 			,webtoon_id
 			,thumbnail
+			,hits
 		from
 			tbl_episode
 		where

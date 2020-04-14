@@ -2,6 +2,7 @@ package com.niconicomics.core.nico.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,12 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.niconicomics.core.nico.vo.Account;
-import com.niconicomics.core.nico.vo.OpenBankingRealName;
+import com.niconicomics.core.nico.vo.InquiryRealNameReq;
+import com.niconicomics.core.nico.vo.InquiryRealNameRes;
+import com.niconicomics.core.nico.vo.OpenBankingTokenRes;
+import com.niconicomics.core.nico.vo.TransferDepositReq;
+import com.niconicomics.core.nico.vo.TransferDepositReqItem;
+import com.niconicomics.core.nico.vo.TransferDepositRes;
+import com.niconicomics.core.nico.vo.TransferDepositResItem;
+import com.niconicomics.core.nico.vo.TransferResultReq;
+import com.niconicomics.core.nico.vo.TransferResultReqItem;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,14 +30,21 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class OpenBankingService {
 	
-	private String accessToken;
 	private final String CLIENT_ID = "OO2GQHBwJArOFvcr8Ezr55cqCn5sIS1JjGqtLbPW";
 	private final String CLIENT_SECRET = "tt2P8BVUWqUeYKa6laBrFKulf228gdKsoIEN3Nn8";
 	private final String HOST = "https://testapi.openbanking.or.kr";
+	private final String CODE = "T991617520";
+	
+	private DateFormat HHmmssSSS;
+	private DateFormat yyyyMMddHHmmss;
+	private DateFormat yyyyMMdd;
 	private Map<String, String> bankMap;
 	
 	public OpenBankingService() {
-		bankMap = new HashMap<>();
+		this.HHmmssSSS = new SimpleDateFormat("HHmmssSSS");
+		this.yyyyMMddHHmmss = new SimpleDateFormat("yyyyMMddHHmmss");
+		this.yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
+		this.bankMap = new HashMap<>();
 		bankMap.put("산업", "002");
 		bankMap.put("기업", "003");
 		bankMap.put("국민", "004");
@@ -75,74 +89,109 @@ public class OpenBankingService {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	public OpenBankingRealName inquiryRealName(String bankName, String accountNum, String birthdate) {
-		String access_token = getAccessToken();
-		HttpHeaders headers = new HttpHeaders();
-		Date date = new Date();
-		String bankCode = bankMap.get(bankName);
-		DateFormat format1 = new SimpleDateFormat("HHmmssSSS");
-		headers.set("Authorization", "Bearer "+access_token);
-        headers.set("Content-Type", "application/json; charset=UTF-8");
-		Map<String, String> body = new HashMap<String, String>();
-		body.put("bank_tran_id", "T991617520U"+format1.format(date)); //내가 만드는거임
-		body.put("bank_code_std", bankCode);
-		body.put("account_num", accountNum);
-		body.put("account_holder_info_type", " ");
-		body.put("account_holder_info", birthdate);
-		DateFormat format2 = new SimpleDateFormat("yyyyMMddHHmmss");
-		body.put("tran_dtime", format2.format(date));
-		HttpEntity<Map<String, String>> entity = new HttpEntity<Map<String, String>>(body, headers);
-		OpenBankingRealName realName = restTemplate.postForObject(HOST+"/v2.0/inquiry/real_name", entity, OpenBankingRealName.class);
-		return realName;
-	}
-	
 	private String getAccessToken() {
 		HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		body.add("client_id", CLIENT_ID);
-		body.add("client_secret", CLIENT_SECRET);
-		body.add("scope", "oob");
-		body.add("grant_type", "client_credentials");
-		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(body, headers);
-		String token = (String) restTemplate.postForObject(HOST+"/oauth/2.0/token", entity, Map.class).get("access_token");
-		accessToken = token;
-		return token;
+        String url = HOST+"/oauth/2.0/token"+
+        		"?client_id="+CLIENT_ID+
+        		"&client_secret="+CLIENT_SECRET+
+        		"&scope=oob"+
+        		"&grant_type=client_credentials";
+        HttpEntity entity = new HttpEntity<>(headers);
+		OpenBankingTokenRes res = (OpenBankingTokenRes) restTemplate.postForObject(url, entity, OpenBankingTokenRes.class);
+		return res.getAccess_token();
+	}
+	
+	public boolean inquiryRealName(Account account) {
+		Date date = new Date();
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer "+getAccessToken());
+        headers.set("Content-Type", "application/json; charset=UTF-8");
+        InquiryRealNameReq req = new InquiryRealNameReq();
+        req.setBank_tran_id(CODE+"U"+HHmmssSSS.format(date));
+        req.setBank_code_std(bankMap.get(account.getBankName()));
+        req.setAccount_num(account.getAccountNumber());
+        req.setAccount_holder_info_type(" ");
+        req.setAccount_holder_info(account.getRegistrationNumber().substring(0, 6));
+        req.setTran_dtime(Long.parseLong(yyyyMMddHHmmss.format(date)));
+        log.debug(req.toString());
+		HttpEntity<InquiryRealNameReq> entity = new HttpEntity<InquiryRealNameReq>(req, headers);
+		InquiryRealNameRes res = restTemplate.postForObject(HOST+"/v2.0/inquiry/real_name", entity, InquiryRealNameRes.class);
+		log.debug(res.toString());
+		return res.getAccount_holder_name().equals(account.getAccountHolderName());
 	}
 
-	public void transfer(Account account, int nico) {
-		String access_token = getAccessToken();
-		HttpHeaders headers = new HttpHeaders();
+	public boolean transfer(Account account, int nico) {
 		Date date = new Date();
-		DateFormat format1 = new SimpleDateFormat("yyyyMMddHHmmss");
-		DateFormat format2 = new SimpleDateFormat("HHmmssSSS");
-		headers.set("Authorization", "Bearer "+access_token);
-        headers.set("Content-Type", "application/json; charset=UTF-8");
-        Map<String, Object> body = new HashMap<>();
-		body.put("cntr_account_type", "N"); //내가 만드는거임
-		body.put("cntr_account_num", "1101230000678");
-		body.put("wd_pass_phrase", "123456");
-		body.put("wd_pass_content", "출금계좌인자내역");
-		body.put("name_check_option", "on");
-		body.put("tran_dtime", format1.format(date));
-		body.put("req_cnt", "1");
+		long tranDtime = Long.parseLong(yyyyMMddHHmmss.format(date));
+		String bankTranId = CODE+"U"+HHmmssSSS.format(date);
+		int bankTranDate = Integer.parseInt(yyyyMMdd.format(date));
+		int tranAmt = nico;
 		
-		Map<String, String> reqList = new HashMap<>();
-		reqList.put("tran_no", "1");
-		reqList.put("bank_tran_id", "T991617520U"+format2.format(date));
-		reqList.put("bank_code_std", bankMap.get(account.getBankName()));
-		reqList.put("account_num", account.getAccountNumber());
-		reqList.put("account_holder_name", account.getAccountHolderName());
-		reqList.put("print_content", "입금계좌인자내역");
-		reqList.put("tran_amt", Integer.toString(nico));
-		reqList.put("req_client_name", account.getName());
-		reqList.put("req_client_num", Integer.toString(account.getAccountId()));
-		reqList.put("transfer_purpose", "TR");
-		body.put("req_list", reqList);
-		// TODO Auto-generated method stub
-		HttpEntity<Map<String, Object>> entity = new HttpEntity<Map<String, Object>>(body, headers);
-		String result = (String) restTemplate.postForObject(HOST+"/v2.0/transfer/deposit/acnt_num", entity, String.class);
-		log.debug(result);
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer "+getAccessToken());
+        headers.set("Content-Type", "application/json; charset=UTF-8");
+        
+        TransferDepositReq req = new TransferDepositReq();
+        req.setCntr_account_type("N");
+        req.setCntr_account_num("4060044536");
+        req.setWd_pass_phrase("NONE");
+        req.setWd_print_content("니코환전");
+        req.setName_check_option("on");
+        req.setTran_dtime(tranDtime);
+        req.setReq_cnt(1);
+        
+        TransferDepositReqItem reqItem = new TransferDepositReqItem();
+        reqItem.setTran_no(1);
+        reqItem.setBank_tran_id(bankTranId);
+        reqItem.setBank_code_std(bankMap.get("오픈은행"));
+        reqItem.setPrint_content("니코환전");
+        reqItem.setTran_amt(tranAmt);
+        reqItem.setAccount_num("1234567890123456");
+        reqItem.setAccount_holder_name(account.getAccountHolderName());
+        reqItem.setReq_client_name(account.getName());
+        reqItem.setReq_client_bank_code(bankMap.get(account.getBankName()));
+        reqItem.setReq_client_account_num(account.getAccountNumber());
+        reqItem.setReq_client_num(Integer.toString(account.getAccountId()));
+        reqItem.setTransfer_purpose("TR");
+        ArrayList<TransferDepositReqItem> reqList = new ArrayList<>();
+        reqList.add(reqItem);
+        req.setReq_list(reqList);
+        log.debug(req.toString());
+        HttpEntity<TransferDepositReq> entity = new HttpEntity<TransferDepositReq>(req, headers);
+		TransferDepositRes res = (TransferDepositRes) restTemplate.postForObject(HOST+"/v2.0/transfer/deposit/acnt_num", entity, TransferDepositRes.class);
+		log.debug(res.toString());
+		transferResult(tranDtime, bankTranId, bankTranDate, tranAmt);
+		return false;
+	}
+	
+	private boolean transferResult(long tranDtime, String bankTranId, int bankTranDate, int tranAmt) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer "+getAccessToken());
+        headers.set("Content-Type", "application/json; charset=UTF-8");
+		String bankTranIdTemp = CODE+"U000000000";
+        int bankTranDateTemp = 20200401;
+        
+		TransferResultReq req = new TransferResultReq();
+		req.setCheck_type("2");
+		req.setReq_cnt(1);
+		req.setTran_dtime(tranDtime);
+		TransferResultReqItem reqItem = new TransferResultReqItem();
+		reqItem.setTran_no(1);
+//		reqItem.setOrg_bank_tran_id(bankTranId);
+//		reqItem.setOrg_bank_tran_date(bankTranDate);
+		reqItem.setOrg_bank_tran_id(bankTranIdTemp);
+		reqItem.setOrg_bank_tran_date(bankTranDateTemp);
+		reqItem.setOrg_tran_amt(tranAmt);
+		ArrayList<TransferResultReqItem> reqList = new ArrayList<>();
+		reqList.add(reqItem);
+		req.setReq_list(reqList);
+		log.debug(req.toString());
+		HttpEntity<TransferResultReq> entity = new HttpEntity<TransferResultReq>(req, headers);
+		String res = (String) restTemplate.postForObject(HOST+"/v2.0/transfer/result", entity, String.class);
+		log.debug(res.toString());
+		
+		return false;
 	}
 	
 }

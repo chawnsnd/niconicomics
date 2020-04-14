@@ -38,9 +38,9 @@
 			,hashtag 
 			,mgr_hashtag 
 			,thumbnail 
-			,hits 
 			,end
 			,(select max(no) from tbl_episode where webtoon_id = #{webtoonId}) as "max_no"
+			,(select nickname from tbl_user where user_id = author_id) as author_nickname
 		from tbl_webtoon
 		where webtoon_id = #{webtoonId}
 	</select>	
@@ -64,9 +64,6 @@
 			<if test="thumbnail != null">
 				thumbnail =#{thumbnail},
 			</if>
-			<if test="hits != null">
-				hits = #{hits},
-			</if>
 		</set>
 		where
 			webtoon_id = #{webtoonId}
@@ -80,7 +77,16 @@
 	</delete>
 
 	<select id="selectWebtoonList" resultType="webtoon" parameterType="webtoonSearchOption">
-		select * from tbl_webtoon
+		select webtoon_id 
+			,title 
+			,summary 
+			,author_id 
+			,hashtag 
+			,mgr_hashtag 
+			,thumbnail 
+			,end
+			,(select nickname from tbl_user where user_id = author_id) as author_nickname
+		from tbl_webtoon
 		<trim prefix="WHERE" suffixOverrides="and">
 		<if test="authorId != null and authorId != 0">
 			author_id = #{authorId} and

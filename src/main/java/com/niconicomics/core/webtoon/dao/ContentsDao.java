@@ -31,6 +31,12 @@ public class ContentsDao {
 		ArrayList<Contents> contentsList = mapper.selectContentsListByEpisodeId(episodeId);
 		return contentsList;
 	}
+
+	public ArrayList<Contents> selectContentsListByWebtoonIdAndEpisodeNo(int webtoonId, int episodeNo){
+		ContentsMapper mapper = session.getMapper(ContentsMapper.class);
+		ArrayList<Contents> contentsList = mapper.selectContentsListByWebtoonIdAndEpisodeNo(webtoonId, episodeNo);
+		return contentsList;
+	}
 	
 	public Contents selectContentsByEpsodeIdAndIdx(int episodeId, int idx) {
 		ContentsMapper mapper = session.getMapper(ContentsMapper.class);

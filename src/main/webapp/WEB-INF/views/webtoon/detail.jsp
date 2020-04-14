@@ -117,16 +117,18 @@ tr:active{
 <script id="episodeListTemplate" type="text/x-handlebars-template">
 <table class="episode-table table">
 	<tr>
-		<th>회차</th>
-		<th>이미지</th>
-		<th>제목</th>
-		<th>등록일</th>
+		<th>No</th>
+		<th>Image</th>
+		<th>Title</th>
+		<th>Hits</th>
+		<th>Reg Date</th>
 	</tr>
 	{{#each .}}
 	<tr onclick="location.href = '<c:url value='/webtoons/${webtoonId}/episodes/{{no}}'/>'">
 		<td>{{no}}</td>
 		<td><div class="image_container episode_thumbnail"><img src="{{thumbnail}}"></div></td>
 		<td>{{title}}</td>
+		<td>{{hits}}</td>
 		<td>{{regdate}}</td>
 	</tr>
 	{{/each}}

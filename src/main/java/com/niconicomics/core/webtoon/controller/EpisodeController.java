@@ -61,6 +61,8 @@ public class EpisodeController {
 			@PathVariable(name = "webtoonId") int webtoonId,
 			@PathVariable(name = "episodeNo") int episodeNo) {
 		Episode episode = episodeDao.selectEpisodeByWebtoonIdAndEpisodeNo(webtoonId, episodeNo);
+		episode.setHits(episode.getHits()+1);
+		episodeDao.updateEpisode(episode);
 		ArrayList<Contents> contentsList = contentsDao.selectContentsListByEpisodeId(episode.getEpisodeId());
 		Map<String, Object> result = new HashMap<>();
 		result.put("episode", episode);

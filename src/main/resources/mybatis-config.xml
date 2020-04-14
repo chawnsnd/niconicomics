@@ -15,12 +15,14 @@
 		<typeAlias type="com.niconicomics.core.chat.vo.Chat" alias="chat"/>
 		<typeAlias type="com.niconicomics.core.nico.vo.Account" alias="account"/>
 		<typeAlias type="com.niconicomics.core.nico.vo.Donate" alias="donate"/>
+		<typeAlias type="com.niconicomics.core.nico.vo.Transfer" alias="transfer"/>
 		<typeAlias type="com.niconicomics.core.user.vo.User" alias="user"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mapper/chat/chatMapper.xml"/>
 		<mapper resource="mapper/nico/accountMapper.xml"/>
 		<mapper resource="mapper/nico/donateMapper.xml"/>
+		<mapper resource="mapper/nico/transferMapper.xml"/>
 		<mapper resource="mapper/webtoon/webtoonMapper.xml"/>
 		<mapper resource="mapper/webtoon/episodeMapper.xml"/>
 		<mapper resource="mapper/webtoon/contentsMapper.xml"/>

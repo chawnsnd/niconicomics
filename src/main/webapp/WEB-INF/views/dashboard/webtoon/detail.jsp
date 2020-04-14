@@ -77,6 +77,9 @@ function getEpisodes(){
 			Title
 		</th>
 		<th>
+			Hits
+		</th>
+		<th>
 			Reg Date
 		</th>
 		<th>
@@ -97,6 +100,9 @@ function getEpisodes(){
 		</td>
 		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
 			{{title}}
+		</td>
+		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
+			{{Hits}}
 		</td>
 		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
 			{{regDate}}

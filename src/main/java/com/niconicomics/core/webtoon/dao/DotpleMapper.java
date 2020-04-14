@@ -10,4 +10,8 @@ public interface DotpleMapper {
 
 	public ArrayList<Dotple> selectDotpleListByContentsId(int contentsId);
 
+	public ArrayList<Dotple> selectDotpleListByEpisodeId(int episodeId);
+
+	public int deleteDotpleByDotpleId(int dotpleId);
+
 }

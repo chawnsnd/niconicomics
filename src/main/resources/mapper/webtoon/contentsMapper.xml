@@ -31,6 +31,22 @@
 			episode_id = #{episodeId}
 	</select>	
 
+	<select id="selectContentsListByWeboonIdAndEpisodeNo" resultType="contents">
+		select
+			contents_id
+			,episode_id
+			,idx
+			,image
+		from
+			tbl_contents
+		where	
+			episode_id = (
+				select episode_id 
+				from tbl_episode 
+				where webtoon_id = #{webtoonId} and no = #{episodeNo}
+			)
+	</select>	
+
 	<select id="selectContentsByEpsodeIdAndIdx" resultType="contents">
 		select *
 		from tbl_contents
