@@ -51,7 +51,6 @@ public class ChatRoom {
     	try {
 	    	ArrayList<Chat> chats = chatDao.selectChatsByWebtoonId(webtoonId);
 	    	for (Chat chat : chats) {
-	    		log.debug(chat.toString());
 				try {
 					TextMessage message = new TextMessage(objectMapper.writeValueAsString(chat));
 					session.sendMessage(message);

@@ -72,6 +72,7 @@ function getAccount(){
 <%@ include file="../layout/header.jsp"%>
 <%@ include file="../layout/nav.jsp"%>
 <main>
+<h2>Account</h2><hr>
 <div>
 	<div id="noAccountTemplate" class="template">
 		<div>등록된 계좌가 없습니다.</div>
@@ -80,48 +81,48 @@ function getAccount(){
 	<div id="accountTemplate" class="template">
 		<div class="box">
 			<div class="item">
-				<div class="title">이름</div>			
+				<div class="title">Name</div>			
 				<div class="value">{{name}}</div>
 			</div>
 			<div class="item">		
-				<div class="title">전화번호</div>			
+				<div class="title">Phone</div>			
 				<div class="value">{{phone}}</div>
 			</div>
 			<div class="item">		
-				<div class="title">주민번호</div>			
+				<div class="title">Registration Number</div>			
 				<div class="value">{{registrationNumber}}</div>
 			</div>
 			<div class="item">		
-				<div class="title">은행명</div>			
+				<div class="title">Bank Name</div>			
 				<div class="value">{{bankName}}</div>
 			</div>
 			<div class="item">		
-				<div class="title">계좌주</div>			
+				<div class="title">Account Holder Name</div>			
 				<div class="value">{{accountHolderName}}</div>
 			</div>
 			<div class="item">		
-				<div class="title">계좌번호</div>			
+				<div class="title">Account Number</div>			
 				<div class="value">{{accountNumber}}</div>
 			</div>
 			<div class="item">		
-				<div class="title">신분증</div>			
-				<div class="value"><a href="{{idCard}}">확인</a></div>
+				<div class="title">Id Card</div>			
+				<div class="value"><a href="{{idCard}}">check</a></div>
 			</div>
 			<div class="item">		
-				<div class="title">통장사본</div>			
-				<div class="value"><a href="{{copyOfBankbook}}">확인</a></div>
+				<div class="title">Copy Of Bankbook</div>			
+				<div class="value"><a href="{{copyOfBankbook}}">check</a></div>
 			</div>
 			<div class="item">		
-				<div class="title">실명확인</div>			
+				<div class="title">Inquiry Name ?</div>			
 				<div class="value">{{inquiryName}}</div>
 			</div>
 			<div class="item">		
-				<div class="title">승인여부</div>			
+				<div class="title">Approved ?</div>			
 				<div class="value">{{approved}}</div>
 			</div>
 			<div class="info">
-				실명확인이 되지 않은 경우 계좌정보를 다시 수정해야 승인이 가능합니다.<br>
-				승인 된 계좌를 통해 정산신청이 가능합니다.
+				If the real name is not verified, the account information needs to be revised to be approved.<br>
+				Payment can be made through an approved account.
 			</div>
 			<div class="btn-group">
 				<button class="btn btn-outline-secondary btn-sm" onclick="location.href='modify-account'"><i class="far fa-edit"></i></button>

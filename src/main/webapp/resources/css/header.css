@@ -1,27 +1,64 @@
 .header_wrap{
 	width: 1000px;
 	margin: auto;
+	line-height: 75px;
 }
 .header_left{
 	float: left;
+	vertical-align: middle;
+	line-height: 75px;
 }
 .header_right{
 	float: right;
+	vertical-align: middle;
+	line-height: 75px;
+}
+.header_right > div{
+	vertical-align: middle;
+}
+.header_right > div > a{
+	color: black;
+	font-size: 15px;
+	margin-left: 8px;
+	font-weight: 500;
+	text-decoration: none;
+}
+.header_right > div > a > i{
+	font-weight: 600;
+}
+.header_login{
+	line-height: 30px;
+	margin-top: 10px;
+}
+.header_login > * {
+	vertical-align: bottom;
+}
+.header_login > .header_userinfo{
+	text-align: right;
+	font-weight: bold;
+	font-size: 18px;
 }
 .header_title{
+	width: 80px;
+	height: 80px;
 	display: inline-block;
 	font-weight: bold;
 	font-size: 15px;
 	cursor: pointer;
 	background-color: #fbc714;
 	padding: 8px;
+	vertical-align: middle;
+	line-height: 20px;
 }
 .header_menus{
-	margin-left: 50px;
+	margin: auto;
+	margin-left: 30px;
 	display: inline-block;
+	vertical-align: middle;
 }
 .header_menus > a {
-	font-size: 15px;
+	margin-right: 20px;
+	font-size: 20px;
 	color: black;
 	font-weight: 500;
 }

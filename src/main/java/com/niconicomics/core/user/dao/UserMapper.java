@@ -12,6 +12,6 @@ public interface UserMapper {
 
 	public User selectUserByEmail(String email);
 
-	public boolean editUser(User user);
+	public boolean updateUser(User user);
 
 }

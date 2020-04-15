@@ -46,7 +46,6 @@ public class ChatHandler extends TextWebSocketHandler{
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		Chat chat = objectMapper.readValue(message.getPayload(), Chat.class);
-		log.debug(chat.toString());
 		User user = userDao.selectUserByUserId(chat.getUserId());
 		chat.setNickname(user.getNickname());
 		int webtoonId = chat.getWebtoonId();

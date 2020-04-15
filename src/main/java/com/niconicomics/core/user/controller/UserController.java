@@ -7,12 +7,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.service.MailService;
@@ -23,8 +25,8 @@ import com.niconicomics.core.user.vo.User;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Controller
-@RequestMapping("users")
+@RestController
+@RequestMapping("/api/users")
 public class UserController {
 	
 	@Autowired
@@ -34,57 +36,34 @@ public class UserController {
 	@Autowired
 	private MailService mailService;
 	
-	@GetMapping(value = "/join")
-	public String test() {
-		return "user/join";
-	}
-	
-	@ResponseBody
-	@GetMapping(value ="/api/users/me")
+	@GetMapping(value ="/me")
 	public User getMe(HttpSession session) {
 		User user = (User) session.getAttribute("loginUser");
+		if(user == null) return null;
 		User newUser = userDao.selectUserByUserId(user.getUserId());
-		//나를 찾는로직
 		return newUser;
 	}
 
-	@ResponseBody
-	@GetMapping(value ="/api/users/{userId}")
+	@GetMapping(value ="/{userId}")
 	public User getUser(@PathVariable(name = "userId") int userId) {
 		User user = userDao.selectUserByUserId(userId);
 		user.setPassword(null);
-		//나를 찾는로직
 		return user;
 	}
 	
-	// 이메일 중복 체크
 	@PostMapping(value = "/check-email")
-	public @ResponseBody String checkEmail(String email) {
-		
-		boolean result = userService.checkEmailValidation(email);
-		
-		if (!result) {
-			return "no";
-		} else {
-			return "yes";
-		}
+	public boolean checkEmail(String email) {
+		return userService.checkEmailValidation(email);
 	}
 	
-	@ResponseBody
 	@PostMapping(value = "/join1")
-	public boolean authorizeEmail(HttpSession session, User user, HttpServletResponse response_email) throws IOException {
-		
-		System.out.println("send-mail check : " + user.getEmail());
-		
+	public boolean join1(HttpSession session, User user, HttpServletResponse response_email) throws IOException {
 		String random = Integer.toString(new Random().nextInt(900000)+100000);
-		
 		session.setAttribute("random", random);
 		session.setAttribute("user", user);
-		// 보내는 사람 주소
+		
 		String fromEmail = "niconicomics@gmail.com";
-		// 제목
 		String subject = "[niconicomics] Please verify your email address.";
-		// 내용
 		String text =
 				"Hi,"+
 				System.lineSeparator()+
@@ -101,14 +80,8 @@ public class UserController {
 		return mailService.sendMail(subject, text, fromEmail, user.getEmail(), null);
 	}
 	
-	@GetMapping(value="/join2")
-	public String goJoin2() {
-		return "user/sendEmail";
-	}
-	
-	@ResponseBody
 	@PostMapping(value = "/join2")
-	public Boolean sendEmail(String random, HttpSession session) {
+	public boolean join2(String random, HttpSession session) {
 		String sessionRandom = (String)session.getAttribute("random");
 		User user = (User)session.getAttribute("user");
 		if(sessionRandom.equals(random)) {
@@ -132,86 +105,45 @@ public class UserController {
 		}
 	}
 
-	@GetMapping(value = "/login")
-	public String goLogin() {
-		
-		return "user/login";
-	}
-	
-	@ResponseBody
 	@PostMapping(value = "/login")
-	public String login(String email, String password, HttpSession session) {
-		
-		System.out.println(email+","+password);
-//		System.out.println("email: {}, password: {}", email, password);
-		
+	public boolean login(String email, String password, HttpSession session) {
 		User user = userDao.selectUserByEmail(email);
+		if(user == null) return false;
 		String salt = user.getSalt();
 		String hashedPassword = UserUtil.hashBySHA256(password, salt);
-		
-		if(user != null && hashedPassword.equals(user.getPassword())) {
+		if(hashedPassword.equals(user.getPassword())) {
 			session.setAttribute("loginUser", user);
-			return "yes";
-		}
-		else {
-			return "no";
-		}
-		
-	}
-	
-	// 비밀번호 확인
-	@PostMapping(value = "/me/check-password")
-	public @ResponseBody String checkPassword(HttpSession session, String userId, String password) {
-		
-		User user = (User)session.getAttribute("loginUser");
-		
-		String salt = user.getSalt();
-		String hashedPassword = UserUtil.hashBySHA256(password, salt);
-		
-		if(user != null && hashedPassword.equals(user.getPassword())) {
-			return "yes";
-		}
-		else {
-			return "no";
-		}
-	}
-	
-	@ResponseBody
-	@PostMapping(value = "/me/edit-profile")
-	public String editUser(HttpSession session, String nickname, String password) {
-		User user = (User)session.getAttribute("loginUser");
-		System.out.println(user.toString());
-		user.setNickname(nickname);
-		
-		if(!password.equals("") && password != null) {
-			String salt = user.getSalt();
-			String hashedPassword = UserUtil.hashBySHA256(password, salt);
-			user.setPassword(hashedPassword);
-		}
-		
-		boolean result = userDao.editUser(user);
-		if (result) {
-			return "yes";
+			return true;
 		} else {
-			return "no";
+			return false;
 		}
+		
 	}
 	
 	@GetMapping(value = "/logout")
-	public String logout(HttpSession session) {
+	public void logout(HttpSession session) {
 		session.removeAttribute("loginUser");
-		return "redirect:/";
 	}
 	
-	@GetMapping(value = "/me/profile")
-	public String myPage() {
-		
-		return "user/me/profile";
+	@PostMapping(value = "/check-password")
+	public boolean checkPassword(HttpSession session, int userId, String password) {
+		User user = userDao.selectUserByUserId(userId);
+		String salt = user.getSalt();
+		String hashedPassword = UserUtil.hashBySHA256(password, salt);
+		if(hashedPassword.equals(user.getPassword())) return true;
+		else return false;
 	}
 	
-	@GetMapping(value = "/me/edit-profile")
-	public String selectUser() {
-		
-		return "user/me/editProfile";
+	@PatchMapping(value = "/{userId}")
+	public void editUser(
+			HttpSession session,
+			@RequestBody User newUser,
+			@PathVariable int userId) {
+		User user = (User) session.getAttribute("loginUser");
+		log.debug(newUser.toString());
+		if(userId != user.getUserId()) return;
+		if(newUser.getPassword() != null) newUser.setPassword(UserUtil.hashBySHA256(newUser.getPassword(), user.getSalt()));
+		newUser.setUserId(userId);
+		userDao.updateUser(newUser);
 	}
 }

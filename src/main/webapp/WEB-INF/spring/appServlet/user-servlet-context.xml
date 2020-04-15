@@ -33,7 +33,7 @@
 	
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/chat"/>
+			<mvc:mapping path="/users/mypage"/>	
 			<beans:ref bean="LoginInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
@@ -46,10 +46,7 @@
 	
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/dashboard"/>
-			<mvc:mapping path="/dashboard/*"/>
-			<mvc:mapping path="/account"/>			
-			<mvc:mapping path="/account/*"/>			
+			<mvc:mapping path="/dashboard"/>	
 			<beans:ref bean="AuthorInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>

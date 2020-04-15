@@ -16,20 +16,16 @@ public class AuthorInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		logger.debug("AuthorInterceptor 실행");
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
 		if(loginUser == null) {
-			response.setStatus(401);
+			response.sendRedirect(request.getContextPath() + "/users/login");
 			return false;
 		}
 
-		if(loginUser.getType().equals("ADMIN")) {
-			return super.preHandle(request, response, handler);		
-		}
-		
 		if(!loginUser.getType().equals("AUTHOR")) {
-			response.setStatus(403);
+			session.removeAttribute("loginUser");
+			response.sendRedirect(request.getContextPath() + "/users/login");
 			return false;
 		}
 		

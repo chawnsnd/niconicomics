@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.niconicomics.core.nico.service.KakaopayService;
 import com.niconicomics.core.nico.service.NicoService;
+import com.niconicomics.core.nico.service.OpenBankingService;
 import com.niconicomics.core.nico.vo.KakaoPayApprove;
 import com.niconicomics.core.nico.vo.KakaoPayReady;
+import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.vo.User;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,17 +31,12 @@ public class NicoController {
 	@Autowired
 	private KakaopayService kakaopayService;
 	
-	@GetMapping(value = "/charge1")
 	@ResponseBody
+	@GetMapping(value = "/charge1")
 	public String charge1(int userId, String item, HttpSession session) {
-		log.debug(Integer.toString(userId));
-		log.debug(item);
 		User loginUser = (User) session.getAttribute("loginUser"); 
-		if(userId != loginUser.getUserId()) {
-			return "";
-		}
+		if(userId != loginUser.getUserId()) return "";
 		KakaoPayReady ready = kakaopayService.kakaoPayReady(item);
-		log.debug(ready.toString());
 		session.setAttribute("chargeUserId", userId);
 		return ready.getNext_redirect_pc_url();
 	}
@@ -49,19 +46,15 @@ public class NicoController {
 		int userId = (int) session.getAttribute("chargeUserId"); 
 		KakaoPayApprove approve = kakaopayService.kakaoPayApprove(pg_token);
 		int nico = Integer.parseInt(approve.getAmount().get("total"));
-		log.debug(Integer.toString(nico));
 		nicoService.chargeNico(userId, nico);
 		return "redirect:/users/me/charge-nico";
 	}
 	
-	@PostMapping(value = "/donate")
 	@ResponseBody
-	public boolean donate(int authorId, int sponsorId, int webtoonId, int nico, HttpSession session) {
+	@PostMapping(value = "/exchage")
+	public boolean exchage(int userId, int nico, HttpSession session) {
 		User loginUser = (User) session.getAttribute("loginUser"); 
-		if(sponsorId == loginUser.getUserId()) {
-			return nicoService.donateNico(authorId, sponsorId, webtoonId, nico);			
-		}
-		return false;
+		if(userId != loginUser.getUserId()) return false;
+		return nicoService.exchageNico(userId, nico);
 	}
-	
 }

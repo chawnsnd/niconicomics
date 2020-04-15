@@ -3,27 +3,32 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- 에피소드 처리 SQL -->
-<mapper namespace="com.niconicomics.core.dao.EpisodeMapper">
+<mapper namespace="com.niconicomics.core.webtoon.dao.EpisodeMapper">
 
-<!-- 에피소드 입력 -->
-	<insert id="InsertEpisode" parameterType="episode">
+	<insert id="insertEpisode" parameterType="episode">
+		<selectKey keyProperty="episodeId" resultType="int" order="BEFORE">
+			select seq_episode.nextval from dual
+		</selectKey>
 		insert into tbl_episode(
 			episode_id
 			,no
 			,title
 			,webtoon_id
+			<if test="thumbnail != null">
 			,thumbnail
+			</if>
 		)values(
-			seq_episode.nextval
+			#{episodeId}
 			,#{no}
 			,#{title}
 			,#{webtoonId}
+			<if test="thumbnail != null">
 			,#{thumbnail}
+			</if>
 		)
 	</insert>
-<!-- 에피소드 정보 읽기-->
-	<select id="episodeList" resultType="episode">
+	
+	<select id="selectEpisodeListByWebtoonId" resultType="episode" parameterType="int">
 		select
 			episode_id
 			,no
@@ -31,14 +36,19 @@
 			,regdate
 			,webtoon_id
 			,thumbnail
+			,hits
 		from 
 			tbl_episode
+		where
+			webtoon_id = #{webtoonId}
+		order by
+			episode_id
 	</select>
-<!-- 에피소드 업데이트 -->
+	
 	<update id="updateEpisode" parameterType="episode">
 		update
 			tbl_episode
-		set
+		<set>
 			<if test="no != null">
 				no = #{no},
 			</if>
@@ -48,18 +58,41 @@
 			<if test="thumbnail != null">
 				thumbnail = #{thumbnail},
 			</if>
-				webtoon_id = #{webtoonId}
+			<if test="thumbnail != null">
+				hits = #{hits},
+			</if>
+		</set>
 		where
-			episode_id = #{episodeId} and
-			webtoon_id = #{webtoonId}
+			episode_id = #{episodeId}
 	</update>
-<!-- 에피소드 삭제 -->
-	<delete id="deleteEpisode" parameterType="episode">
+	
+	<delete id="deleteEpisodeByEpisodeId" parameterType="int">
 		delete from
 			tbl_episode
 		where
-			episode_id = #{episodeId} and
-			webtoon_id = #{webtoonId}
+			episode_id = #{episodeId}
 	</delete>
+
+	<select id="selectEpisodeByEpisodeId" parameterType="episode" resultType="Episode">
+		select * from
+			tbl_episode
+		where
+			episode_id = #{episodeId}
+	</select>
+	
+	<select id="selectEpisodeByWebtoonIdAndEpisodeNo" resultType="episode">
+		select
+			episode_id
+			,no
+			,title
+			,regdate
+			,webtoon_id
+			,thumbnail
+			,hits
+		from
+			tbl_episode
+		where
+			webtoon_id = #{webtoonId} and no = #{episodeNo}
+	</select>
 
 </mapper>
