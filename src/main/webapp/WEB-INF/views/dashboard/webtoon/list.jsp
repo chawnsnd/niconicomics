@@ -63,10 +63,10 @@ function getWebtoons(curPage){
 <%@ include file="../layout/nav.jsp"%>
 <main>
 <h2>Webtoon</h2><hr>
-<div class="card container">
+<div class="card">
 	<div class="card-body">
-		<p class="card-title text-right">
-			<input type = "button" class="btn btn-primary" id = "insert" value ="Enroll">
+		<p class="card-title">
+			<input type = "button" class="btn btn-primary" id = "insert" value ="Enroll Webtoon">
 		</p>
 		<script id="webtoonListTemplate" type="text/x-handlebars-template">
 		<table class="table">
@@ -85,7 +85,7 @@ function getWebtoons(curPage){
 			<tr onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
 				<td>
 					<div class="thumbnail image_container">
-						<img src = "{{thumbnail}}" width = "100px">
+						<img src = "{{thumbnail}}">
 					</div>
 				</td>
 				<td>
