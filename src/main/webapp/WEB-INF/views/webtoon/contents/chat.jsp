@@ -10,6 +10,7 @@ sock.onclose = onclose; //연결 끊음
 $(function(){
 	$("#middle").css("height", $(window)[0].innerHeight-110);
 	$("#chat_room").css("height", $("#middle").height()-50);
+	$("#chat_room").scrollTop($("#chat_room")[0].scrollHeight);
 	$("#message, #me").on("keyup", function(e){
 		if(e.keyCode == 13){
 			sendMessage();

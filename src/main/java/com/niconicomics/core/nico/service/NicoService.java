@@ -1,5 +1,7 @@
 package com.niconicomics.core.nico.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,10 +43,10 @@ public class NicoService {
 		Account account = accountDao.selectAccountByAuthorId(userId);
 		int amount = (int) (nico * (1-FEES));
 		if(user.getNico()-amount < 0) return false;
-		if(!openBankingService.transfer(account, amount)) return false;
+//		if(!openBankingService.transfer(account, amount)) return false;
 		user.setNico(user.getNico()-nico);
 		Transfer transfer = new Transfer();
-		transfer.setAccountId(userId);
+		transfer.setAccountId(account.getAccountId());
 		transfer.setNico(nico);
 		transfer.setAmount(amount);
 		if(userDao.updateUser(user) && transferDao.insertTransfer(transfer)) {
@@ -52,6 +54,11 @@ public class NicoService {
 		}else {			
 			return false;
 		}
+	}
+	
+	public ArrayList<Transfer> getTransferList(int authorId){
+		Account account = accountDao.selectAccountByAuthorId(authorId);
+		return transferDao.selectTransferListByAccountId(account.getAccountId());
 	}
 	
 }

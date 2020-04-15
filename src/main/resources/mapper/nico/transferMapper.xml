@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.niconicomics.core.nico.dao.transferMapper">
+<mapper namespace="com.niconicomics.core.nico.dao.TransferMapper">
 
-	<insert id="transferDonate" parameterType="transfer">
+	<insert id="insertTransfer" parameterType="transfer">
 		insert into tbl_transfer(
 			transfer_id,
-			author_id,
+			account_id,
 			amount,
-			nico,
+			nico
 		) values (
 			seq_transfer.nextval,
-			#{authorId},
+			#{accountId},
 			#{amount},
-			#{nico},
+			#{nico}
 		)
 	</insert>
+	
+	<select id="selectTransferListByAccountId" resultType="transfer">
+		select *
+		from tbl_transfer
+		where account_id = #{accountId}
+		order by transfer_id desc
+	</select>
 
 </mapper>

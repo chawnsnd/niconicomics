@@ -1,6 +1,7 @@
 var hide = false;
 var footerPositionTop;
 var fullScreen = false;
+var showDotple;
 function initScroll(){
 	$(window).on("mousemove", function(e){
 		if(hide){
@@ -41,6 +42,14 @@ function toggleChatroom(e){
 }
 function toggleDotple(){
 	$(".dotple").toggle();
+	showDotple = !showDotple;
+}
+function settingDotple(){
+	if(showDotple){
+		$(".dotple").show();
+	}else{
+		$(".dotple").hide();
+	}
 }
 function initShowHide(){
 	if(me.showChat == "SHOW"){
@@ -49,16 +58,16 @@ function initShowHide(){
 		$("#chatroom").hide();
 	}
 	if(me.showDotple == "SHOW"){
-		$(".dotple").show();
+		showDotple = true;
 	}else if(me.showDotple == "HIDE"){
-		$(".dotple").hide();
+		showDotple = false;
 	}
+	settingDotple();
 }
 function initHotKey(){
 	$(document).keydown(function(e){
 		if(e.keyCode == 27){
 			$("#dotpleForm").remove();
-			showDotpleForm = false;
 		}
 	})
 }
