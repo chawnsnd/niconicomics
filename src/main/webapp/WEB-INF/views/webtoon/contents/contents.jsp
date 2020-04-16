@@ -223,7 +223,7 @@ function submitDotple(e){
 			success: function(data){
 				var message = "${sessionScope.loginUser.nickname} left a dotple.";
 				if(nico > 0){
-					message = "${sessionScope.loginUser.nickname} left a dotple width "+nico+" Nico donation."
+					message = "${sessionScope.loginUser.nickname} left a dotple with "+nico+" Nico donation."
 				}
 				sock.send(JSON.stringify({
 					userId: me.userId,
