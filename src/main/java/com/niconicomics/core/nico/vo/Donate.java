@@ -11,6 +11,5 @@ public class Donate {
 	private int authorId;
 	private int webtoonId;
 	private int nico;
-	private int dotpleId;
 	
 }

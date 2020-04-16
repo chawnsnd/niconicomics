@@ -39,6 +39,7 @@
 			,mgr_hashtag 
 			,thumbnail 
 			,end
+			,reg_date
 			,(select max(no) from tbl_episode where webtoon_id = #{webtoonId}) as "max_no"
 			,(select nickname from tbl_user where user_id = author_id) as author_nickname
 		from tbl_webtoon
@@ -85,6 +86,7 @@
 			,mgr_hashtag 
 			,thumbnail 
 			,end
+			,reg_date
 			,(select nickname from tbl_user where user_id = author_id) as author_nickname
 		from tbl_webtoon
 		<trim prefix="WHERE" suffixOverrides="and">

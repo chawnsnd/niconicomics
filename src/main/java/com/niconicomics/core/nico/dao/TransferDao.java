@@ -1,5 +1,7 @@
 package com.niconicomics.core.nico.dao;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,6 +21,11 @@ public class TransferDao {
 		}else {
 			return false;
 		}
+	}
+	
+	public ArrayList<Transfer> selectTransferListByAccountId(int accountId){
+		TransferMapper mapper = session.getMapper(TransferMapper.class);
+		return mapper.selectTransferListByAccountId(accountId);
 	}
 
 }

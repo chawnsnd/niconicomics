@@ -11,4 +11,5 @@ public class Dotple {
 	private int xAxis;
 	private int yAxis;
 	private int idx;
+	private String type;
 }

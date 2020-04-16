@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!DOCTYPE html>
+<link rel="shortcut icon" type="image/png" href="<c:url value='/resources/favicon.png'/>">
 <style>
 header{
 	background-color: white;
@@ -53,7 +53,7 @@ header *{
 <header>
 	<div class="logo" onclick="location.href='<c:url value="/"/>'">ニコニコ</div>
 	<script id="titleTemplate" type="text/x-handlebars-template">
-		<div id="title" class="title" onclick="location.href='<c:url value="/webtoons/${webtoonId}"/>'">{{title}} Ep. ${episodeNo}</div>
+		<div id="title" class="title" onclick="location.href='<c:url value="/webtoons/${webtoonId}"/>'">(${episodeNo}) {{title}}</div>
 	</script>
 	<div class="menu">
 		<div class="menu_item" id="toggleDotple" onclick="toggleDotple()">DOTPLE</div>

@@ -7,22 +7,33 @@
 <meta charset="UTF-8">
 <%@ include file="../layout/global.jsp"%>
 <script>
-var episodes = [];
-
+var maxNo = 0;
 $(document).ready(function() {
 	$('#insert').on('click', insertEpisode);
+	getWebtoon();
 	getEpisodes();
 });
 
+function getWebtoon(){
+	$.ajax({
+		url: "<c:url value='/api/webtoons/${webtoonId}'/>", // core/webtoons
+		type: "GET",
+		data:{
+			authorId : "${sessionScope.loginUser.userId}"
+		},
+		success: function(data){
+			maxNo = data.maxNo;
+			data["hashtags"] = data.hashtag.split("#").slice(1);
+			bindTemplate($('#webtoonTemplate'), data);
+			imageContainer();
+		},
+		error: function(err){
+			console.log(err);
+		}
+	})
+}
+
 function insertEpisode(){
-	console.log(episodes);
-	var maxNo;
-	if (episodes.length == 0) maxNo = 0;
-	else{
-		var maxNo = episodes.reduce(function(prev, curr){
-			return prev.no > curr.no ? prev : curr;
-		}).no;
-	}
 	location.href="<c:url value='/dashboard/webtoons/${webtoonId}/episodes/"+(maxNo+1)+"/insert'/>"
 }
 
@@ -39,6 +50,24 @@ function deleteEpisode(episodeNo){
 	})
 }
 
+function deleteWebtoon(webtoonId){
+	$.ajax({
+		url : "<c:url value='/api/webtoons/'/>"+webtoonId,
+		method : "delete",
+		success : function(){
+			location.href="<c:url value='/dashboard/webtoons'/>"
+		},
+		error : function(err){
+			console.log(err)
+		}
+	})
+}
+
+function updateWebtoon(webtoonId){
+	location.href = "<c:url value='/dashboard/webtoons/"+webtoonId+"/update'/>"
+}
+
+
 function updateEpisode(episodeNo){
 	location.href = "<c:url value='/dashboard/webtoons/${webtoonId}/episodes/"+episodeNo+"/update'/>"
 }
@@ -49,9 +78,10 @@ function getEpisodes(){
 		type: "GET",
 		async: false,
 		success: function(data){
+			console.log(data);
 			var template = $('#myEpisodeListTemplate');
 			bindTemplate(template, data);
-			episodes = data;
+			imageContainer();
 		},
 		error: function(err){
 			console.log(err);
@@ -59,64 +89,107 @@ function getEpisodes(){
 	})
 }
 </script>
+<style>
+#webtoon_thumbnail{
+	width: 150px;
+	height: 150px;
+}
+#episode_thumbnail{
+	width: 80px;
+	height: 50px;
+}
+</style>
 </head>
 <body>
 <%@ include file="../layout/header.jsp"%>
 <%@ include file="../layout/nav.jsp"%>
 <main>
-<input type = "button" class="btn btn-primary" id = "insert" value ="회차등록">
-<table>
-	<tr>
-		<th>
-			Thumbnail
-		</th>
-		<th>
-			No
-		</th>
-		<th>
-			Title
-		</th>
-		<th>
-			Hits
-		</th>
-		<th>
-			Reg Date
-		</th>
-		<th>
-			Delete
-		</th>
-		<th>
-			Update
-		</th>
-	</tr>
-	<script id="myEpisodeListTemplate" type="text/x-handlebars-template">
-	{{#each .}}
-	<tr>
-		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
-			<img src = "{{thumbnail}}" width = "100px">
-		</td>
-		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
-			{{no}}
-		</td>
-		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
-			{{title}}
-		</td>
-		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
-			{{Hits}}
-		</td>
-		<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
-			{{regDate}}
-		</td>
-		<td>
-			<input type = "button" value = "삭제" id = "deleteEpisode" onclick="deleteEpisode({{no}})">
-		</td>
-		<td>
-			<input type = "button" value = "수정" id = "updateEpisode" onclick="updateEpisode({{no}})">
-		</td>
-	</tr>
-	{{/each}}
-	</script>
-</table>
+<h2>Webtoon</h2><hr>
+<div class="card">
+	<script id="webtoonTemplate" type="text/x-handlebars-template">
+	<div class="row">
+		<div class="col-md-auto">
+			<div id="webtoon_thumbnail" class="image_container col-md-auto">
+				<img src="{{thumbnail}}">
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-body">
+				<h5 class="card-title">{{title}}</h5>
+				<p class="card-text">{{summary}}</p>
+				<div id="hashtags">
+					{{#each hashtags}}
+					<span class="badge badge-pill badge-info"># {{this}}</span>
+					{{/each}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<div class="card-footer text-right">
+				<button class="btn btn-warning btn-sm" onclick="updateWebtoon({{webtoonId}})">EDIT</button>
+				<button class="btn btn-danger btn-sm" onclick="deleteWebtoon({{webtoonId}})">DELETE</button>
+			</div>
+		</div>
+	</div>
+ 	</script>
+</div>
+<div class="card mt-3">
+	<div class="card-body">
+		<p class="card-title">
+			<input type = "button" class="btn btn-primary" id = "insert" value ="Post Episode" onclick="insertEpisode()">
+		</p>
+		<script id="myEpisodeListTemplate" type="text/x-handlebars-template">
+		<table class="table">
+			<tr>
+				<th>
+					No
+				</th>
+				<th>
+					Thumbnail
+				</th>
+				<th width="50%">
+					Title
+				</th>
+				<th>
+					Hits
+				</th>
+				<th>
+					Reg Date
+				</th>
+				<th>
+					Edit
+				</th>
+			</tr>
+			{{#each .}}
+			<tr>
+				<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
+					{{no}}
+				</td>
+				<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
+					<div id="episode_thumbnail" class="image_container">
+						<img src = "{{thumbnail}}" width = "100px">
+					</div>
+				</td>
+				<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
+					{{title}}
+				</td>
+				<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
+					{{hits}}
+				</td>
+				<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
+					{{regdate}}
+				</td>
+				<td>
+					<button class="btn btn-warning btn-sm" id="updateEpisode" onclick="updateEpisode({{no}})">Edit</button>
+				</td>
+			</tr>
+		 	{{/each}}
+		</table>
+		</script>
+	</div>
+</div>
 </main>
 <%@ include file="../layout/footer.jsp"%>
 </body>

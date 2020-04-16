@@ -56,6 +56,7 @@ public class WebtoonController {
 	
 	@PostMapping(value = "")
 	public void insertWebtoon(Webtoon webtoon, MultipartFile thumbnailImage, HttpSession session) throws NotImageException {
+		log.debug(webtoon.toString());
 		User user = (User) session.getAttribute("loginUser");
 		webtoon.setAuthorId(user.getUserId());
 		int webtoonId = webtoonDao.insertWebtoon(webtoon);

@@ -119,7 +119,7 @@ tr:active{
 	<tr>
 		<th>No</th>
 		<th>Image</th>
-		<th>Title</th>
+		<th class="text-left">Title</th>
 		<th>Hits</th>
 		<th>Reg Date</th>
 	</tr>
@@ -127,7 +127,7 @@ tr:active{
 	<tr onclick="location.href = '<c:url value='/webtoons/${webtoonId}/episodes/{{no}}'/>'">
 		<td>{{no}}</td>
 		<td><div class="image_container episode_thumbnail"><img src="{{thumbnail}}"></div></td>
-		<td>{{title}}</td>
+		<td style="width: 50%;" class="text-left">{{title}}</td>
 		<td>{{hits}}</td>
 		<td>{{regdate}}</td>
 	</tr>

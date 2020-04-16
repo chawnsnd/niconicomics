@@ -8,6 +8,10 @@
 <title>작가 대시보드</title>
 <%@ include file="../layout/global.jsp"%>
 <script>
+Handlebars.registerHelper('calcFees', function (nico, amount){
+    return (((nico-amount)/nico)*100).toFixed(2)+" %";
+});
+
 var me;
 $(function(){
 	getMe();
@@ -19,30 +23,52 @@ function getMe(){
 		async: false,
 		success: function(data){
 			me = data;
+			getTransfers(data.userId);
 			$("#exchage").remove();
 			bindTemplate($("#exchangeTemplate"), data);
 		},
 		error: function(err){
 			console.log(err);
 		}
-	})	
+	})
 }
-function exchage(){
+function getTransfers(authorId){
 	$.ajax({
-		url: "<c:url value='/api/nico/exchage'/>",
-		method: "post",
-		data: {
-			userId : ${sessionScope.loginUser.userId},
-			nico : $("#exchageNico").val()
+		url: "<c:url value='/api/transfers'/>",
+		method: "get",
+		data:{
+			authorId: authorId
 		},
 		success: function(data){
 			console.log(data);
-			getMe();
+			$("#exchageHistory").remove();
+			bindTemplate($("#exchageHistoryTemplate"), data);
 		},
 		error: function(err){
 			console.log(err);
 		}
 	})
+}
+function exchage(){
+	if($("#exchageNico").val()=="") return;
+	var result = confirm("Are you sure you want to exchange "+$("#exchageNico").val()+" Nico?");
+	if(result){
+		$.ajax({
+			url: "<c:url value='/api/nico/exchage'/>",
+			method: "post",
+			data: {
+				userId : ${sessionScope.loginUser.userId},
+				nico : $("#exchageNico").val()
+			},
+			success: function(data){
+				alert("The exchange is complete. Please check your account.");
+				getMe();
+			},
+			error: function(err){
+				console.log(err);
+			}
+		})
+	}
 }
 </script>
 </head>
@@ -66,6 +92,26 @@ function exchage(){
 			<button class="btn btn-primary btn-block" onclick="exchage()">exchange</button>		
 		</div>
 	</div>
+</div>
+</script>
+<script id="exchageHistoryTemplate" type="text/x-handlebars-template">
+<div id="exchageHistory" class="card mt-3">
+	<table class="table">
+		<tr>
+			<th>Exchange nico</th>
+			<th>Actual transfer amount</th>
+			<th>Fees</th>
+			<th>Transfer date</th>
+		</tr>
+		{{#each .}}
+		<tr>
+			<td>{{nico}} Nico</td>
+			<td>₩ {{amount}}</td>
+			<td>{{calcFees nico amount}}</td>
+			<td>{{transferDate}}</td>
+		</tr>
+		{{/each}}
+	</table>
 </div>
 </script>
 </main>
