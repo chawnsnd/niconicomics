@@ -74,7 +74,6 @@ function checkEmail(){
 	$.ajax({
 		url: "<c:url value='/api/users/check-email'/>",
 		type: "post",
-		dataType: "text",
 		data: {email : $("#userEmail").val()},
 		success: function(result){
 			if(result){

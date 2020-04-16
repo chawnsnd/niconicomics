@@ -22,7 +22,7 @@
 <nav class="sidebar">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link" href="<c:url value='/dashboard/'/>">
+        <a class="nav-link" href="<c:url value='/dashboard/analysis'/>">
           <i class="fas fa-chart-line"></i> Analysis
         </a>
       </li>
