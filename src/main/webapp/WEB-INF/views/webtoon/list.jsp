@@ -12,13 +12,15 @@ var searchOption = {
 	author: null,
 	hashtags: []
 }
-var currentPage;
+var currentPage = 1;
+var totalPageCount = 1;
 $(function(){
 	$.ajaxSettings.traditional = true;
 	getWebtoonList(1);
 	initRecommandHashtag();
 })
 function getWebtoonList(currentPage){
+	if(currentPage < 1 || currentPage > totalPageCount) return;
 	$.ajax({
 		url: "<c:url value='/api/webtoons'/>",
 		method: "get",
@@ -31,30 +33,19 @@ function getWebtoonList(currentPage){
 		},
 		success: function(data){
 			$("#webtoonList").remove();
+			$(data.webtoonList).each(function(idx ,webtoon){
+				webtoon.hashtags = splitHashtag(webtoon.hashtag);
+			})
 			bindTemplate($("#webtoonListTemplate"), data.webtoonList);
 			imageContainer();
 			$("#navi").remove();
 			bindTemplate($("#naviTemplate"), data.navi);
-			currentPage = data.navi.currentPage;
+			currentPage = (data.navi.currentPage == 0) ? 1 : data.navi.currentPage;
+			totalPageCount = (data.navi.totalPageCount == 0) ? 1 : data.navi.totalPageCount;
 		}
 	})
 }
 function initRecommandHashtag(){
-	$("input[name='typeHashtag']").on("change", function(){
-		var value = $(this).val();
-		var idx = searchOption.hashtags.indexOf(value); 
-		if (idx > -1) return;
-		var idx = searchOption.hashtags.indexOf("episode"); 
-		if (idx > -1) searchOption.hashtags.splice(idx, 1);
-		var idx = searchOption.hashtags.indexOf("omnibus"); 
-		if (idx > -1) searchOption.hashtags.splice(idx, 1);
-		var idx = searchOption.hashtags.indexOf("story"); 
-		if (idx > -1) searchOption.hashtags.splice(idx, 1);
-		searchOption.hashtags.push(value);
-		$("#searchOption").remove();
-		bindTemplate($("#searchOptionTemplate"), searchOption);
-		getWebtoonList(currentPage);
-	})
 	$("input[name='checkHashtag']").on("click", function(){
 		var value = $(this).val();
 		var idx = searchOption.hashtags.indexOf(value); 
@@ -62,7 +53,7 @@ function initRecommandHashtag(){
 		else searchOption.hashtags.push(value);
 		$("#searchOption").remove();
 		bindTemplate($("#searchOptionTemplate"), searchOption);
-		getWebtoonList(currentPage);
+		getWebtoonList(1);
 	})
 }
 function addSearchOption(){
@@ -78,7 +69,7 @@ function addSearchOption(){
 	}
 	$("#searchOption").remove();
 	bindTemplate($("#searchOptionTemplate"), searchOption);
-	getWebtoonList(currentPage);
+	getWebtoonList(1);
 }
 function removeSearchOption(key, value){
 	if(key == "hashtag"){
@@ -89,23 +80,22 @@ function removeSearchOption(key, value){
 	}
 	$("#searchOption").remove();
 	bindTemplate($("#searchOptionTemplate"), searchOption);
-	getWebtoonList(currentPage);
+	getWebtoonList(1);
+}
+function splitHashtag(hashtags){
+	var hashtagArr = hashtags.split("#");
+	hashtagArr.shift();
+	return hashtagArr;
+}
+function enterSearch(e){
+	e = e || window.event;
+	if(e.keyCode == 13){
+		$("#searchButton").trigger("click");
+	}
 }
 </script>
 </head>
 <style>
-.searchbox{
-	display: inline-block;
-	border: 1px solid #aeaeae;
-	width: 100%;
-	height: 200px;
-}
-.line{
-	margin: 20px 0;
-}
-.right{
-	float: right;
-}
 .keyword{
 	display: inline-block;
 	padding: 5px 10px;
@@ -128,78 +118,126 @@ function removeSearchOption(key, value){
 .webtoon:hover{
     box-shadow: 0.5px 0.5px 3px 0px black;
 }
-.navibar{
-	line-height: 30px;
+.image_container{
+	width: 150px;
+	height: 120px;
 }
-.navibar *{
-	float: right;
-	vertical-align: middle;
+.title{
+	font-weight: bold;
+	font-size: 16px;
+	padding: 5px;
+	padding-bottom: 0px;
+}
+.author{
+	padding-left: 5px;
+	padding-bottom: 5px;
 }
 </style>
 <body>
 <%@ include file="../layout/header.jsp"%>
 <main>
-<div class="searchbox box">
-	<h3>Search</h3>
-	<select id="searchKey">
-		<option value="title">Title</option>
-		<option value="author">Author</option>
-		<option value="hashtag">HashTag</option>
-	</select>
-	<input type="text" id="searchValue">
-	<button class="btn btn-primary btn-sm" onclick="addSearchOption()">Add & Search</button>
-	<div>
+<div class="card p-3">
+	<div class="h3">Search</div>
+	<div class="input-group">
+		<div class="input-group-prepend">
+			<select class="custom-select" id="searchKey">
+				<option value="title">Title</option>
+				<option value="author">Author</option>
+				<option value="hashtag">Hashtag</option>
+			</select>
+		</div>
+		<input type="text" id="searchValue" class="form-control" onkeydown="enterSearch()">
+		<div class="input-group-append">
+			<button id="searchButton" class="btn btn-primary btn-sm" onclick="addSearchOption()">Add & Search</button>
+		</div>
+	</div>
+	<div class="mt-3">
 		<h5>Recommand Hashtag</h5>
 		<div>
-			<label><input type="radio" name="typeHashtag" value="episode">#episode</label>
-			<label><input type="radio" name="typeHashtag" value="omnibus">#omnibus</label>
-			<label><input type="radio" name="typeHashtag" value="story">#story</label>
 		</div>
 		<div>
-			<label><input type="checkbox" name="checkHashtag" value="life">#life</label>
-			<label><input type="checkbox" name="checkHashtag" value="gag">#gag</label>
-			<label><input type="checkbox" name="checkHashtag" value="fantasy">#fantasy</label>
-			<label><input type="checkbox" name="checkHashtag" value="action">#action</label>
-			<label><input type="checkbox" name="checkHashtag" value="drama">#drama</label>
-			<label><input type="checkbox" name="checkHashtag" value="romance">#romance</label>
-			<label><input type="checkbox" name="checkHashtag" value="sensitivity">#sensitivity</label>
-			<label><input type="checkbox" name="checkHashtag" value="thriller">#thriller</label>
-			<label><input type="checkbox" name="checkHashtag" value="costume">#costume</label>
-			<label><input type="checkbox" name="checkHashtag" value="sport">#sport</label>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="episode"># episode</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="omnibus"># omnibus</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="story"># story</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="life"># life</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="gag"># gag</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="fantasy"># fantasy</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="action"># action</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="drama"># drama</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="romance"># romance</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="sensitivity"># sensitivity</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="thriller"># thriller</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="costume"># costume</label>
+			</div>
+			<div class="form-check form-check-inline"">
+				<label><input type="checkbox" class="form-check-input" name="checkHashtag" value="sport"># sport</label>
+			</div>
 		</div>
 	</div>
 </div>
-<div class="line">
-	<script id="searchOptionTemplate" type="text/x-handlebars-template">
-	<div id="searchOption">
-		{{#each hashtags}}
- 		<div class="keyword" onclick="removeSearchOption('hashtag', '{{this}}')">#<span>{{this}}</span> <i class='far fa-times-circle'></i></div>
-		{{/each}}
-		{{#if title}}
- 		<div class="keyword" onclick="removeSearchOption('title', '{{title}}')">Title : {{title}} <i class='far fa-times-circle'></i></div>
- 		{{/if}}
-		{{#if author}}
-		<div class="keyword" onclick="removeSearchOption('author', '{{author}}')">Author : {{author}} <i class='far fa-times-circle'></i></div>
-		{{/if}}
+<div>
+<script id="searchOptionTemplate" type="text/x-handlebars-template">
+<div id="searchOption" class="mt-3">
+	{{#each hashtags}}
+	<div class="badge badge-pill badge-info p-2" onclick="removeSearchOption('hashtag', '{{this}}')"># <span>{{this}}</span> <i class='far fa-times-circle'></i></div>
+	{{/each}}
+	{{#if title}}
+	<div class="badge badge-pill badge-info p-2" onclick="removeSearchOption('title', '{{title}}')">Title : {{title}} <i class='far fa-times-circle'></i></div>
+ 	{{/if}}
+	{{#if author}}
+	<div class="badge badge-pill badge-info p-2" onclick="removeSearchOption('author', '{{author}}')">Author : {{author}} <i class='far fa-times-circle'></i></div>
+	{{/if}}
+</div>
+</script>
+<script id="naviTemplate" type="text/x-handlebars-template">
+<div class="row">
+<div class="col">
+<div id="navi" class="mt-3 float-right input-group" style="width: 150px;">
+	<div class="input-group-prepend" id="idx"><span class="input-group-text">{{currentPage}} / {{totalPageCount}}</span></div>
+	<div class="input-group-append">
+		<button class="btn btn-secondary btn-sm" onclick="getWebtoonList({{currentPage}}-1)">prev</button>
+		<button class="btn btn-secondary btn-sm" onclick="getWebtoonList({{currentPage}}+1)">next</button>
 	</div>
-	</script>
-	<script id="naviTemplate" type="text/x-handlebars-template">
-	<div id="navi" class="row navi">
-	<div id="idx">{{currentPage}} / {{totalPageCount}}</div>
-	<div id="btn" class="right btn-group">
-		<button class="btn btn-light btn-sm" onclick="getWebtoonList({{currentPage}}-1)">prev</button>
-		<button class="btn btn-light btn-sm" onclick="getWebtoonList({{currentPage}}+1)">next</button>
-	</div>
-	</div>
-	</script>
+</div>
+</div>
+</div>
+</script>
 </div>
 <script id="webtoonListTemplate" type="text/x-handlebars-template">
 <div id="webtoonList" class="cards">
 {{#each .}}
-<div class="card webtoon" onclick="location.href ='<c:url value='/webtoons/{{webtoonId}}'/>'">
-	<div class="image_container"><img src="{{thumbnail}}"></div>
-	<div>{{title}}</div>
-	<div>{{hashtag}}</div>
+<div class="card webtoon" onclick="location.href = '<c:url value='/webtoons/'/>{{webtoonId}}'">
+	<div class="image_container">
+		<img src="{{thumbnail}}">
+	</div>
+	<div class="title">{{title}}</div>
+	<div class="author">{{authorNickname}}</div>
+	{{#each hashtags}}
+	<div class="badge badge-pill badge-info"># {{this}}</div>
+	{{/each}}
 </div>
 {{/each}}
 </div>

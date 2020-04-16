@@ -6,6 +6,12 @@ var webtoon;
 $(function(){
 	bindTemplate($("#modalTemplate"), {webtoon, me});
 })
+<c:if test="${sessionScope.loginUser == null}">
+function donate(){
+	alert("Please login.");
+	$("#closeModal").trigger("click");
+}
+</c:if>
 <c:if test="${sessionScope.loginUser != null}">
 function donate(){
 	$.ajax({
@@ -19,16 +25,19 @@ function donate(){
 		},
 		success: function(result){
 			if(result){
-				alert("후원이 성공하였습니다.")
+				alert("Donation was successful.")
 				$("#closeModal").trigger("click");
 				sock.send(JSON.stringify({
 					userId: ${sessionScope.loginUser.userId},
 					webtoonId: ${webtoonId},
 					type: "DONATE",
-					message: "${sessionScope.loginUser.nickname}님이 "+$("#donateNico").val()+"니코를 후원하였습니다."
+					message: "${sessionScope.loginUser.nickname} donated "+$("#donateNico").val()+" Nico."
 				}))
+				getMe();
+				$("#modal").remove();
+				bindTemplate($("#modalTemplate"), {webtoon, me});
 			}else{
-				alert("후원이 실패하였습니다.")
+				alert("Fail donation.")
 			}
 		},
 		error: function(err){
@@ -49,7 +58,7 @@ function donate(){
         </button>
       </div>
       <script id="modalTemplate" type="text/x-handlebars-template">
-      <div class="modal-body">
+      <div id="modal" class="modal-body">
         <div class="author"><h5>To. {{webtoon.authorNickname}}</h5></div>
 		<div class="input-group mb-3">
 			<input type="number" id="donateNico" class="form-control" placeholder="nico">

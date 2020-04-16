@@ -50,7 +50,7 @@ function logout(){
 		<div class="header_menus">
 			<a href="<c:url value='/'/>">HOME</a>
 			<a href="<c:url value='/webtoons'/>">SEARCH</a>
-			<a href="https://github.com/chawnsnd/niconicomics" target="_blank">GITHUB</a>
+			<a href="https://github.com/chawnsnd/niconicomics" target="_blank">API REFERENCE</a>
 		</div>
 	</div>
 	<div class="header_right">

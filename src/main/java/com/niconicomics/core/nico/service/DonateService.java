@@ -24,6 +24,7 @@ public class DonateService {
 	public boolean donate(Donate donate) {
 		User author = userDao.selectUserByUserId(donate.getAuthorId());
 		User sponsor = userDao.selectUserByUserId(donate.getSponsorId());
+		if(donate.getNico() < 0) return false;
 		if(sponsor.getNico()-donate.getNico() < 0) return false;
 		author.setNico(author.getNico()+donate.getNico());
 		sponsor.setNico(sponsor.getNico()-donate.getNico());
