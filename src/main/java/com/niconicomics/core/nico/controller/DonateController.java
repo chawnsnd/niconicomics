@@ -18,7 +18,7 @@ public class DonateController {
 	@Autowired
 	private DonateService donateService;
 	
-	@PostMapping(value = "/")
+	@PostMapping(value = "")
 	public boolean donate(Donate donate, HttpSession session) {
 		User loginUser = (User) session.getAttribute("loginUser"); 
 		if(donate.getSponsorId() != loginUser.getUserId()) return false;

@@ -6,14 +6,20 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="shortcut icon" type="image/png" href="<c:url value='/resources/favicon.png'/>">
 <script src="<c:url value='/resources/js/jquery-3.4.1.min.js'/>"></script>
-<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
+<script src="<c:url value='/resources/js/bootstrap/bootstrap.bundle.min.js'/>"></script>
+<script src="<c:url value='/resources/js/bootstrap/bootstrap.min.js'/>"></script>
+<script src="<c:url value='/resources/js/bootstrap/tagsinput.js'/>"></script>
 <script src="<c:url value='/resources/js/handlebars-v4.7.3.js'/>"></script>
 <script src="<c:url value='/resources/js/handlebars-custom.js'/>"></script>
 <script src="<c:url value='/resources/js/contents.js'/>"></script>
-<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap.min.css'/>">
-<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap-theme.min.css'/>">
+<script src="<c:url value='/resources/js/component.js'/>"></script>
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap/bootstrap-grid.min.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap/bootstrap-reboot.min.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap/tagsinput.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/bootstrap/bootstrap.min.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/handlebars.css'/>">
+<link rel="stylesheet" type="text/css" href="<c:url value='/resources/css/component.css'/>">
 <script src="https://kit.fontawesome.com/74fba7f134.js" crossorigin="anonymous"></script>
 <script>
 
@@ -21,9 +27,9 @@ var me;
 var webtoon;
 var episode;
 var contentsList;
-var showDotpleForm = false;
 
 $(function(){
+	$("main").height($(window)[0].innerHeight);
 	getMe();
 	getWebtoon();
 	getEpisode();
@@ -35,8 +41,6 @@ $(function(){
 		}
 	});
 	initShowHide();
-	$("main").css("height", $(window)[0].innerHeight);
-	footerPositionTop = $("footer").offset().top;
 	initScroll();
 	initHotKey();
 })
@@ -68,45 +72,60 @@ function getMe(){
 		}
 	})
 }
-function clickImage(t, e){
-	if(showDotpleForm){
-		$("#dotpleForm").remove();
-		showDotpleForm = !showDotpleForm;
-		return;
-	}
+
+function clickImage(e){
+	var st = $(".contents")[0].scrollTop;
+	e = e || window.event;
+	e.stopPropagation();
+	e.preventDefault();
+	var target = event.currentTarget;
 	$("#dotpleForm").remove();
-	var html = $("#dotpleFormTemplate").html();
-	$(t).append(html);
+	$(target).append('<div id="dotpleForm" style="width: 250px" data-idx='+$(target).data('idx')+' data-xAxis='+e.offsetX+' data-yAxis='+e.offsetY+'>'+
+	'<input class="form-control" type="text" id="dotpleContents" placeholder="message" onkeyup="enterDotple()">'+
+	'<div class="input-group">'+
+		'<div class="input-group-prepend">'+
+			'<div class="input-group-text">'+
+			'<input type="checkbox" onclick="toggleDotpleDonate()">'+
+			'</div>'+
+		'</div>'+
+		'<input id="inputNico" type="number" class="form-control d-none">'+
+		'<div id="dotpleNico" class="input-group-append d-none">'+
+		'<span class="input-group-text">'+me.nico+'/ Nico</span>'+
+		'</div>'+
+		'<div id="noneCheck" class="input-group-append">'+
+			'<span class="input-group-text">Check donation</span>'+
+		'</div>'+
+	'</div>'+
+	'<button class="btn btn-primary btn-block" id="dotpleSubmit" onclick="submitDotple()" class="btn btn-primary btn-sm">Submit</button>'+
+	'</div>');
 	$("#dotpleContents").focus();
 	$("#dotpleForm").on("click", function(e){
 		e.stopPropagation();
+		e.preventDefault();
 	})
-	$("#dotpleContents").on("keydown", function(e){
-		if(e.keyCode == 13) $("#dotpleSubmit").trigger("click");
-	})
-	$("#dotpleDonateForm").on("click", function(e){
-		$(t).css("display", "inline-block");
-	})
-	var offsetX = e.offsetX;
-	var offsetY = e.offsetY;
-	$("#dotpleSubmit").on("click", function(e){
-		e.stopPropagation();
-		submitDotple($(t).parent().data("idx"), offsetX, offsetY);
-		$("#dotpleForm").remove();
-		showDotpleForm = false;
-	})
-	$(t).css("position", "relative");
 	$("#dotpleForm").css({
 		"text-align": "left",
 		"position": "absolute",
 		"background-color": "white",
 		"display": "inline-block",
 		"z-index": 9,
-		"border": "2px solid #a3a3a3",
-		"top": offsetY,
-		"left": offsetX
+		"top": e.offsetY,
+		"left": e.offsetX
 	});
-	showDotpleForm = true;
+	$(".contents").scrollTop(st);
+}
+
+function toggleDotpleDonate(){
+	$("#inputNico").val(0);
+	if($("#dotpleNico").hasClass("d-none")){
+		$("#dotpleNico").removeClass("d-none")
+		$("#inputNico").removeClass("d-none")
+		$("#noneCheck").addClass("d-none")
+	}else{
+		$("#dotpleNico").addClass("d-none")
+		$("#inputNico").addClass("d-none")
+		$("#noneCheck").removeClass("d-none")
+	}
 }
 
 function deleteDotple(dotpleId){
@@ -120,18 +139,20 @@ function deleteDotple(dotpleId){
 }
 
 function createDotple(dotple){
-	$(".image").eq(dotple.idx-1).css("position", "relative");
-	var html = "<div "+
-		"style='position: absolute; top: "+dotple.yaxis+"px; left: "+dotple.xaxis+"px;'"+
-		"class='dotple' data-dotpleid="+dotple.dotpleId+">"+dotple.contents+"</div>";
+	var dotpleHtml = $("<div style='z-index: 8; position: absolute; top: "+dotple.yaxis+"px; left: "+dotple.xaxis+"px;'"+
+	"class='dotple' data-dotpleid="+dotple.dotpleId+">"+dotple.contents+"</div>");
 	if(dotple.userId == me.userId){
-		html = "<div "+
-		"style='position: absolute; top: "+dotple.yaxis+"px; left: "+dotple.xaxis+"px;'"+
-		"class='dotple mydotple' onclick=deleteDotple("+dotple.dotpleId+") data-dotpleid="+dotple.dotpleId+">"+dotple.contents+" <i class='far fa-times-circle'></i></div>";
+		dotpleHtml.addClass("mydotple");
+		dotpleHtml.html(dotpleHtml.html()+" <i class='far fa-times-circle'></i>");
+		dotpleHtml.attr("onclick", "deleteDotple("+dotple.dotpleId+")")
 	}
-	$(".image").eq(dotple.idx-1).prepend(html);
-	$(".image").eq(dotple.idx-1).css("position", "relative");
+	if(dotple.type == "DONATE"){
+		dotpleHtml.addClass("donateDotple");
+		dotpleHtml.html("<i class='fas fa-money-bill-wave'></i> "+dotpleHtml.html());
+	}
+	$(dotpleHtml).appendTo(".image[data-idx="+dotple.idx+"]");
 	$(".dotple").on("click", function(e){e.stopPropagation();})
+	settingDotple();
 }
 
 function initDotple(){
@@ -162,51 +183,62 @@ function getEpisode(){
 			contentsList = data.contentsList;
 			episode = data.episode;
 			bindTemplate($("#contentsTemplate"), data.contentsList);
-			$(".image").on("click", function(e){
-				clickImage(this, e);
-			})
 		},
 		error: function(err){
 			console.log(err);
 		}
 	})
 }
-function submitDotple(idx, xAxis, yAxis){
+function enterDotple(e){
+	e = e || window.event;
+	if(e.keyCode == 13) {
+		e.preventDefault();
+		$('#dotpleSubmit').trigger('click');
+	}
+}
+
+function submitDotple(e){
+	e = e || window.event;
+	var idx = $(e.target).parent().data("idx");
+	var xAxis = $(e.target).parent().data("xaxis");
+	var yAxis = $(e.target).parent().data("yaxis");
 	var contents = $("#dotpleContents").val();
 	if(me == ''){
 		alert("Please login.");
 		return;
 	}else{
-		$.ajax({
-			url: "<c:url value='/api/webtoons/${webtoonId}/episodes/${episodeNo}/dotples'/>",
-			type: "post",
-			data: {
+		var nico = Number($("#inputNico").val());
+		var data = {
 				userId: me.userId,
 				idx: idx,
 				xAxis: xAxis,
 				yAxis: yAxis,
 				contents: contents,
-			},
+				nico: nico
+		};
+		$.ajax({
+			url: "<c:url value='/api/webtoons/${webtoonId}/episodes/${episodeNo}/dotples'/>",
+			type: "post",
+			data: data,
 			success: function(data){
+				var message = "${sessionScope.loginUser.nickname} left a dotple.";
+				if(nico > 0){
+					message = "${sessionScope.loginUser.nickname} left a dotple with "+nico+" Nico donation."
+				}
 				sock.send(JSON.stringify({
 					userId: me.userId,
 					webtoonId: ${webtoonId},
 					type: "DOTPLE",
-					message: "${sessionScope.loginUser.nickname}님이 닷플을 남겼습니다."
+					message: message
 				}))
+				$("#dotpleForm").remove();
+				getMe();
 				createDotple(data);
 			},
 			error: function(err){
 				console.log(err);
 			}
 		})
-	}
-}
-function toggleDotpleDonate(){
-	if($("#dotpleNico").attr("disabled")){
-		$("#dotpleNico").attr("disabled", false);
-	}else{
-		$("#dotpleNico").attr("disabled", true);
 	}
 }
 </script>
@@ -257,22 +289,22 @@ main{
 	border: 1px solid #fbc714;
 	cursor: pointer;
 }
+.donateDotple{
+	border: 1px solid #e83d3d;
+}
+#dotpleForm{
+	border: 1px solid #eaeaea;
+}
 </style>
 </head>
 <body>
 <%@ include file="./header.jsp"%>
 <main>
-<script id="dotpleFormTemplate" type="text/x-handlebars-template">
-	<div id="dotpleForm" style="width: 250px">
-		<input class="form-control" type="text" id="dotpleContents" placeholder="message">
-		<button class="btn btn-primary btn-block" id="dotpleSubmit" class="btn btn-primary btn-sm">등록</button>
-	</div>
-</script>
 <script id="contentsTemplate" type="text/x-handlebars-template">
 <div class="contents" id="contents">
 	{{#each .}}
-	<div class="image_container" data-idx={{idx}}>
-		<div class="image">
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
 			<img src="{{image}}" width="700px">
 		</div>
 	</div>

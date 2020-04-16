@@ -16,6 +16,7 @@
 			,x_axis
 			,y_axis
 			,contents
+			,type
 		)values(
 			#{dotpleId}
 			,#{userId}
@@ -23,6 +24,7 @@
 			,#{xAxis}
 			,#{yAxis}
 			,#{contents}
+			,#{type}
 		)
 	</insert>
 	
@@ -40,6 +42,7 @@
 			,tbl_dotple.x_axis
 			,tbl_dotple.y_axis
 			,tbl_dotple.contents
+			,tbl_dotple.type
 			,tbl_contents.idx as idx
 		from tbl_dotple join tbl_contents
 		on tbl_dotple.contents_id = tbl_contents.contents_id

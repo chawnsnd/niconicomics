@@ -53,6 +53,7 @@
 		<if test="type != null">type = #{type},</if>
 		<if test="showDotple != null">show_dotple = #{showDotple},</if>
 		<if test="showChat != null">show_chat = #{showChat},</if>
+		<if test="nico != null">nico = #{nico},</if>
 	</set>
 	where user_id = #{userId}
 </update>
