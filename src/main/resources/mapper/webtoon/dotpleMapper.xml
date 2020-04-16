@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.niconicomics.core.webtoon.dao.DotpleMapper">
+
+	<insert id="insertDotple" parameterType="dotple">
+		<selectKey keyProperty="dotpleId" resultType="int" order="BEFORE">
+			select seq_dotple.nextval from dual
+		</selectKey>
+		insert into tbl_dotple(
+			dotple_id
+			,user_id
+			,contents_id
+			,x_axis
+			,y_axis
+			,contents
+			,type
+		)values(
+			#{dotpleId}
+			,#{userId}
+			,#{contentsId}
+			,#{xAxis}
+			,#{yAxis}
+			,#{contents}
+			,#{type}
+		)
+	</insert>
+	
+	<select id="selectDotpleListByContentsId" resultType="dotple">
+		select *
+		from tbl_dotple
+		where contents_id = #{contentsId}
+	</select>
+
+	<select id="selectDotpleListByEpisodeId" resultType="dotple">
+		select 
+			tbl_dotple.dotple_id
+			,tbl_dotple.user_id
+			,tbl_dotple.contents_id
+			,tbl_dotple.x_axis
+			,tbl_dotple.y_axis
+			,tbl_dotple.contents
+			,tbl_dotple.type
+			,tbl_contents.idx as idx
+		from tbl_dotple join tbl_contents
+		on tbl_dotple.contents_id = tbl_contents.contents_id
+		where tbl_contents.episode_id = #{episodeId}
+	</select>
+	
+	<delete id="deleteDotpleByDotpleId">
+		delete from tbl_dotple where dotple_id = #{dotpleId}
+	</delete>
+
+</mapper>

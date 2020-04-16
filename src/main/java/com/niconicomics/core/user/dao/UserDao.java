@@ -35,6 +35,16 @@ public class UserDao {
 	}
 	
 	/*
+	TODO 1명의 회원정보 수정
+	@param email, password, nickname, (birthdate), (gender)
+	 */
+	public boolean updateUser(User user) {
+		UserMapper mapper = session.getMapper(UserMapper.class);
+		boolean result = mapper.updateUser(user);
+		return result;
+	}
+	
+	/*
 	TODO 1명의 회원정보 검색
 	@param email 검색할 email
 	@return user 객체값
@@ -44,5 +54,4 @@ public class UserDao {
 		int result = mapper.selectCountByEmail(email);
 		return result;
 	}
-	
 }

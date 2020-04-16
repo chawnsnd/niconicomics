@@ -3,22 +3,19 @@ package com.niconicomics.core.user.controller;
 import java.io.IOException;
 import java.util.Random;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.niconicomics.core.chat.controller.ChatController;
 import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.service.MailService;
 import com.niconicomics.core.user.service.UserService;
@@ -28,8 +25,8 @@ import com.niconicomics.core.user.vo.User;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Controller
-@RequestMapping("users")
+@RestController
+@RequestMapping("/api/users")
 public class UserController {
 	
 	@Autowired
@@ -39,32 +36,52 @@ public class UserController {
 	@Autowired
 	private MailService mailService;
 	
-	@RequestMapping(value = "/join", method = RequestMethod.GET)
-	public String test() {
-		return "user/join";
+	@GetMapping(value ="/me")
+	public User getMe(HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		if(user == null) return null;
+		User newUser = userDao.selectUserByUserId(user.getUserId());
+		return newUser;
+	}
+
+	@GetMapping(value ="/{userId}")
+	public User getUser(@PathVariable(name = "userId") int userId) {
+		User user = userDao.selectUserByUserId(userId);
+		user.setPassword(null);
+		return user;
 	}
 	
-	// 이메일 중복 체크
-	@RequestMapping(value = "/check-email", method = RequestMethod.POST)
-	public @ResponseBody String checkEmail(String email) {
+	@PostMapping(value = "/check-email")
+	public boolean checkEmail(String email) {
+		return userService.checkEmailValidation(email);
+	}
+	
+	@PostMapping(value = "/join1")
+	public boolean join1(HttpSession session, User user, HttpServletResponse response_email) throws IOException {
+		String random = Integer.toString(new Random().nextInt(900000)+100000);
+		session.setAttribute("random", random);
+		session.setAttribute("user", user);
 		
-		boolean result = userService.checkEmailValidation(email);
+		String fromEmail = "niconicomics@gmail.com";
+		String subject = "[niconicomics] Please verify your email address.";
+		String text =
+				"Hi,"+
+				System.lineSeparator()+
+				"We recieved a request to verify " + user.getEmail() + " as your email account."+
+				System.lineSeparator()+
+				"If you made this request, use the code below to complete the verification process:"+
+				System.lineSeparator()+
+				random+
+				System.lineSeparator()+
+				System.lineSeparator()+
+				"Thanks,"+
+				"niconicomics Security Team";
 		
-		if (result == false) {
-			return "no";
-		} else {
-			return "yes";
-		}
+		return mailService.sendMail(subject, text, fromEmail, user.getEmail(), null);
 	}
 	
-	@GetMapping(value="/join2")
-	public String goJoin2() {
-		return "user/sendEmail";
-	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/join2", method = RequestMethod.POST)
-	public Boolean sendEmail(String random, HttpSession session) {
+	@PostMapping(value = "/join2")
+	public boolean join2(String random, HttpSession session) {
 		String sessionRandom = (String)session.getAttribute("random");
 		User user = (User)session.getAttribute("user");
 		if(sessionRandom.equals(random)) {
@@ -87,70 +104,46 @@ public class UserController {
 			return false;
 		}
 	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/join1", method = RequestMethod.GET)
-	public boolean authorizeEmail(HttpSession session, User user, HttpServletResponse response_email) throws IOException {
-		
-		System.out.println("send-mail check : " + user.getEmail());
-		
-		String random = Integer.toString(new Random().nextInt(900000)+100000);
-		
-		session.setAttribute("random", random);
-		session.setAttribute("user", user);
-		// 보내는 사람 주소
-		String fromEmail = "niconicomics@gmail.com";
-		// 제목
-		String subject = "[niconicomics] Please verify your email address.";
-		// 내용
-		String text =
-				"Hi,"+
-				System.lineSeparator()+
-				"We recieved a request to verify " + user.getEmail() + " as your email account."+
-				System.lineSeparator()+
-				"If you made this request, use the code below to complete the verification process:"+
-				System.lineSeparator()+
-				random+
-				System.lineSeparator()+
-				System.lineSeparator()+
-				"Thanks,"+
-				"niconicomics Security Team";
-		
-		return mailService.sendMail(subject, text, fromEmail, user.getEmail(), null);
-	}
-	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String goLogin() {
-		
-		return "user/login";
-	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(String email, String password, HttpSession session) {
-		
-		System.out.println(email+","+password);
-//		System.out.println("email: {}, password: {}", email, password);
-		
+
+	@PostMapping(value = "/login")
+	public boolean login(String email, String password, HttpSession session) {
 		User user = userDao.selectUserByEmail(email);
+		if(user == null) return false;
 		String salt = user.getSalt();
 		String hashedPassword = UserUtil.hashBySHA256(password, salt);
-		
-		if(user != null && hashedPassword.equals(user.getPassword())) {
+		if(hashedPassword.equals(user.getPassword())) {
 			session.setAttribute("loginUser", user);
-			return "yes";
-		}
-		else {
-			return "no";
+			return true;
+		} else {
+			return false;
 		}
 		
 	}
 	
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpSession session) {
+	@GetMapping(value = "/logout")
+	public void logout(HttpSession session) {
 		session.removeAttribute("loginUser");
-		return "redirect:/";
 	}
 	
+	@PostMapping(value = "/check-password")
+	public boolean checkPassword(HttpSession session, int userId, String password) {
+		User user = userDao.selectUserByUserId(userId);
+		String salt = user.getSalt();
+		String hashedPassword = UserUtil.hashBySHA256(password, salt);
+		if(hashedPassword.equals(user.getPassword())) return true;
+		else return false;
+	}
 	
+	@PatchMapping(value = "/{userId}")
+	public void editUser(
+			HttpSession session,
+			@RequestBody User newUser,
+			@PathVariable int userId) {
+		User user = (User) session.getAttribute("loginUser");
+		log.debug(newUser.toString());
+		if(userId != user.getUserId()) return;
+		if(newUser.getPassword() != null) newUser.setPassword(UserUtil.hashBySHA256(newUser.getPassword(), user.getSalt()));
+		newUser.setUserId(userId);
+		userDao.updateUser(newUser);
+	}
 }

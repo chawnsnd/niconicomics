@@ -14,8 +14,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		logger.debug("LoginInterceptor 실행");
-		
 		HttpSession session = request.getSession();
 		String loginEmail = (String) session.getAttribute("loginEmail");
 		

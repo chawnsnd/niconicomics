@@ -7,19 +7,24 @@
 	select *
 	from tbl_chat
 	where webtoon_id = #{webtoonId}
+	order by chat_id
 	</select>
 
 	<insert id="insertChat" parameterType="chat">
 	insert into tbl_chat(
 		chat_id,
 		user_id,
+		nickname,
 		webtoon_id,
-		message
+		message,
+		type
 	)values(
 		seq_chat.nextval,
 		#{userId},
+		#{nickname},
 		#{webtoonId},
-		#{message}
+		#{message},
+		#{type}
 	)
 	</insert>
 	

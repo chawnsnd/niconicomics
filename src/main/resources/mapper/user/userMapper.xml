@@ -44,6 +44,20 @@
 	)
 </insert>
 
+<!-- 회원 정보 수정 -->
+<update id="updateUser" parameterType="user">
+	update tbl_user
+	<set>
+		<if test="password != null">password = #{password},</if>
+		<if test="nickname != null">nickname = #{nickname},</if>
+		<if test="type != null">type = #{type},</if>
+		<if test="showDotple != null">show_dotple = #{showDotple},</if>
+		<if test="showChat != null">show_chat = #{showChat},</if>
+		<if test="nico != null">nico = #{nico},</if>
+	</set>
+	where user_id = #{userId}
+</update>
+
 <!-- 이메일 중복 체크 -->
 <select id="selectCountByEmail" resultType="int">
 	select count(*) from tbl_user

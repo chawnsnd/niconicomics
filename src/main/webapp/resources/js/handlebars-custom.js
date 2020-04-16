@@ -9,15 +9,4 @@ function bindTemplate(templateDom, data){
 	var template = Handlebars.compile(source); 
 	var html = template(data);
 	$(templateDom).after(html);
-	$(templateDom).remove();
-}
-
-function bindTemplates(templateDom, datas){
-	var source = $(templateDom).html(); 
-	var template = Handlebars.compile(source);
-	$.each(datas, function(index, data){
-		var html = template(data);
-		$(templateDom).after(html);		
-	})
-	$(templateDom).remove();
 }

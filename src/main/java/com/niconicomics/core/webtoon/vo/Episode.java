@@ -11,4 +11,5 @@ public class Episode {
 	private String regdate;
 	private int webtoonId;
 	private String thumbnail;
+	private int hits;
 }

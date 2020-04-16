@@ -28,37 +28,45 @@ $(document).ready(function(){
 
 		login();
 	})
+	$("#userPassword").on("keyup", function(e){
+		if(e.keyCode == 13){
+			$("#login").trigger("click");
+		}
+	})
 })
 
 function login(){
 	$.ajax({
-		url: "./login",
+		url: "<c:url value='/api/users/login'/>",
 		type: "post",
 		data: {
-			email : $("#userEmail").val()
-			, password : $("#userPassword").val()
+			email : $("#userEmail").val(),
+			password : $("#userPassword").val()
 		},
-		success: function(data){
-			if(data=='yes'){
-				location.href="<c:url value='/'/>";
+		success: function(result){
+			if(result){
+				location.href="<c:url value='/'/>"
 			}else{
 				alert("please try again");
-				$("#userEmail").val("");
-				$("#userPassword").val("");
 			}
 		},
-		error: function(error){console.log(error);}
+		error: function(err){
+			console.log(err);
+		}
 	})
 	
 }
 
 </script>
-
+<style>
+main{
+	width: 500px;
+}
+</style>
 <body>
 <%@ include file="../layout/header.jsp"%>
 <main>
 	<h2>Sign in</h2>
-	<h3>Using your niconicomics account!</h3>
 	<form action="/users/login" method="post" id="loginForm">
 		<div class="form-group">
 			<input type="text" class="form-control" id="userEmail" placeholder="enter your Email">
@@ -67,12 +75,9 @@ function login(){
 			<input type="password" class="form-control" id="userPassword" placeholder="enter your password">
 		</div>
 		<div class="form-group">
-			<button type="button" class="btn btn-pimary btn-block" id="login">sign in</button>
+			<button type="button" class="btn btn-primary btn-block" id="login">sign in</button>
 		</div>
 	</form>
-	
-	 <div id="result">login result</div>
-
 </main>
 <%@ include file="../layout/footer.jsp"%>
 </body>

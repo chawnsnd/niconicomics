@@ -38,6 +38,7 @@ public class KakaopayService {
 		itemMap.put("1000니코", 1000);
 		itemMap.put("2000니코", 2000);
 		itemMap.put("3000니코", 3000);
+		itemMap.put("10000니코", 10000);
 		headers = new HttpHeaders();
 		headers.set("Authorization", "KakaoAK "+ADMIN_KEY);
 		headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
@@ -58,9 +59,9 @@ public class KakaopayService {
 		body.add("total_amount", Integer.toString(amount));
 		body.add("tax_free_amount", "0");
 		body.add("vat_amount", Integer.toString(amount/11));
-		body.add("approval_url", "http://localhost:8888/core/charge/kakaopay-approve");
-		body.add("cancel_url", "http://localhost:8888/core/charge/kakao-cancel");
-		body.add("fail_url", "http://localhost:8888/core/charge/kakao-fail");
+		body.add("approval_url", "http://localhost:8888/core/api/nico/charge2");
+		body.add("cancel_url", "http://localhost:8888/core/nico/charge/cancel");
+		body.add("fail_url", "http://localhost:8888/core/nico/charge/fail");
 		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(body, headers);
 		ready = restTemplate.postForObject(HOST+"/v1/payment/ready", entity, KakaoPayReady.class);
 		log.debug(ready.toString());
