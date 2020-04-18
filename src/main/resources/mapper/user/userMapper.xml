@@ -21,26 +21,21 @@
 	insert into tbl_user(
 		user_id
 		,email
-		,password
+		<if test="password != null">,password</if>
 		,type
 		,nickname
-		,birthdate
-		<if test="gender=='MALE'|| gender=='FEMALE'">
-		,gender
-		</if>
-		,salt
-	)
-	values(
+		<if test="birthdate != null">,birthdate</if>
+		<if test="gender=='MALE'|| gender=='FEMALE'">,gender</if>
+		<if test="salt != null">,salt</if>
+	)values(
 		seq_user.nextval
 		,#{email}
-		,#{password}
+		<if test="password != null">,#{password}</if>
 		,#{type}
 		,#{nickname}
-		,#{birthdate}
-		<if test="gender=='MALE'|| gender=='FEMALE'">
-		,#{gender}
-		</if>
-		,#{salt}
+		<if test="birthdate != null">,#{birthdate}</if>
+		<if test="gender=='MALE'|| gender=='FEMALE'">,#{gender}</if>
+		<if test="salt != null">,#{salt}</if>
 	)
 </insert>
 

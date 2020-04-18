@@ -98,6 +98,10 @@ function getEpisodes(){
 	width: 80px;
 	height: 50px;
 }
+.image_container{
+	background-size: cover;
+	background-position: center;
+}
 </style>
 </head>
 <body>
@@ -109,9 +113,7 @@ function getEpisodes(){
 	<script id="webtoonTemplate" type="text/x-handlebars-template">
 	<div class="row">
 		<div class="col-md-auto">
-			<div id="webtoon_thumbnail" class="image_container col-md-auto">
-				<img src="{{thumbnail}}">
-			</div>
+			<div id="webtoon_thumbnail" class="image_container" style="background-image: url({{thumbnail}})"></div>
 		</div>
 		<div class="col">
 			<div class="card-body">
@@ -168,9 +170,7 @@ function getEpisodes(){
 					{{no}}
 				</td>
 				<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
-					<div id="episode_thumbnail" class="image_container">
-						<img src = "{{thumbnail}}" width = "100px">
-					</div>
+					<div id="episode_thumbnail" class="image_container" style="background-image: url({{thumbnail}})"></div>
 				</td>
 				<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
 					{{title}}

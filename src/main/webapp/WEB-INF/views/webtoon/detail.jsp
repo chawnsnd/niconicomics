@@ -20,7 +20,6 @@ function getWebtoon(){
 		success: function(data){
 			console.log(data);
 			bindTemplate($("#webtoonTemplate"), data);
-			imageContainer();
 			splitHashtag(data.hashtag);
 		}
 	})
@@ -54,6 +53,8 @@ function getEpisodes(){
 	width: 200px;
 	height: 200px;
 	display: inline-block;
+	background-size: cover;
+	background-position: center;
 }
 .webtoon_info{
 	margin: 10px;
@@ -104,7 +105,7 @@ tr:active{
 <main>
 <script id="webtoonTemplate" type="text/x-handlebars-template">
 <div class="info">
-	<div class="webtoon-thumbnail image_container"><img src="{{thumbnail}}"></div>
+	<div class="webtoon_thumbnail image_container" style="background-image: url({{thumbnail}})"></div>
 	<div class="webtoon_info">	
 		<div class="webtoon_title">{{title}}</div>
 		<div class="author">{{authorNickname}}</div>
@@ -126,7 +127,7 @@ tr:active{
 	{{#each .}}
 	<tr onclick="location.href = '<c:url value='/webtoons/${webtoonId}/episodes/{{no}}'/>'">
 		<td>{{no}}</td>
-		<td><div class="image_container episode_thumbnail"><img src="{{thumbnail}}"></div></td>
+		<td><div class="episode_thumbnail image_container" style="background-image: url({{thumbnail}})"></div></td>
 		<td style="width: 50%;" class="text-left">{{title}}</td>
 		<td>{{hits}}</td>
 		<td>{{regdate}}</td>

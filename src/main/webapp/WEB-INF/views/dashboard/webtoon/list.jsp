@@ -41,9 +41,7 @@ function getWebtoons(curPage){
 			authorId : "${sessionScope.loginUser.userId}"
 		},
 		success: function(data){
-			console.log(data)
 			bindTemplate($('#webtoonListTemplate'), data.webtoonList);
-			imageContainer();
 		},
 		error: function(err){
 			console.log(err);
@@ -52,9 +50,11 @@ function getWebtoons(curPage){
 }
 </script>
 <style>
-.thumbnail{
+.image_container{
 	width: 80px;
 	height: 50px;
+	background-size: cover;
+	background-position: center;
 }
 </style>
 </head>
@@ -84,9 +84,7 @@ function getWebtoons(curPage){
 			{{#each .}}
 			<tr onclick = "location.href = '../dashboard/webtoons/{{webtoonId}}'">
 				<td>
-					<div class="thumbnail image_container">
-						<img src = "{{thumbnail}}">
-					</div>
+					<div class="image_container" style="background-image: url({{thumbnail}})"></div>
 				</td>
 				<td>
 					{{title}}
