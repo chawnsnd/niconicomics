@@ -37,7 +37,6 @@ function getWebtoonList(currentPage){
 				webtoon.hashtags = splitHashtag(webtoon.hashtag);
 			})
 			bindTemplate($("#webtoonListTemplate"), data.webtoonList);
-			imageContainer();
 			$("#navi").remove();
 			bindTemplate($("#naviTemplate"), data.navi);
 			currentPage = (data.navi.currentPage == 0) ? 1 : data.navi.currentPage;
@@ -108,6 +107,8 @@ function enterSearch(e){
 .image_container{
 	width: 150px;
 	height: 120px;
+	background-size: cover;
+	background-position: center;
 }
 .webtoon{
 	display: inline-block;
@@ -230,9 +231,7 @@ function enterSearch(e){
 <div id="webtoonList" class="cards">
 {{#each .}}
 <div class="card webtoon" onclick="location.href = '<c:url value='/webtoons/'/>{{webtoonId}}'">
-	<div class="image_container">
-		<img src="{{thumbnail}}">
-	</div>
+	<div class="image_container" style="background-image: url({{thumbnail}})"></div>
 	<div class="title">{{title}}</div>
 	<div class="author">{{authorNickname}}</div>
 	{{#each hashtags}}
