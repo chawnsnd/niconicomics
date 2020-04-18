@@ -91,6 +91,21 @@ function checkEmail(){
 		}
 	})
 }
+function loginKakao(){
+	location.href = 
+	"https://kauth.kakao.com/oauth/authorize"+
+	"?client_id=e8d019946e7e473b418a83659e5b38dc"+
+	"&redirect_uri=http://localhost:8888/core/users/kakao-login"+
+	"&response_type=code";
+}
+function loginNaver(){
+	location.href = 
+	"https://nid.naver.com/oauth2.0/authorize"+
+	"?response_type=code"+
+	"&client_id=DAo5utEZEh2u7jRDH9lv"+
+	"&redirect_uri=http://localhost:8888/core/users/naver-login"+
+	"&state=niconicomics"
+}
 </script>
 <style>
 main{
@@ -133,6 +148,9 @@ main{
 		<div class="form-group">
 			<button class="btn btn-primary btn-block" type="button" id="submit">Sign up</button>
 		</div>
+		<hr>
+		<a onclick="loginKakao()"><img src="<c:url value='/resources/images/kakao_login_button.png'/>" style="width: 100%; height: 60px; cursor: pointer;"></a>
+		<a onclick="loginNaver()"><img src="<c:url value='/resources/images/naver_login_button.png'/>" style="width: 100%; height: 60px; cursor: pointer;"></a>
 </main>
 <%@ include file="../layout/footer.jsp"%>
 </body>
