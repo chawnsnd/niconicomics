@@ -92,7 +92,7 @@ public class UserController {
 	public boolean join2(String random, HttpSession session) {
 		String sessionRandom = (String)session.getAttribute("random");
 		User user = (User)session.getAttribute("user");
-		if(sessionRandom.equals(random)) {
+//		if(sessionRandom.equals(random)) {
 			boolean result = userService.checkEmailValidation(user.getEmail());
 			if(!result) {
 				return false;
@@ -108,9 +108,9 @@ public class UserController {
 			}else {
 				return true;
 			}
-		}else {
-			return false;
-		}
+//		}else {
+//			return false;
+//		}
 	}
 
 	@PostMapping(value = "/login")
