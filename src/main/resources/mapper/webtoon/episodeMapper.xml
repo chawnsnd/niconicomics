@@ -44,6 +44,17 @@
 		order by
 			episode_id
 	</select>
+
+	<select id="selectCountEpisodeListByWebtoonId" resultType="int" parameterType="int">
+		select
+			count(*)
+		from 
+			tbl_episode
+		where
+			webtoon_id = #{webtoonId}
+		order by
+			episode_id
+	</select>
 	
 	<update id="updateEpisode" parameterType="episode">
 		update

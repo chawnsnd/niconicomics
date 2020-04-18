@@ -46,14 +46,18 @@ public class EpisodeController {
 	private ContentsDao contentsDao;
 
 	@GetMapping(value = "/{webtoonId}/episodes")
-	public ArrayList<Episode> getEpisodeList(
+	public Map<String, Object> getEpisodeList(
 			@PathVariable(value = "webtoonId") int webtoonId,
 			@RequestParam(defaultValue = "20") int countPerPage,
 			@RequestParam(defaultValue = "1") int currentPage,
 			@RequestParam(defaultValue = "5") int pagePerGroup) {
-//		PageNavigator navi = new PageNavigator(countPerPage, pagePerGroup, currentPage, 100);
-		ArrayList<Episode> episodeList = episodeDao.selectEpisodeListByWebtoonId(webtoonId);
-		return episodeList;
+		int episodeListSize = episodeDao.selectCountEpsisodeListByWebtoonId(webtoonId);
+		PageNavigator navi = new PageNavigator(countPerPage, pagePerGroup, currentPage, episodeListSize);
+		ArrayList<Episode> episodeList = episodeDao.selectEpisodeListByWebtoonId(webtoonId, navi);
+		Map<String, Object> result = new HashMap<>();
+		result.put("navi", navi);
+		result.put("episodeList", episodeList);
+		return result;
 	}
 	
 	@GetMapping(value = "/{webtoonId}/episodes/{episodeNo}")
