@@ -93,7 +93,7 @@ main{
 		</div>
 	</form>
 	<hr>
-	<a onclick="loginKakao()"><img src="<c:url value='/resources/images/kakao_login_button.png'/>" style="width: 100%; height: 60px; cursor: pointer;"></a>
+	<a onclick="loginKakao()"><img src="<c:url value='/resources/images/kakao_login_button.png'/>" style="width: 100%; height: 60px; cursor: pointer;">g</a>
 	<a onclick="loginNaver()"><img src="<c:url value='/resources/images/naver_login_button.png'/>" style="width: 100%; height: 60px; cursor: pointer;"></a>
 </main>
 <%@ include file="../layout/footer.jsp"%>
