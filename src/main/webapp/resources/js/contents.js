@@ -3,6 +3,7 @@ var footerPositionTop;
 var fullScreen = false;
 var showDotple;
 function initScroll(){
+	footerPositionTop = $("footer").position().top;
 	$(window).on("mousemove", function(e){
 		if(hide){
 			if(e.pageY<=$("header").outerHeight()){
