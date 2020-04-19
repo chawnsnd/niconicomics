@@ -57,7 +57,7 @@ public class UserViewController {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "e8d019946e7e473b418a83659e5b38dc");
-        body.add("redirect_url", "http://localhost:8888/core/users/kakao-login");
+        body.add("redirect_url", "http://localhost/users/kakao-login");
         body.add("code", code);
         HttpEntity<MultiValueMap<String, String>> tokenReq = new HttpEntity<>(body, headers);
         Map<String, String> tokenInfo = restTemplate.postForObject("https://kauth.kakao.com/oauth/token", tokenReq, Map.class);
