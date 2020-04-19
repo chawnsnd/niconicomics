@@ -115,6 +115,10 @@ function enterSearch(e){
 	cursor: pointer;
 	margin-right: 15px;
 	margin-top: 15px;
+	width: 150px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .webtoon:hover{
     box-shadow: 0.5px 0.5px 3px 0px black;
