@@ -68,7 +68,7 @@ function loginNaver(){
 	"https://nid.naver.com/oauth2.0/authorize"+
 	"?response_type=code"+
 	"&client_id=DAo5utEZEh2u7jRDH9lv"+
-	"&redirect_uri=http://localhost/core/users/naver-login"+
+	"&redirect_uri=http://localhost/users/naver-login"+
 	"&state=niconicomics"
 }
 </script>
