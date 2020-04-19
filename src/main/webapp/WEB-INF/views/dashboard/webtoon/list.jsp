@@ -7,6 +7,9 @@
 <meta charset="UTF-8">
 <%@ include file="../layout/global.jsp"%>
 <script>
+var currentPage = 1;
+var totalPageCount = 1;
+
 $(document).ready(function() {
 	$('#insert').on('click', insertWebtoon);
 	getWebtoons(1);
@@ -41,7 +44,13 @@ function getWebtoons(curPage){
 			authorId : "${sessionScope.loginUser.userId}"
 		},
 		success: function(data){
+			console.log(data);
+			$("#webtoonList").remove();
+			$("#navi").remove();
+			bindTemplate($('#naviTemplate'), data.navi);
 			bindTemplate($('#webtoonListTemplate'), data.webtoonList);
+			currentPage = (data.navi.currentPage == 0) ? 1 : data.navi.currentPage;
+			totalPageCount = (data.navi.totalPageCount == 0) ? 1 : data.navi.totalPageCount;
 		},
 		error: function(err){
 			console.log(err);
@@ -65,11 +74,22 @@ function getWebtoons(curPage){
 <h2>Webtoon</h2><hr>
 <div class="card">
 	<div class="card-body">
-		<p class="card-title">
+		<p class="card-title float-left">
 			<input type = "button" class="btn btn-primary" id = "insert" value ="Enroll Webtoon">
 		</p>
+		<script id="naviTemplate" type="text/x-handlebars-template">
+		<div id="navi" class="float-right">
+			<div class="input-group" style="width: 150px;">
+				<div class="input-group-prepend" id="idx"><span class="input-group-text">{{currentPage}} / {{totalPageCount}}</span></div>
+				<div class="input-group-append">
+					<button class="btn btn-secondary btn-sm" onclick="getEpisodes({{currentPage}}-1)">prev</button>
+					<button class="btn btn-secondary btn-sm" onclick="getEpisodes({{currentPage}}+1)">next</button>
+				</div>
+			</div>
+		</div>
+		</script>
 		<script id="webtoonListTemplate" type="text/x-handlebars-template">
-		<table class="table">
+		<table id="webtoonList" class="table">
 			<tr>
 				<th>
 					Thumbnail

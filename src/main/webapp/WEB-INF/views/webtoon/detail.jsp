@@ -8,9 +8,12 @@
 <%@ include file="../layout/global.jsp"%>
 </head>
 <script>
+var currentPage = 1;
+var totalPageCount = 1;
+
 $(function(){
 	getWebtoon();
-	getEpisodes();
+	getEpisodes(1);
 })
 
 function getWebtoon(){
@@ -18,7 +21,6 @@ function getWebtoon(){
 		url: "<c:url value='/api/webtoons/${webtoonId}'/>",
 		method: "get",
 		success: function(data){
-			console.log(data);
 			bindTemplate($("#webtoonTemplate"), data);
 			splitHashtag(data.hashtag);
 		}
@@ -35,12 +37,21 @@ function splitHashtag(hashtags){
 	})
 }
 
-function getEpisodes(){
+function getEpisodes(currentPage){
+	if(currentPage < 1 || currentPage > totalPageCount) return;
 	$.ajax({
 		url: "<c:url value='/api/webtoons/${webtoonId}/episodes'/>",
 		method: "get",
+		data:{
+			currentPage: currentPage
+		},
 		success: function(data){
-			bindTemplate($("#episodeListTemplate"), data);
+			$("#episodeList").remove();
+			$("#navi").remove();
+			bindTemplate($("#episodeListTemplate"), data.episodeList);
+			bindTemplate($("#naviTemplate"), data.navi);
+			currentPage = (data.navi.currentPage == 0) ? 1 : data.navi.currentPage;
+			totalPageCount = (data.navi.totalPageCount == 0) ? 1 : data.navi.totalPageCount;
 		}
 	})
 }
@@ -114,9 +125,21 @@ tr:active{
 	</div>
 </div>
 </script>
-<br>
+<script id="naviTemplate" type="text/x-handlebars-template">
+<div id="navi" class="row">
+<div class="col">
+<div id="navi" class="mt-3 float-right input-group mb-3" style="width: 150px;">
+	<div class="input-group-prepend" id="idx"><span class="input-group-text">{{currentPage}} / {{totalPageCount}}</span></div>
+	<div class="input-group-append">
+		<button class="btn btn-secondary btn-sm" onclick="getEpisodes({{currentPage}}-1)">prev</button>
+		<button class="btn btn-secondary btn-sm" onclick="getEpisodes({{currentPage}}+1)">next</button>
+	</div>
+</div>
+</div>
+</div>
+</script>
 <script id="episodeListTemplate" type="text/x-handlebars-template">
-<table class="episode-table table">
+<table id="episodeList" class="episode-table table">
 	<tr>
 		<th>No</th>
 		<th>Image</th>

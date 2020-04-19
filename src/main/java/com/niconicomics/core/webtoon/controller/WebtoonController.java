@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,8 +34,6 @@ public class WebtoonController {
 	
 	@Autowired
 	private WebtoonDao webtoonDao;
-	@Autowired
-	private UserDao userDao;
 
 	@GetMapping(value = "")
 	public Map<String, Object> getWebtoonList(
