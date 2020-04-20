@@ -8,10 +8,12 @@
 <%@ include file="../layout/global.jsp"%>
 <script>
 var maxNo = 0;
+var currentPage = 1;
+var totalPageCount = 1;
 $(document).ready(function() {
 	$('#insert').on('click', insertEpisode);
 	getWebtoon();
-	getEpisodes();
+	getEpisodes(1);
 });
 
 function getWebtoon(){
@@ -25,7 +27,6 @@ function getWebtoon(){
 			maxNo = data.maxNo;
 			data["hashtags"] = data.hashtag.split("#").slice(1);
 			bindTemplate($('#webtoonTemplate'), data);
-			imageContainer();
 		},
 		error: function(err){
 			console.log(err);
@@ -72,16 +73,21 @@ function updateEpisode(episodeNo){
 	location.href = "<c:url value='/dashboard/webtoons/${webtoonId}/episodes/"+episodeNo+"/update'/>"
 }
 
-function getEpisodes(){
+function getEpisodes(currentPage){
 	$.ajax({
 		url: "<c:url value='/api/webtoons/${webtoonId}/episodes'/>",
 		type: "GET",
+		data:{
+			currentPage: currentPage
+		},
 		async: false,
 		success: function(data){
-			console.log(data);
-			var template = $('#myEpisodeListTemplate');
-			bindTemplate(template, data);
-			imageContainer();
+			$("#myEpisodeList").remove();
+			$("#navi").remove();
+			bindTemplate($('#naviTemplate'), data.navi);
+			bindTemplate($('#myEpisodeListTemplate'), data.episodeList);
+			currentPage = (data.navi.currentPage == 0) ? 1 : data.navi.currentPage;
+			totalPageCount = (data.navi.totalPageCount == 0) ? 1 : data.navi.totalPageCount;
 		},
 		error: function(err){
 			console.log(err);
@@ -98,6 +104,10 @@ function getEpisodes(){
 	width: 80px;
 	height: 50px;
 }
+.image_container{
+	background-size: cover;
+	background-position: center;
+}
 </style>
 </head>
 <body>
@@ -109,9 +119,7 @@ function getEpisodes(){
 	<script id="webtoonTemplate" type="text/x-handlebars-template">
 	<div class="row">
 		<div class="col-md-auto">
-			<div id="webtoon_thumbnail" class="image_container col-md-auto">
-				<img src="{{thumbnail}}">
-			</div>
+			<div id="webtoon_thumbnail" class="image_container" style="background-image: url({{thumbnail}})"></div>
 		</div>
 		<div class="col">
 			<div class="card-body">
@@ -137,11 +145,22 @@ function getEpisodes(){
 </div>
 <div class="card mt-3">
 	<div class="card-body">
-		<p class="card-title">
+		<p class="card-title float-left">
 			<input type = "button" class="btn btn-primary" id = "insert" value ="Post Episode" onclick="insertEpisode()">
 		</p>
+		<script id="naviTemplate" type="text/x-handlebars-template">
+		<div id="navi" class="float-right">
+			<div class="input-group" style="width: 150px;">
+				<div class="input-group-prepend" id="idx"><span class="input-group-text">{{currentPage}} / {{totalPageCount}}</span></div>
+				<div class="input-group-append">
+					<button class="btn btn-secondary btn-sm" onclick="getEpisodes({{currentPage}}-1)">prev</button>
+					<button class="btn btn-secondary btn-sm" onclick="getEpisodes({{currentPage}}+1)">next</button>
+				</div>
+			</div>
+		</div>
+		</script>
 		<script id="myEpisodeListTemplate" type="text/x-handlebars-template">
-		<table class="table">
+		<table id="myEpisodeList" class="table">
 			<tr>
 				<th>
 					No
@@ -168,9 +187,7 @@ function getEpisodes(){
 					{{no}}
 				</td>
 				<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
-					<div id="episode_thumbnail" class="image_container">
-						<img src = "{{thumbnail}}" width = "100px">
-					</div>
+					<div id="episode_thumbnail" class="image_container" style="background-image: url({{thumbnail}})"></div>
 				</td>
 				<td onclick = "location.href = '<c:url value='/webtoons/${webtoonId}/episodes/'/>{{no}}'">
 					{{title}}

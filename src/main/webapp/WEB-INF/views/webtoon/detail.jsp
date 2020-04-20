@@ -8,9 +8,12 @@
 <%@ include file="../layout/global.jsp"%>
 </head>
 <script>
+var currentPage = 1;
+var totalPageCount = 1;
+
 $(function(){
 	getWebtoon();
-	getEpisodes();
+	getEpisodes(1);
 })
 
 function getWebtoon(){
@@ -18,9 +21,7 @@ function getWebtoon(){
 		url: "<c:url value='/api/webtoons/${webtoonId}'/>",
 		method: "get",
 		success: function(data){
-			console.log(data);
 			bindTemplate($("#webtoonTemplate"), data);
-			imageContainer();
 			splitHashtag(data.hashtag);
 		}
 	})
@@ -36,12 +37,21 @@ function splitHashtag(hashtags){
 	})
 }
 
-function getEpisodes(){
+function getEpisodes(currentPage){
+	if(currentPage < 1 || currentPage > totalPageCount) return;
 	$.ajax({
 		url: "<c:url value='/api/webtoons/${webtoonId}/episodes'/>",
 		method: "get",
+		data:{
+			currentPage: currentPage
+		},
 		success: function(data){
-			bindTemplate($("#episodeListTemplate"), data);
+			$("#episodeList").remove();
+			$("#navi").remove();
+			bindTemplate($("#episodeListTemplate"), data.episodeList);
+			bindTemplate($("#naviTemplate"), data.navi);
+			currentPage = (data.navi.currentPage == 0) ? 1 : data.navi.currentPage;
+			totalPageCount = (data.navi.totalPageCount == 0) ? 1 : data.navi.totalPageCount;
 		}
 	})
 }
@@ -54,6 +64,8 @@ function getEpisodes(){
 	width: 200px;
 	height: 200px;
 	display: inline-block;
+	background-size: cover;
+	background-position: center;
 }
 .webtoon_info{
 	margin: 10px;
@@ -104,7 +116,7 @@ tr:active{
 <main>
 <script id="webtoonTemplate" type="text/x-handlebars-template">
 <div class="info">
-	<div class="webtoon-thumbnail image_container"><img src="{{thumbnail}}"></div>
+	<div class="webtoon_thumbnail image_container" style="background-image: url({{thumbnail}})"></div>
 	<div class="webtoon_info">	
 		<div class="webtoon_title">{{title}}</div>
 		<div class="author">{{authorNickname}}</div>
@@ -113,9 +125,21 @@ tr:active{
 	</div>
 </div>
 </script>
-<br>
+<script id="naviTemplate" type="text/x-handlebars-template">
+<div id="navi" class="row">
+<div class="col">
+<div id="navi" class="mt-3 float-right input-group mb-3" style="width: 150px;">
+	<div class="input-group-prepend" id="idx"><span class="input-group-text">{{currentPage}} / {{totalPageCount}}</span></div>
+	<div class="input-group-append">
+		<button class="btn btn-secondary btn-sm" onclick="getEpisodes({{currentPage}}-1)">prev</button>
+		<button class="btn btn-secondary btn-sm" onclick="getEpisodes({{currentPage}}+1)">next</button>
+	</div>
+</div>
+</div>
+</div>
+</script>
 <script id="episodeListTemplate" type="text/x-handlebars-template">
-<table class="episode-table table">
+<table id="episodeList" class="episode-table table">
 	<tr>
 		<th>No</th>
 		<th>Image</th>
@@ -126,7 +150,7 @@ tr:active{
 	{{#each .}}
 	<tr onclick="location.href = '<c:url value='/webtoons/${webtoonId}/episodes/{{no}}'/>'">
 		<td>{{no}}</td>
-		<td><div class="image_container episode_thumbnail"><img src="{{thumbnail}}"></div></td>
+		<td><div class="episode_thumbnail image_container" style="background-image: url({{thumbnail}})"></div></td>
 		<td style="width: 50%;" class="text-left">{{title}}</td>
 		<td>{{hits}}</td>
 		<td>{{regdate}}</td>

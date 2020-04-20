@@ -14,13 +14,10 @@ var webtoons;
 $(function(){
 	bannerSliderSetting();
 	getWebtoons().then(function(){
-		imageContainer();
 	});
 	getNewWebtoons();
 	$(".type").on("click", function(){
-		getWebtoons($(this).data("type")).then(function(){
-			imageContainer();
-		});
+		getWebtoons($(this).data("type"));
 		$(".type").removeClass("active");
 		$(this).addClass("active");
 	})
@@ -32,7 +29,7 @@ function getNewWebtoons(){
 		async: false,
 		data:{
 			currentPage: 1,
-			CountPerPage: 10,
+			CountPerPage: 9,
 		},
 		success: function(data){
 			$("#newWebtoons").remove();
@@ -137,6 +134,10 @@ function bannerSliderSetting(){
 	cursor: pointer;
 	margin-right: 15px;
 	margin-top: 15px;
+	width: 150px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .webtoon:hover{
     box-shadow: 0.5px 0.5px 3px 0px black;
@@ -144,6 +145,8 @@ function bannerSliderSetting(){
 .image_container{
 	width: 150px;
 	height: 120px;
+	background-size: cover;
+	background-position: center;
 }
 .title{
 	font-weight: bold;
@@ -207,9 +210,7 @@ function bannerSliderSetting(){
 <div id="webtoons" class="row webtoons float-left">
 	{{#each .}}
 	<div class="card webtoon" onclick="location.href = '<c:url value='/webtoons/'/>{{webtoonId}}'">
-		<div class="image_container">
-			<img src="{{thumbnail}}">
-		</div>
+		<div class="image_container" style="background-image: url({{thumbnail}})"></div>
 		<div class="title">{{title}}</div>
 		<div class="author">{{authorNickname}}</div>
 	</div>
