@@ -80,7 +80,7 @@ function bannerSliderSetting(){
 <style>
 .swiper-container {
 	width: 100%;
-	height: 200px;
+	height: 300px;
 }
 .swiper-slide {
 	text-align: center;
