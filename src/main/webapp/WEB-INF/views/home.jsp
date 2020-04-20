@@ -190,10 +190,9 @@ function bannerSliderSetting(){
 <main>
 <div class="swiper-container" id="banner-slider">
 	<div class="swiper-wrapper">
-		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 1</div></div>
-		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 2</div></div>
-		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 3</div></div>
-		<div class="swiper-slide"><div style="height: 200px; line-height: 200px; vertical-align: middle;">Banner 4</div></div>
+		<div class="swiper-slide"><img src="<c:url value='/resources/images/banner/banner1.png'/>"></div>
+		<div class="swiper-slide"><img src="<c:url value='/resources/images/banner/banner1.png'/>"></div>
+		<div class="swiper-slide"><img src="<c:url value='/resources/images/banner/banner1.png'/>"></div>
 	</div>
 	<div class="swiper-button-next"></div>
 	<div class="swiper-button-prev"></div>
