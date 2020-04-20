@@ -6,7 +6,7 @@ import lombok.Data;
 public class Donate {
 
 	private int donateId;
-	private int donateDate;
+	private String donateDate;
 	private int sponsorId;
 	private int authorId;
 	private int webtoonId;
