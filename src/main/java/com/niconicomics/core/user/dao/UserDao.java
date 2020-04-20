@@ -1,9 +1,12 @@
 package com.niconicomics.core.user.dao;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.niconicomics.core.nico.vo.Donate;
 import com.niconicomics.core.user.vo.User;
 
 @Repository
@@ -54,4 +57,5 @@ public class UserDao {
 		int result = mapper.selectCountByEmail(email);
 		return result;
 	}
+
 }
