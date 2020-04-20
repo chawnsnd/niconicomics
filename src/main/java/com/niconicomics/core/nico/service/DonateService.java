@@ -1,5 +1,7 @@
 package com.niconicomics.core.nico.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,12 @@ public class DonateService {
 		}else {
 			return false;
 		}
+	}
+
+
+
+	public ArrayList<Donate> selectDonateListByWebtoonId(int webtoonId) {
+		return donateDao.selectDonateListByWebtoonId(webtoonId);
 	}
 	
 }

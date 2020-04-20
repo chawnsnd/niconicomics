@@ -18,5 +18,11 @@
 			#{webtoonId}
 		)
 	</insert>
+	
+	<select id="selectDonateListByWebtoonId" parameterType="int" resultType="donate">
+		select *
+		from tbl_donate
+		where webtoon_id = #{webtoonId}
+	</select>
 
 </mapper>

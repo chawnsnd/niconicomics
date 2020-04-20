@@ -65,7 +65,7 @@ function logout(){
 			<div class="header_userinfo">{{nickname}}</div>
 			<a href="<c:url value="/users/mypage/profile"/>"><i class="fas fa-home"></i> MyPage</a>
 				{{#if (isAuthor type)}}
-				<a href="<c:url value="/dashboard"/>"><i class="fas fa-chart-line"></i> Dashboard</a>
+				<a href="<c:url value="/dashboard/analysis"/>"><i class="fas fa-chart-line"></i> Dashboard</a>
 				{{/if}}
 			<a onclick="logout()" href="#"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
 			</div>
