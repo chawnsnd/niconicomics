@@ -94,7 +94,7 @@ function loginKakao(){
 	location.href = 
 	"https://kauth.kakao.com/oauth/authorize"+
 	"?client_id=e8d019946e7e473b418a83659e5b38dc"+
-	"&redirect_uri=http://localhost:8888/core/users/kakao-login"+
+	"&redirect_uri=http://203.233.199.118/users/kakao-login"+
 	"&response_type=code";
 }
 function loginNaver(){
@@ -102,7 +102,7 @@ function loginNaver(){
 	"https://nid.naver.com/oauth2.0/authorize"+
 	"?response_type=code"+
 	"&client_id=DAo5utEZEh2u7jRDH9lv"+
-	"&redirect_uri=http://localhost:8888/core/users/naver-login"+
+	"&redirect_uri=http://203.233.199.118/users/naver-login"+
 	"&state=niconicomics"
 }
 </script>
