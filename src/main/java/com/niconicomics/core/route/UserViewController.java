@@ -115,6 +115,16 @@ public class UserViewController {
 		return "user/mypage/chargeNico";
 	}
 	
+	@GetMapping(value = "/mypage/charge-cancel")
+	public String goChargCancel() {
+		return "user/mypage/chargeCancel";
+	}
+
+	@GetMapping(value = "/mypage/charge-fail")
+	public String goChargfail() {
+		return "user/mypage/chargeFail";
+	}
+	
 	@GetMapping(value = "/mypage/profile")
 	public String myPage() {
 		return "user/mypage/profile";

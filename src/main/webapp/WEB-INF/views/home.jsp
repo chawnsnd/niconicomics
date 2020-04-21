@@ -29,7 +29,7 @@ function getNewWebtoons(){
 		async: false,
 		data:{
 			currentPage: 1,
-			CountPerPage: 9,
+			countPerPage: 9,
 		},
 		success: function(data){
 			$("#newWebtoons").remove();
