@@ -109,6 +109,7 @@
 			</foreach>
 		</if>
 		</trim>
+		order by reg_date desc
 	</select>
 
 	<select id="selectCountWebtoonList" resultType="int" parameterType="webtoonSearchOption">

@@ -43,7 +43,8 @@ function getEpisodes(currentPage){
 		url: "<c:url value='/api/webtoons/${webtoonId}/episodes'/>",
 		method: "get",
 		data:{
-			currentPage: currentPage
+			currentPage: currentPage,
+			countPerPage: 10
 		},
 		success: function(data){
 			$("#episodeList").remove();
