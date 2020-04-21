@@ -44,12 +44,15 @@ function thumbnailPreview(){
 }
 
 function updateWebtoon() {
+	if(!validate()) return;
 	var strHashtags = "";
 	strHashtags += "#"+$("input[name='typeHashtag']:checked").val();
 	$("input[name='checkHashtag']:checked").each((idx, hashtag) => {
 		strHashtags += "#"+$(hashtag).val();
 	})
-	strHashtags += "#"+$("input[data-role='tagsinput']").val();
+	if($("input[data-role='tagsinput']").val().trim()!=""){
+		strHashtags += "#"+$("input[data-role='tagsinput']").val();
+	}
 	$("#hashtag").val(strHashtags);
 	var form = $('#updateWebtoonForm')[0];
 	var formData = new FormData(form);
@@ -68,6 +71,17 @@ function updateWebtoon() {
 		}
 	})
 }
+
+function validate(){
+	var result = true;
+	if($("#title").val()==""||$("#title").val()==null) result = false;
+	if($("#summary").val()==""||$("#summary").val()==null) result = false;
+	if($("#thumbnailInput")[0].files.length == 0) result = false;
+	if($("input[name='typeHashtag']:checked").length == 0) result = false;
+	if(!result) alert("Please check the input box.");
+	return result;
+}
+
 </script>
 </head>
 <body>
@@ -90,6 +104,7 @@ function updateWebtoon() {
 			<th>Tag</th>
 			<td>
 				<div>
+					<span><b>Required</b></span>
 					<div class="form-check form-check-inline">
 						<input class="form-check-input" type="radio" name="typeHashtag" id="episode" value="episode">
 						<label class="form-check-label" for="episode">episode</label>

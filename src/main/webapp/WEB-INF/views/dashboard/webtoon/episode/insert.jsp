@@ -53,6 +53,7 @@ function thumbnailPreview(){
 }
 
 function insertEpisode() {
+	if(!validate()) return;
 	var form = $('#insertEpisodeForm')[0];
 	var formData = new FormData(form);
 	$.ajax({
@@ -96,6 +97,14 @@ function downContents(target){
 	curFile[0].files = dt2.files;
 	contentsPreview();
 }
+
+function validate(){
+	var result = true;
+	if($("#title").val()==""||$("#title").val()==null) result = false;
+	if($("#thumbnailInput")[0].files.length == 0) result = false;
+	if(!result) alert("Please check the input box.");
+	return result;
+}
 </script>
 <style>
 #contentsPreview{
@@ -129,7 +138,7 @@ function downContents(target){
 			</td>
 		</tr>
 		<tr>
-			<th>원고등록</th>
+			<th>Manuscript</th>
 			<td colspan="3">
 				<input type="button" class="btn btn-warning btn-sm" value="ADD" onclick="addContents()">
 				<div id="contentsList" class="card mt-2">
