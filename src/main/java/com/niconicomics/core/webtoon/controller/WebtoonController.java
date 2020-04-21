@@ -45,6 +45,9 @@ public class WebtoonController {
 		int webtoonListSize = webtoonDao.selectCountWebtoonList(option);
 		PageNavigator navi = new PageNavigator(countPerPage, pagePerGroup, currentPage, webtoonListSize);
 		ArrayList<Webtoon> webtoonList = webtoonDao.selectWebtoonList(option, navi);
+		for (Webtoon webtoon : webtoonList) {
+			log.debug(webtoon.toString());
+		}
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("webtoonList", webtoonList);
 		result.put("navi", navi);

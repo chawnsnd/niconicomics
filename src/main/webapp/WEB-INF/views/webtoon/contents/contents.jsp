@@ -73,6 +73,13 @@ function getMe(){
 	})
 }
 
+function removeDotpleForm(e){
+	e = e || window.event;
+	e.preventDefault();
+	e.stopPropagation();
+	$("#dotpleForm").remove();
+}
+
 function clickImage(e){
 	var st = $(".contents")[0].scrollTop;
 	e = e || window.event;
@@ -80,7 +87,13 @@ function clickImage(e){
 	e.preventDefault();
 	var target = event.currentTarget;
 	$("#dotpleForm").remove();
-	$(target).append('<div id="dotpleForm" style="width: 250px" data-idx='+$(target).data('idx')+' data-xAxis='+e.offsetX+' data-yAxis='+e.offsetY+'>'+
+	$(target).append('<div id="dotpleForm" class="card" style="width: 250px" data-idx='+$(target).data('idx')+' data-xAxis='+e.offsetX+' data-yAxis='+e.offsetY+'>'+
+	'<div class="card-header p-2">'+
+	'<span class="card-title d-inline-block h5 mb-0">Dotple</span>'+
+	'<button type="button" class="close float-right" onclick="removeDotpleForm()">'+
+    '<span aria-hidden="true">&times;</span>'+
+  	'</button>'+
+  	'</div>'+
 	'<input class="form-control" type="text" id="dotpleContents" placeholder="message" onkeyup="enterDotple()">'+
 	'<div class="input-group">'+
 		'<div class="input-group-prepend">'+

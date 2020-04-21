@@ -48,7 +48,7 @@ function getWebtoons(type){
 			async: false,
 			data:{
 				currentPage: 1,
-				CountPerPage: 30,
+				CountPerPage: 12,
 				hashtags: type
 			},
 			success: function(data){

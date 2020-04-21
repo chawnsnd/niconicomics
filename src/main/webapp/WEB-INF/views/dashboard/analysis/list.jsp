@@ -9,8 +9,15 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
 var webtoonList;
+var currentPage = 1;
+var totalPageCount = 1;
+
 $(document).ready(function() {
-	getWebtoons();
+	initPage(1);
+});
+
+function initPage(currentPage){
+	getWebtoons(currentPage);
 	$(webtoonList).each(function(idx, webtoon){
 		getEpisodes(webtoon.webtoonId);
 		getDonate(webtoon.webtoonId);
@@ -24,7 +31,8 @@ $(document).ready(function() {
 	bindTemplate($("#myWebtoonListTemplate"), webtoonList);
 	$(".chart").hide();	
 	google.charts.load('current', { 'packages' : [ 'corechart' ] });
-});
+	$("#loadingSpinner").remove();
+}
 
 function getDonate(webtoonId){
 	$.ajax({
@@ -40,7 +48,7 @@ function getDonate(webtoonId){
 				donatedNico += donate.nico;
 			})
 			$(webtoonList).each(function(idx, webtoon){
-				if(webtoon.webtoonId = webtoonId){
+				if(webtoon.webtoonId == webtoonId){
 					webtoon.donatedNico = donatedNico;
 				}
 			})
@@ -51,16 +59,21 @@ function getDonate(webtoonId){
 	})
 }
 
-function getWebtoons() {
+function getWebtoons(currentPage) {
 	$.ajax({
 		url : "<c:url value='/api/webtoons'/>", // core/webtoons
 		type : "GET",
 		async: false,
 		data : {
-			authorId : "${sessionScope.loginUser.userId}"
+			authorId : "${sessionScope.loginUser.userId}",
+			currentPage : currentPage,
+			countPerPage : 10
 		},
 		success : function(data) {
 			webtoonList = data.webtoonList;
+			bindTemplate($("#naviTemplate"), data.navi);
+			currentPage = (data.navi.currentPage == 0) ? 1 : data.navi.currentPage;
+			totalPageCount = (data.navi.totalPageCount == 0) ? 1 : data.navi.totalPageCount;
 		},
 		error : function(err) {
 			console.log(err);
@@ -72,6 +85,9 @@ function getEpisodes(webtoonId){
 	$.ajax({
 		url : "<c:url value='/api/webtoons/'/>"+webtoonId+"/episodes", // core/webtoons
 		type : "GET",
+		data : {
+			countPerPage: 300
+		},
 		async: false,
 		success : function(data) {
 			$(webtoonList).each(function(idx, webtoon){
@@ -118,7 +134,7 @@ function getDotples(webtoonId, episodeNo){
 function calcDotples(webtoonId){
 	var allDotpleCount = 0;
 	$(webtoonList).each(function(idx, webtoon){
-		if(webtoon.webtoonId = webtoonId){
+		if(webtoon.webtoonId == webtoonId){
 			$(webtoon.episodeList).each(function(idx, episode){
 				allDotpleCount += episode.dotpleCount;
 			})
@@ -155,10 +171,12 @@ function drawHits(webtoonId) {
 			hAxis : {
 				title: 'EPISODE',
 				format : 'string',
+				direction: -1
 			},
 			vAxis : {
 				title: 'HITS',
-				format: 'decimal'
+				format: 'decimal',
+				minValue: 0
 			}
 	};
 	var chart = new google.visualization.LineChart(document.getElementById('chart_'+webtoonId));
@@ -195,10 +213,12 @@ function drawDotples(webtoonId) {
 			hAxis : {
 				title: 'EPISODE',
 				format : 'string',
+				direction: -1
 			},
 			vAxis : {
 				title: 'DOTPLES',
-				format: 'decimal'
+				format: 'decimal',
+				minValue: 0
 			}
 	};
 	var chart = new google.visualization.LineChart(document.getElementById('chart_'+webtoonId));
@@ -206,6 +226,7 @@ function drawDotples(webtoonId) {
 
 }
 function toggleChart(webtoonId){
+	console.log(webtoonId)
 	$("tr[data-webtoonid="+webtoonId+"]").toggle();
 	drawHits(webtoonId);
 }
@@ -225,6 +246,23 @@ function toggleChart(webtoonId){
 <main>
 <h2>Analysis</h2><hr>
 <div class="card">
+<div class="card-body">
+<div id="loadingSpinner" class="d-flex justify-content-center">
+	<div class="spinner-border" role="status">
+	  <span class="sr-only">Loading...</span>
+	</div>
+</div>
+<script id="naviTemplate" type="text/x-handlebars-template">
+<div id="navi" class="float-right mb-3">
+	<div class="input-group" style="width: 150px;">
+		<div class="input-group-prepend" id="idx"><span class="input-group-text">{{currentPage}} / {{totalPageCount}}</span></div>
+		<div class="input-group-append">
+			<button class="btn btn-secondary btn-sm" onclick="getEpisodes({{currentPage}}-1)">prev</button>
+			<button class="btn btn-secondary btn-sm" onclick="getEpisodes({{currentPage}}+1)">next</button>
+		</div>
+	</div>
+</div>
+</script>
 <script id="myWebtoonListTemplate" type="text/x-handlebars-template">
 <table class="table">
 	<tr>
@@ -250,8 +288,8 @@ function toggleChart(webtoonId){
 		<td colspan="6">
 		<div style="margin: auto;">
 			<div class="form-check form-check-inline">
-			<label><input type="radio" class="form-check-input" name="chartCategory" value="hits" checked="checked" onclick="drawHits({{webtoonId}})">Hits</label>
-			<label><input type="radio" class="form-check-input" name="chartCategory" value="dotples" onclick="drawDotples({{webtoonId}})">Dotples</label>
+			<label><input type="radio" class="form-check-input" name="chartCategory-{{webtoonId}}" value="hits" checked="checked" onclick="drawHits({{webtoonId}})">Hits</label>
+			<label><input type="radio" class="form-check-input" name="chartCategory-{{webtoonId}}" value="dotples" onclick="drawDotples({{webtoonId}})">Dotples</label>
 			</div>
 			<div style="width: 100%;" id="chart_{{webtoonId}}"></div>
 		</div>
@@ -260,6 +298,7 @@ function toggleChart(webtoonId){
 	{{/each}}
 </table>
 </script>
+</div>
 </div>
 </main>
 <%@ include file="../layout/footer.jsp"%>
