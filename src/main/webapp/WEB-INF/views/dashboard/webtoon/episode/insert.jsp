@@ -40,7 +40,7 @@ function contentsPreview(){
 		reader.onload = function (e) {
 			$('#contentsPreview').append("<div><img src='"+e.target.result+"' width='50%'></div>");
 		}
-		reader.readAsDataURL($(inp)[0].files[0]);
+		if($(inp)[0].files.length != 0) reader.readAsDataURL($(inp)[0].files[0]);
 	});
 }
 
@@ -77,24 +77,21 @@ function upContents(target){
 	var prevFile = $("input[type='file'][name="+(idx-1)+"]");
 	var dt1 = new DataTransfer();
 	var dt2 = new DataTransfer();
-	dt1.items.add(curFile[0].files[0]);
-	dt2.items.add(prevFile[0].files[0]);
+	if(curFile[0].files.length != 0) dt1.items.add(curFile[0].files[0]);
+	if(prevFile[0].files.length != 0) dt2.items.add(prevFile[0].files[0]);
 	prevFile[0].files = dt1.files;
 	curFile[0].files = dt2.files;
 	contentsPreview();
 }
 function downContents(target){
 	var curFile = $(target).parent().children("input[type='file']");
-	console.log(curFile);
 	var idx = curFile.attr("name");
 	if(idx>=$(".contents").length) return;
-	console.log((Number(idx)+1))
 	var nextFile = $("input[type='file'][name="+(Number(idx)+1)+"]");
-	console.log(nextFile)
 	var dt1 = new DataTransfer();
 	var dt2 = new DataTransfer();
-	dt1.items.add(curFile[0].files[0]);
-	dt2.items.add(nextFile[0].files[0]);
+	if(curFile[0].files.length != 0) dt1.items.add(curFile[0].files[0]);
+	if(nextFile[0].files.length != 0) dt2.items.add(nextFile[0].files[0]);
 	nextFile[0].files = dt1.files;
 	curFile[0].files = dt2.files;
 	contentsPreview();

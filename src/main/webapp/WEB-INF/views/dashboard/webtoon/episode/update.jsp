@@ -59,7 +59,7 @@ function contentsPreview(){
 			reader.onload = function (e) {
 				$('#contentsPreview').append("<div><img src='"+e.target.result+"' width='50%'></div>");
 			}
-			reader.readAsDataURL($(inp)[0].files[0]);
+			if($(inp)[0].files.length != 0) reader.readAsDataURL($(inp)[0].files[0]);
 		}
 	});
 }
@@ -90,6 +90,7 @@ function updateEpisode() {
 		}
 	})
 }
+
 function upContents(target){
 	var curFile = $(target).parent().children("input[type='file']");
 	var idx = curFile.attr("name");
@@ -97,70 +98,24 @@ function upContents(target){
 	var prevFile = $("input[type='file'][name="+(idx-1)+"]");
 	var dt1 = new DataTransfer();
 	var dt2 = new DataTransfer();
-	if(curFile[0].files.length == 0 && prevFile[0].files.length == 0){
-		var curImg = curFile.data("image");
-		var prevImg = prevFile.data("image");
-		curFile.data("image", prevImg);
-		curFile[0].files = new DataTransfer().files;
-		prevFile.data("image", curImg);
-		prevFile[0].files = new DataTransfer().files;
-	}else if(prevFile[0].files.length == 0){
-		var prevImg = prevFile.data("image");
-		prevFile.removeAttr("data-image")
-		dt1.items.add(curFile[0].files[0]);
-		prevFile[0].files = dt1.files;
-		curFile.data("image", prevImg);
-		curFile[0].files = new DataTransfer().files;
-	}else if(curFile[0].files.length == 0){
-		var curImg = curFile.data("image");
-		curFile.removeAttr("data-image")
-		dt1.items.add(prevFile[0].files[0]);
-		curFile[0].files = dt1.files;
-		prevFile.data("image", curImg);
-		prevFile[0].files = new DataTransfer().files;
-	}else{
-		dt1.items.add(curFile[0].files[0]);
-		dt2.items.add(prevFile[0].files[0]);
-		prevFile[0].files = dt1.files;
-		curFile[0].files = dt2.files;
-	}
+	if(curFile[0].files.length != 0) dt1.items.add(curFile[0].files[0]);
+	if(prevFile[0].files.length != 0) dt2.items.add(prevFile[0].files[0]);
+	prevFile[0].files = dt1.files;
+	curFile[0].files = dt2.files;
 	contentsPreview();
 }
+
 function downContents(target){
 	var curFile = $(target).parent().children("input[type='file']");
-	console.log(curFile);
 	var idx = curFile.attr("name");
 	if(idx>=$(".contents").length) return;
 	var nextFile = $("input[type='file'][name="+(Number(idx)+1)+"]");
 	var dt1 = new DataTransfer();
 	var dt2 = new DataTransfer();
-	if(curFile[0].files.length == 0 && nextFile[0].files.length == 0){
-		var curImg = curFile.data("image");
-		var nextImg = nextFile.data("image");
-		curFile.data("image", nextImg);
-		curFile[0].files = new DataTransfer().files;
-		nextFile.data("image", curImg);
-		nextFile[0].files = new DataTransfer().files;
-	}else if(nextFile[0].files.length == 0){
-		var nextImg = nextFile.data("image");
-		nextFile.removeAttr("data-image")
-		dt1.items.add(curFile[0].files[0]);
-		nextFile[0].files = dt1.files;
-		curFile.data("image", nextImg);
-		curFile[0].files = new DataTransfer().files;
-	}else if(curFile[0].files.length == 0){
-		var curImg = curFile.data("image");
-		curFile.removeAttr("data-image")
-		dt1.items.add(nextFile[0].files[0]);
-		curFile[0].files = dt1.files;
-		nextFile.data("image", curImg);
-		nextFile[0].files = new DataTransfer().files;
-	}else{
-		dt1.items.add(curFile[0].files[0]);
-		dt2.items.add(nextFile[0].files[0]);
-		nextFile[0].files = dt1.files;
-		curFile[0].files = dt2.files;
-	}
+	if(curFile[0].files.length != 0) dt1.items.add(curFile[0].files[0]);
+	if(nextFile[0].files.length != 0) dt2.items.add(nextFile[0].files[0]);
+	nextFile[0].files = dt1.files;
+	curFile[0].files = dt2.files;
 	contentsPreview();
 }
 </script>
