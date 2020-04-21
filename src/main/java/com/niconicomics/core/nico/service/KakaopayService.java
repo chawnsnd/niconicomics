@@ -60,8 +60,8 @@ public class KakaopayService {
 		body.add("tax_free_amount", "0");
 		body.add("vat_amount", Integer.toString(amount/11));
 		body.add("approval_url", "http://localhost:8888/core/api/nico/charge2");
-		body.add("cancel_url", "http://localhost:8888/core/nico/charge/cancel");
-		body.add("fail_url", "http://localhost:8888/core/nico/charge/fail");
+		body.add("cancel_url", "http://localhost:8888/core/mypage/charge-cancel");
+		body.add("fail_url", "http://localhost:8888/core/mypage/charge-fail");
 		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(body, headers);
 		ready = restTemplate.postForObject(HOST+"/v1/payment/ready", entity, KakaoPayReady.class);
 		log.debug(ready.toString());

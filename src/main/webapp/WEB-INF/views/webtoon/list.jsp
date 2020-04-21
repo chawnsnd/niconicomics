@@ -113,7 +113,8 @@ function enterSearch(e){
 .webtoon{
 	display: inline-block;
 	cursor: pointer;
-	margin-right: 15px;
+	margin-left: 6.5px;
+	margin-right: 6.5px;
 	margin-top: 15px;
 	width: 150px;
 	overflow: hidden;
