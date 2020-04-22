@@ -5,7 +5,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>작가 대시보드</title>
 <%@ include file="../layout/global.jsp"%>
 <script>
 Handlebars.registerHelper('calcFees', function (nico, amount){

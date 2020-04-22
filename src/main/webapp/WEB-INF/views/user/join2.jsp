@@ -6,7 +6,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>send email for authorizing</title>
 <%@ include file="../layout/global.jsp"%>
 
 </head>

@@ -4,7 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>NICONICOMICS</title>
 <%@ include file="./layout/global.jsp"%>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
 <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">

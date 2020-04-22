@@ -4,7 +4,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>테스트</title>
 <%@ include file="./layout/global.jsp"%>
 <script>
 var hashTagArr = [];

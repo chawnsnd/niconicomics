@@ -4,7 +4,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>충전페이지</title>
 <script src="./resources/js/jquery-3.4.1.min.js"></script>
 <script>
 $(function(){
