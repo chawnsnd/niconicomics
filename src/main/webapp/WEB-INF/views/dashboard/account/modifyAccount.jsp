@@ -26,6 +26,12 @@ function getAccount(){
 				history(-1);
 			}else{
 				bindTemplate($("#formTemplate"), data);
+				$("#submit").on("click", function(){
+					modifyAccount();
+				})
+				$("#accountForm").on("submit", function(e){
+					e.preventDefault();
+				})
 			}
 		},
 		error: function(err){
