@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Niconicomics</title>
+<link rel="shortcut icon" type="image/png" href="<c:url value='/resources/favicon.png'/>">
 <script src="<c:url value='/resources/js/jquery-3.4.1.min.js'/>"></script>
 <script src="<c:url value='/resources/js/bootstrap/bootstrap.bundle.min.js'/>"></script>
 <script src="<c:url value='/resources/js/bootstrap/bootstrap.min.js'/>"></script>
