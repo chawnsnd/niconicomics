@@ -5,7 +5,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
 <script src="<c:url value='/resources/js/jquery-3.4.1.min.js'/>"></script>
 <script src="<c:url value='/resources/js/bootstrap/bootstrap.bundle.min.js'/>"></script>
 <script src="<c:url value='/resources/js/bootstrap/bootstrap.min.js'/>"></script>

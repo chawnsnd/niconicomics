@@ -6,7 +6,6 @@
 
 <head>
 <meta charset="UTF-8">
-<title>sign up for uniconicomics</title>
 <%@ include file="../layout/global.jsp"%>
 </head>
 
