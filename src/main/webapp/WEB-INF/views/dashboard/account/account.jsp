@@ -15,7 +15,7 @@ function deleteAccount(){
 		url: "../account/${sessionScope.loginUser.userId}",
 		type: "delete",
 		success: function(){
-			alert("계좌가 삭제되었습니다.")
+			alert("Your account has been deleted.")
 			history.go(0);
 		},
 		error: function(err){
@@ -75,7 +75,7 @@ function getAccount(){
 <h2>Account</h2><hr>
 <div>
 	<div id="noAccountTemplate" class="template">
-		<div>등록된 계좌가 없습니다.</div>
+		<div>There are no registered accounts.</div>
 		<button class='btn btn-outline-secondary btn-sm' onclick='location.href=`enroll-account`'>등록</button>
 	</div>
 	<div id="accountTemplate" class="template">
