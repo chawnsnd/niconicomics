@@ -26,7 +26,8 @@
 			account_holder_name, 
 			account_number, 
 			id_card, 
-			copy_of_bankbook
+			copy_of_bankbook,
+			inquiry_name
 		) values (
 			seq_account.nextval,
 			#{authorId},
@@ -37,7 +38,8 @@
 			#{accountHolderName},
 			#{accountNumber},
 			#{idCard},
-			#{copyOfBankbook}
+			#{copyOfBankbook},
+			#{inquiryName}
 		)
 	</insert>
 	

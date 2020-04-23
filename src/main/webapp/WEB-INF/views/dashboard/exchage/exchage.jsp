@@ -60,7 +60,11 @@ function exchage(){
 				nico : $("#exchageNico").val()
 			},
 			success: function(data){
-				alert("The exchange is complete. Please check your account.");
+				if(data){
+					alert("The exchange is complete. Please check your account.");
+				}else{
+					alert("The exchange is failed.");
+				}
 				getMe();
 			},
 			error: function(err){

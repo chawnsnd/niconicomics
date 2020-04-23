@@ -16,6 +16,9 @@ import com.niconicomics.core.nico.vo.TransferDepositReqItem;
 import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.vo.User;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class NicoService {
 	
@@ -39,8 +42,10 @@ public class NicoService {
 
 	@Transactional
 	public boolean exchageNico(int userId, int nico) {
+		if(nico <= 0) return false;
 		User user = userDao.selectUserByUserId(userId);
 		Account account = accountDao.selectAccountByAuthorId(userId);
+		if(account == null) return false;
 		int amount = (int) (nico * (1-FEES));
 		if(user.getNico()-amount < 0) return false;
 //		if(!openBankingService.transfer(account, amount)) return false;
