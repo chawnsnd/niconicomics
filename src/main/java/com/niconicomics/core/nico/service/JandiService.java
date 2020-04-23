@@ -31,7 +31,7 @@ public class JandiService {
         JSONObject body = new JSONObject();
         body.put("body", 
         		"새로운 계좌등록 신청이 있습니다."+
-				"[[확인]](http://localhost:8888/core/admin/account/"+account.getAuthorId()+")"
+				"[[확인]](http://203.233.199.118/admin/account/"+account.getAuthorId()+")"
         );
 		HttpEntity<JSONObject> entity = new HttpEntity<>(body, headers);
         log.debug(entity.toString());

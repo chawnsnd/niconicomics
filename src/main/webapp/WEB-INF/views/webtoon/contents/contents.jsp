@@ -280,9 +280,6 @@ main{
 	overflow-y: auto;
 	flex: 3.5;
 }
-.contents::-webkit-scrollbar { 
-    display: none; 
-}
 .chatroom{
 	border-left: 1px solid #a3a3a3;
 	flex: 1;
@@ -314,17 +311,79 @@ main{
 <body>
 <%@ include file="./header.jsp"%>
 <main>
-<script id="contentsTemplate" type="text/x-handlebars-template">
+<!-- <script id="contentsTemplate" type="text/x-handlebars-template"> -->
+<!-- <div class="contents" id="contents"> -->
+<!-- 	{{#each .}} -->
+<!-- 	<div class="image_container"> -->
+<!-- 		<div class="image" data-idx={{idx}} onclick="clickImage()"> -->
+<!-- 			<img src="{{image}}" width="700px"> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	{{/each}} -->
+<!-- </div> -->
+<!-- </script> -->
 <div class="contents" id="contents">
-	{{#each .}}
 	<div class="image_container">
 		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="{{image}}" width="700px">
+			<img src="/core/resources/images/ps.jpg" width="700px">
 		</div>
 	</div>
-	{{/each}}
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
+	<div class="image_container">
+		<div class="image" data-idx={{idx}} onclick="clickImage()">
+			<img src="/core/resources/images/ps.jpg" width="700px">
+		</div>
+	</div>
 </div>
-</script>
 <div class="chatroom" id="chatroom">
 <%@ include file="./chat.jsp"%>
 </div>
