@@ -311,79 +311,17 @@ main{
 <body>
 <%@ include file="./header.jsp"%>
 <main>
-<!-- <script id="contentsTemplate" type="text/x-handlebars-template"> -->
-<!-- <div class="contents" id="contents"> -->
-<!-- 	{{#each .}} -->
-<!-- 	<div class="image_container"> -->
-<!-- 		<div class="image" data-idx={{idx}} onclick="clickImage()"> -->
-<!-- 			<img src="{{image}}" width="700px"> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-<!-- 	{{/each}} -->
-<!-- </div> -->
-<!-- </script> -->
+<script id="contentsTemplate" type="text/x-handlebars-template">
 <div class="contents" id="contents">
+	{{#each .}}
 	<div class="image_container">
 		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
+			<img src="{{image}}" width="700px">
 		</div>
 	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
-	<div class="image_container">
-		<div class="image" data-idx={{idx}} onclick="clickImage()">
-			<img src="/core/resources/images/ps.jpg" width="700px">
-		</div>
-	</div>
+	{{/each}}
 </div>
+</script>
 <div class="chatroom" id="chatroom">
 <%@ include file="./chat.jsp"%>
 </div>
