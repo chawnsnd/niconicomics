@@ -12,7 +12,8 @@ $(function(){
 })
 function getAccount(){
 	var pathname = window.location.pathname;
-	var userId = pathname.split("/")[4];
+	var pathnameArr = pathname.split("/");
+	var userId = pathnameArr[pathnameArr.length-1];
 	$.ajax({
 		url: "<c:url value='/account/"+userId+"'/>",
 		type: "get",
@@ -35,7 +36,8 @@ function getAccount(){
 }
 function approveAccount(){
 	var pathname = window.location.pathname;
-	var userId = pathname.split("/")[4];
+	var pathnameArr = pathname.split("/");
+	var userId = pathnameArr[pathnameArr.length-1];
 	$.ajax({
 		url: "<c:url value='/admin/account/"+userId+"/approve'/>",
 		type: "patch",
