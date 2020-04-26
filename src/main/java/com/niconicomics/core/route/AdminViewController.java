@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.niconicomics.core.nico.dao.AccountDao;
 import com.niconicomics.core.nico.vo.Account;
 
-@RequestMapping("/admin")
 @Controller
+@RequestMapping("/admin")
 public class AdminViewController {
 
 	@Autowired

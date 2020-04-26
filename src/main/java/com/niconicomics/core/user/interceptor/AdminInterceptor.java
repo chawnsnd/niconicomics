@@ -24,7 +24,7 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
 			return false;
 		}
 		
-		if(!loginUser.getType().equals("AUTHOR")) {
+		if(!loginUser.getType().equals("ADMIN")) {
 			session.removeAttribute("loginUser");
 			response.sendRedirect(request.getContextPath() + "/users/login");
 			return false;
