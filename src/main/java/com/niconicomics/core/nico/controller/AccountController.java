@@ -34,7 +34,7 @@ public class AccountController {
 	@GetMapping(value="/{userId}")
 	public Account getAccount(@PathVariable int userId, HttpSession session, HttpServletResponse res) {
 		User user = (User) session.getAttribute("loginUser");
-		if(userId != user.getUserId()) return null;
+		if(userId != user.getUserId() && !user.getType().equals("ADMIN")) return null;
 		Account account = accountService.getAccount(userId);
 		return account;
 	}
@@ -45,7 +45,7 @@ public class AccountController {
 			@RequestParam(name = "copyOfBankbookImg") MultipartFile copyOfBankbookImg,
 			HttpServletResponse res, HttpSession session) throws NotImageException {
 		User user = (User) session.getAttribute("loginUser");
-		if(userId != user.getUserId()) return false;
+		if(userId != user.getUserId() && !user.getType().equals("ADMIN")) return false;
 		account.setAuthorId(userId);
 		return accountService.enrollAccount(account, idCardImg, copyOfBankbookImg);
 	}
@@ -56,7 +56,7 @@ public class AccountController {
 			@RequestParam(name = "idCardImg") MultipartFile copyOfBankbookImg,
 			HttpServletResponse res, HttpSession session) throws NotImageException {
 		User user = (User) session.getAttribute("loginUser");
-		if(userId != user.getUserId()) return false;
+		if(userId != user.getUserId() && !user.getType().equals("ADMIN")) return false;
 		account.setAuthorId(userId);
 		return accountService.modifyAccount(account, idCardImg, copyOfBankbookImg);
 	}
@@ -65,7 +65,7 @@ public class AccountController {
 	public boolean deleteAccount(@PathVariable(name = "userId") int userId,
 			HttpServletResponse res, HttpSession session) {
 		User user = (User) session.getAttribute("loginUser");
-		if(userId != user.getUserId()) return false;
+		if(userId != user.getUserId() && !user.getType().equals("ADMIN")) return false;
 		return accountService.deleteAccountByAuthorId(userId);
 	}
 	
