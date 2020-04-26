@@ -17,6 +17,7 @@ function getAccount(){
 		url: "<c:url value='/account/"+userId+"'/>",
 		type: "get",
 		success: function(data){
+			console.log(data);
 			if(data == "") {
 				bindTemplate($("#noAccountTemplate"), data);
 			}else{
