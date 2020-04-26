@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.niconicomics.core.user.vo.User;
+
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 	
@@ -15,9 +17,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		HttpSession session = request.getSession();
-		String loginEmail = (String) session.getAttribute("loginEmail");
+		User loginUser = (User) session.getAttribute("loginUser");
 		
-		if(loginEmail == null) {
+		if(loginUser == null) {
 			response.sendRedirect(request.getContextPath() + "/users/login");
 			return false;
 		}

@@ -18,6 +18,7 @@ public class AuthorInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		HttpSession session = request.getSession();
 		User loginUser = (User) session.getAttribute("loginUser");
+		
 		if(loginUser == null) {
 			response.sendRedirect(request.getContextPath() + "/users/login");
 			return false;
