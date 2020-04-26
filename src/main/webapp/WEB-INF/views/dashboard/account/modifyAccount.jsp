@@ -42,6 +42,10 @@ function getAccount(){
 function modifyAccount(){
 	var form = $('#accountForm')[0];
     var formData = new FormData(form);
+    $("#submit").html('<div class="spinner-border" role="status">'+
+  		  '<span class="sr-only">Loading...</span>'+
+  			'</div>');
+	$("#submit").attr("disabled", "disabled");
 	$.ajax({
 		url: "../account/${sessionScope.loginUser.userId}/put",
 		type: "post",
@@ -51,10 +55,12 @@ function modifyAccount(){
         processData : false,
 		success: function(result){
 			if(result){
-				alert("등록이 성공되었습니다.");
+				alert("Registration was successful.");
 				location.href = "<c:url value='/dashboard/account'/>";	
 			}else{
-				alert("등록이 실패되었습니다.");
+				alert("Registration failed.");
+				$("#submit").html('Submit');
+				$("#submit").removeAttr("disabled", "disabled");
 			}
 		},
 		error: function(err){
