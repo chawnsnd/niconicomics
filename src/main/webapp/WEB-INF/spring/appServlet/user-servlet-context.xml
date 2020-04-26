@@ -25,44 +25,5 @@
 	
 	<context:component-scan base-package="com.niconicomics.core" />
 	
-	<!-- Interceptor -->	
-	<beans:bean
-	id="LoginInterceptor"
-	class="com.niconicomics.core.user.interceptor.LoginInterceptor">
-	</beans:bean>
-	
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/users/mypage"/>	
-			<beans:ref bean="LoginInterceptor"/>
-		</mvc:interceptor>
-	</mvc:interceptors>
-	
-	<!-- Interceptor -->	
-	<beans:bean
-	id="AuthorInterceptor"
-	class="com.niconicomics.core.user.interceptor.AuthorInterceptor">
-	</beans:bean>
-	
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/dashboard"/>	
-			<beans:ref bean="AuthorInterceptor"/>
-		</mvc:interceptor>
-	</mvc:interceptors>
-
-	<!-- Interceptor -->
-	<beans:bean 
-	id="AdminInterceptor" 
-	class="com.niconicomics.core.user.interceptor.AdminInterceptor">
-	</beans:bean>
-	
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/admin"/>
-			<mvc:mapping path="/admin/*"/>
-			<beans:ref bean="AdminInterceptor"/>
-		</mvc:interceptor>
-	</mvc:interceptors>
 	
 </beans:beans>
