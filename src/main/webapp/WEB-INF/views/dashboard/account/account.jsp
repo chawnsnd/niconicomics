@@ -76,7 +76,7 @@ function getAccount(){
 <div>
 	<div id="noAccountTemplate" class="template">
 		<div>There are no registered accounts.</div>
-		<button class='btn btn-outline-secondary btn-sm' onclick='location.href=`enroll-account`'>등록</button>
+		<button class='btn btn-outline-secondary btn-sm' onclick='location.href=`enroll-account`'>Enroll Account</button>
 	</div>
 	<div id="accountTemplate" class="template">
 		<div class="box">

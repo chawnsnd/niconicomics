@@ -45,6 +45,10 @@ $(document).ready(function(){
 })
 
 function join1(){
+	$("#submit").html('<div class="spinner-border" role="status">'+
+	  		  '<span class="sr-only">Loading...</span>'+
+	  			'</div>');
+	$("#submit").attr("disabled", "disabled");
 	$.ajax({
 		url: "<c:url value='/api/users/join1'/>",
 		type: "post",
@@ -61,6 +65,8 @@ function join1(){
 				location.href = "<c:url value='/users/join2'/>";
 			}else{
 				alert("Fail");
+				$("#submit").html('Submit');
+				$("#submit").removeAttr("disabled", "disabled");
 			}
 		},
 		error: function(error){
