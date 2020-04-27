@@ -8,8 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.niconicomics.core.nico.dao.DonateDao;
 import com.niconicomics.core.nico.vo.Donate;
+import com.niconicomics.core.nico.vo.DonateSearchOption;
 import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.vo.User;
+import com.niconicomics.core.webtoon.dao.WebtoonDao;
+import com.niconicomics.core.webtoon.vo.Webtoon;
 
 @Service
 public class DonateService {
@@ -19,6 +22,9 @@ public class DonateService {
 	
 	@Autowired
 	private DonateDao donateDao;
+	
+	@Autowired
+	private WebtoonDao webtoonDao;
 	
 	
 	
@@ -37,10 +43,13 @@ public class DonateService {
 		}
 	}
 
-
-
-	public ArrayList<Donate> selectDonateListByWebtoonId(int webtoonId) {
-		return donateDao.selectDonateListByWebtoonId(webtoonId);
+	public ArrayList<Donate> selectDonateListBySearchOption(DonateSearchOption option) {
+		ArrayList<Donate> donateList = donateDao.selectDonateListBySearchOption(option);
+		for (Donate donate : donateList) {
+			donate.setSponserNickname(userDao.selectUserByUserId(donate.getSponsorId()).getNickname());
+			donate.setWebtoonTitle(webtoonDao.selectWebtoonByWebtoonId(donate.getWebtoonId()).getTitle());
+		}
+		return donateDao.selectDonateListBySearchOption(option);
 	}
 	
 }

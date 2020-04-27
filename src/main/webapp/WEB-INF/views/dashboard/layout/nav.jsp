@@ -32,6 +32,11 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="<c:url value='/dashboard/donate'/>">
+          <i class="fas fa-hand-holding-usd"></i> Donate
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="<c:url value='/dashboard/account'/>">
           <i class="fas fa-university"></i> Account
         </a>

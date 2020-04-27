@@ -19,10 +19,17 @@
 		)
 	</insert>
 	
-	<select id="selectDonateListByWebtoonId" parameterType="int" resultType="donate">
+	<select id="selectDonateListBySearchOption" parameterType="donateSearchOption" resultType="donate">
 		select *
 		from tbl_donate
-		where webtoon_id = #{webtoonId}
+		<where>
+			<if test="webtoonId != 0">
+				webtoon_id = #{webtoonId},
+			</if>
+			<if test="authorId != 0">
+				author_id = #{authorId}
+			</if>
+		</where>
 	</select>
 
 </mapper>
