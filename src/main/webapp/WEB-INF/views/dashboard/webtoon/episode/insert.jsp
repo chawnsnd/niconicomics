@@ -9,8 +9,8 @@
 <script type="text/javascript">
 $(function() {
 	$("#insertEpisodeButton").on('click', insertEpisode);
-	$("#thumbnailInput").on('change', thumbnailPreview);
-	$(".contentsInput").on('change', contentsPreview);
+	$("#thumbnailInput").on('change', checkThumbnail);
+	$(".contentsInput").on('change', checkContents);
 })
 
 function addContents(){
@@ -23,13 +23,28 @@ function addContents(){
 				'</div>';
 	$("#contentsList").append(html);
 	$(".contentsInput").off('change');
-	$(".contentsInput").on('change', contentsPreview);
+	$(".contentsInput").on('change', checkContents);
 }
 
 function removeContents(target){
 	var idx = $(target).parents().children("input[type='file']").attr("name");
 	$(".contents").eq(idx-1).remove();
 	contentsPreview();
+}
+
+function checkContents(e){
+	var file = $(e.target)[0].files[0];
+	var _URL = window.URL || window.webkitURL;
+    var img = new Image();
+	img.src = _URL.createObjectURL(file);
+    img.onload = function() {
+		if(img.width < 500 || img.width > 900) {
+			alert("Please fit the image width 500px ~ 900px.");
+			$(e.target).val("");
+		}else{
+			contentsPreview();
+		}
+    }
 }
 
 function contentsPreview(){
@@ -41,6 +56,21 @@ function contentsPreview(){
 		}
 		if($(inp)[0].files.length != 0) reader.readAsDataURL($(inp)[0].files[0]);
 	});
+}
+
+function checkThumbnail(){
+	var file  = $("#thumbnailInput")[0].files[0];
+    var _URL = window.URL || window.webkitURL;
+    var img = new Image();
+	img.src = _URL.createObjectURL(file);
+    img.onload = function() {
+		if(img.width != 434 || img.height != 330) {
+			alert("Please fit the image horizontally 434px and 330px vertically.");
+			$("#thumbnailInput").val("");
+		}else{
+			thumbnailPreview();
+		}
+    }
 }
 
 function thumbnailPreview(){
@@ -133,6 +163,7 @@ function validate(){
 			<th>Thumbnail</th>
 			<td colspan="4">
 				<input type="file" name="thumbnailImage" value="이미지추가" id="thumbnailInput">
+				<span>( 434px x 330px )</span>
 				<div id="output" class="mt-3"></div>
 			</td>
 		</tr>
@@ -140,6 +171,7 @@ function validate(){
 			<th>Manuscript</th>
 			<td colspan="3">
 				<input type="button" class="btn btn-warning btn-sm" value="ADD" onclick="addContents()">
+				<span>( WIDTH : 500px ~ 900px )</span>
 				<div id="contentsList" class="card mt-2">
 					<div class="contents">
 						<input type="file" name="1" class="contentsInput">

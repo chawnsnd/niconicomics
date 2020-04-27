@@ -15,6 +15,7 @@
 		<typeAlias type="com.niconicomics.core.chat.vo.Chat" alias="chat"/>
 		<typeAlias type="com.niconicomics.core.nico.vo.Account" alias="account"/>
 		<typeAlias type="com.niconicomics.core.nico.vo.Donate" alias="donate"/>
+		<typeAlias type="com.niconicomics.core.nico.vo.DonateSearchOption" alias="donateSearchOption"/>
 		<typeAlias type="com.niconicomics.core.nico.vo.Transfer" alias="transfer"/>
 		<typeAlias type="com.niconicomics.core.user.vo.User" alias="user"/>
 	</typeAliases>

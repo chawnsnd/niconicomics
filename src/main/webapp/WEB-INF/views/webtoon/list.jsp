@@ -74,6 +74,9 @@ function removeSearchOption(key, value){
 	if(key == "hashtag"){
 		var idx = searchOption.hashtags.indexOf(value); 
 		if (idx > -1) searchOption.hashtags.splice(idx, 1);
+		$("input[name='checkHashtag']:checked").each(function(idx, checkbox){
+			if($(checkbox).val() == value) $(checkbox).prop("checked", false);
+		})
 	}else{
 		searchOption[key] = null;
 	}

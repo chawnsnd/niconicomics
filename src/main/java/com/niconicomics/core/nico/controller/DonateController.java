@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.niconicomics.core.nico.service.DonateService;
 import com.niconicomics.core.nico.vo.Donate;
+import com.niconicomics.core.nico.vo.DonateSearchOption;
 import com.niconicomics.core.user.vo.User;
 
 @RestController
@@ -29,8 +30,8 @@ public class DonateController {
 	}
 	
 	@GetMapping(value = "")
-	public ArrayList<Donate> getDonates(int webtoonId) {
-		return donateService.selectDonateListByWebtoonId(webtoonId);
+	public ArrayList<Donate> getDonates(DonateSearchOption option) {
+		return donateService.selectDonateListBySearchOption(option);
 	}
 	
 }

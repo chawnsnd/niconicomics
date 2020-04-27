@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.niconicomics.core.nico.vo.Donate;
+import com.niconicomics.core.nico.vo.DonateSearchOption;
 import com.niconicomics.core.user.dao.UserMapper;
 
 @Repository
@@ -24,9 +25,9 @@ public class DonateDao {
 		}
 	}
 
-	public ArrayList<Donate> selectDonateListByWebtoonId(int webtoonId) {
+	public ArrayList<Donate> selectDonateListBySearchOption(DonateSearchOption option) {
 		DonateMapper mapper = session.getMapper(DonateMapper.class);
-		return mapper.selectDonateListByWebtoonId(webtoonId);
+		return mapper.selectDonateListBySearchOption(option);
 	}
 	
 }

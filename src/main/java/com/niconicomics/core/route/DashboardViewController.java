@@ -83,6 +83,11 @@ public class DashboardViewController {
 		model.addAttribute("episodeNo", episodeNo);
 		return "dashboard/webtoon/episode/update";
 	}
+	
+	@GetMapping(value = "/donate")
+	public String goDonate() {
+		return "dashboard/donate/donate";
+	}
 
 	//exchange
 	@GetMapping(value = "/exchange")
