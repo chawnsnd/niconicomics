@@ -264,7 +264,7 @@ function toggleChart(webtoonId){
 </div>
 </script>
 <script id="myWebtoonListTemplate" type="text/x-handlebars-template">
-<table class="table">
+<table id="myWebtoonList" class="table">
 	<tr>
 		<th>Thumbnail</th>
 		<th width="20%">Title</th>
