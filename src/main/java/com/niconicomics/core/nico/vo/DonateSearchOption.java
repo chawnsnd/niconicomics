@@ -7,5 +7,7 @@ public class DonateSearchOption {
 
 	private int webtoonId;
 	private int authorId;
+	private String gender;
+	private int age;
 	
 }

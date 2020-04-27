@@ -11,9 +11,13 @@ import com.niconicomics.core.nico.vo.Donate;
 import com.niconicomics.core.nico.vo.DonateSearchOption;
 import com.niconicomics.core.user.dao.UserDao;
 import com.niconicomics.core.user.vo.User;
+import com.niconicomics.core.util.AgeCalculator;
 import com.niconicomics.core.webtoon.dao.WebtoonDao;
 import com.niconicomics.core.webtoon.vo.Webtoon;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class DonateService {
 
@@ -45,11 +49,14 @@ public class DonateService {
 
 	public ArrayList<Donate> selectDonateListBySearchOption(DonateSearchOption option) {
 		ArrayList<Donate> donateList = donateDao.selectDonateListBySearchOption(option);
+		ArrayList<Donate> resultList = new ArrayList<>();
 		for (Donate donate : donateList) {
-			donate.setSponserNickname(userDao.selectUserByUserId(donate.getSponsorId()).getNickname());
+			User sponser = userDao.selectUserByUserId(donate.getSponsorId());
+			donate.setSponserNickname(sponser.getNickname());
 			donate.setWebtoonTitle(webtoonDao.selectWebtoonByWebtoonId(donate.getWebtoonId()).getTitle());
+			resultList.add(donate);
 		}
-		return donateDao.selectDonateListBySearchOption(option);
+		return resultList;
 	}
 	
 }
