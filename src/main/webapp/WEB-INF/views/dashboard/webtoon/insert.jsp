@@ -12,8 +12,23 @@ $(function() {
 		e.preventDefault();
 	});
 	$("#insertWebtoonButton").on('click', insertWebtoon);
-	$("#thumbnailInput").on('change', thumbnailPreview);
+	$("#thumbnailInput").on('change', checkThumbnail);
 })
+
+function checkThumbnail(){
+	var file  = $("#thumbnailInput")[0].files[0];
+    var _URL = window.URL || window.webkitURL;
+    var img = new Image();
+	img.src = _URL.createObjectURL(file);
+    img.onload = function() {
+		if(img.width != 434 || img.height != 330) {
+			alert("Please fit the image horizontally 434px and 330px vertically.");
+			$("#thumbnailInput").val("");
+		}else{
+			thumbnailPreview();
+		}
+    }
+}
 
 function thumbnailPreview(){
 	var reader = new FileReader();
@@ -36,20 +51,20 @@ function insertWebtoon() {
 	$("#hashtag").val(strHashtags);
 	var form = $('#insertWebtoonForm')[0];
 	var formData = new FormData(form);
-// 	$.ajax({
-// 		url : "<c:url value='/api/webtoons'/>",
-// 		type : 'post',
-// 		enctype: 'multipart/form-data',
-// 		data : formData,
-// 		contentType: false,
-// 		processData: false,
-// 		success : function() {
-// 			location.href= "<c:url value='/dashboard/webtoons'/>";
-// 		},
-// 		error : function(err) {
-// 			console.log(err)
-// 		}
-// 	})
+	$.ajax({
+		url : "<c:url value='/api/webtoons'/>",
+		type : 'post',
+		enctype: 'multipart/form-data',
+		data : formData,
+		contentType: false,
+		processData: false,
+		success : function() {
+			location.href= "<c:url value='/dashboard/webtoons'/>";
+		},
+		error : function(err) {
+			console.log(err)
+		}
+	})
 }
 
 function validate(){
@@ -140,6 +155,7 @@ function validate(){
 			<th>Thumbnail</th>
 			<td>
 				<input type="file" name="thumbnailImage" value="이미지추가" id="thumbnailInput">
+				<span>( 434px x 330px )</span>
 				<div id="thumbnail_output" class="mt-3"></div>
 			</td>
 		</tr>

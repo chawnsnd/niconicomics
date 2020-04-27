@@ -18,7 +18,7 @@ function getWebtoon(){
 		success : function(data){
 			bindTemplate($('#webtoonTemplate'), data);
 			$('#thumbnail_output').html("<img src='"+data.thumbnail+"' width='200px'>");
-			$("#thumbnailInput").on('change', thumbnailPreview);
+			$("#thumbnailInput").on('change', checkThumbnail);
 			data["hashtags"] = data.hashtag.split("#").slice(1);
 			$(data.hashtags).each((idx, tag)=>{
 				$('input[name="typeHashtag"], input[name="checkHashtag"]').each((idx, box)=>{
@@ -33,6 +33,21 @@ function getWebtoon(){
 		}
 	})
 }	
+
+function checkThumbnail(){
+	var file  = $("#thumbnailInput")[0].files[0];
+    var _URL = window.URL || window.webkitURL;
+    var img = new Image();
+	img.src = _URL.createObjectURL(file);
+    img.onload = function() {
+		if(img.width != 434 || img.height != 330) {
+			alert("Please fit the image horizontally 434px and 330px vertically.");
+			$("#thumbnailInput").val("");
+		}else{
+			thumbnailPreview();
+		}
+    }
+}
 
 function thumbnailPreview(){
 	var reader = new FileReader();
@@ -159,6 +174,7 @@ function validate(){
 			<th>Thumbnail</th>
 			<td>
 				<input type="file" name="thumbnailImage" value="이미지추가" id="thumbnailInput">
+				<span>( 434px x 330px )</span>
 				<div id="thumbnail_output" class="mt-3"></div>
 			</td>
 		</tr>
