@@ -1,9 +1,13 @@
 .header_wrap{
+	display: block;
 	margin: auto;
 	background-color: #E4B100;
 }
 .header_right{
 	float: right;
+	line-height: 2.5;
+	padding-right: 8px;
+	color: white;
 }
 .header_title{
 	font-weight: bold;
@@ -11,4 +15,5 @@
 	cursor: pointer;
 	color: white;
 	padding: 8px;
+	display: inline-block;
 }
