@@ -70,7 +70,7 @@ function donate(){
       </script>
       <div class="modal-footer">
         <button type="button" id="closeModal" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="donate()">후원하기</button>
+        <button type="button" class="btn btn-primary" onclick="donate()">Donate</button>
       </div>
     </div>
   </div>

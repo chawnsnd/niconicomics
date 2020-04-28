@@ -23,7 +23,6 @@ function keyup(){
 			$(this).after("<input type='text' class='inputTag'>");
 			$(this).remove();
 			hashTagArr.push($(this).val().trim());
-			console.log("저장된 해시태그: "+hashTagArr);
 			keyup();
 			keydown();
 			$(".inputTag:last").focus();
@@ -37,7 +36,6 @@ function keydown(){
 			$(this).remove();
 			$(".hashTag:last").after("<input type='text' class='inputTag' value="+$(".hashTag:last").text()+">");
 			hashTagArr.pop();
-			console.log("저장된 해시태그: "+hashTagArr);
 			keyup();
 			keydown();
 			$(".inputTag:last").focus();

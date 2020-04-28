@@ -32,12 +32,12 @@ function charge(){
 </script>
 </head>
 <body>
-	<label><input name="item" value="1000니코" type="radio">1000니코</label>
-	<label><input name="item" value="2000니코" type="radio">2000니코</label>
-	<label><input name="item" value="3000니코" type="radio">3000니코</label>
+	<label><input name="item" value="1000니코" type="radio">1000 NICO</label>
+	<label><input name="item" value="2000니코" type="radio">2000 NICO</label>
+	<label><input name="item" value="3000니코" type="radio">3000 NICO</label>
 	<hr/>
 	<input type="submit" value="충전하기" onclick="charge()">
 	<hr/>
-	<span>충전된 니코 : </span><span id="nico"></span>
+	<span>Charged Nico : </span><span id="nico"></span>
 </body>
 </html>

@@ -45,6 +45,7 @@ function insertWebtoon() {
 	$("input[name='checkHashtag']:checked").each((idx, hashtag) => {
 		strHashtags += "#"+$(hashtag).val();
 	})
+	console.log($("input[data-role='tagsinput']").val());
 	if($("input[data-role='tagsinput']").val().trim()!=""){
 		strHashtags += "#"+replaceAll($("input[data-role='tagsinput']").val(), ",", "#");
 	}

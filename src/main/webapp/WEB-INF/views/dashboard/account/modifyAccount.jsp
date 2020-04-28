@@ -22,7 +22,7 @@ function getAccount(){
 		success: function(data){
 			console.log(data);	
 			if(data == "") {
-				alert("등록된 계좌가 없습니다.");
+				alert("There is no registered account.");
 				history(-1);
 			}else{
 				bindTemplate($("#formTemplate"), data);

@@ -28,15 +28,15 @@ function fn_sendEmail(){
 		},
 		success : function(data){
 			if(data){
-				alert("회원가입이 완료되었습니다.");
+				alert("Success to join.");
 				location.href = "<c:url value='/'/>";
 			}else{
-				alert("인증번호를 확인해주세요.")
+				alert("Please check the authentication number.")
 			}
 		}
 		,
 		error: function(data){
-			alert("에러가 발생했습니다.");
+			alert("An error has occurred.");
 			return false;
 		}
 	})
