@@ -8,6 +8,9 @@
 <meta charset="UTF-8">
 <%@ include file="../../layout/global.jsp"%>
 <script>
+$(function(){
+	getMe();
+});
 function charge(){
 	var item = $("input[name='item']:checked").val();
 	$.ajax({
@@ -17,10 +20,22 @@ function charge(){
 			userId: ${sessionScope.loginUser.userId},
 			item: item
 		},
-		success: function(url){
-			location.href = url;
+		success: function(){
+			location.href = "<c:url value='/users/mypage/profile'/>";
 		}
 	});
+}
+function getMe(){
+	$.ajax({
+		url: "<c:url value='/api/users/me'/>",
+		type: "get",
+		success: function(data){
+			$("#nico").html(data.nico);
+		},
+		error: function(err){
+			console.log(err)
+		}
+	})
 }
 </script>
 </head>
@@ -34,7 +49,7 @@ function charge(){
 		<div class="box">
 			<div class="item">
 				<div class="title">Charged Nico</div>			
-				<div class="value">${sessionScope.loginUser.nico} NICO</div>
+				<div class="value"><span id="nico"></span> NICO</div>
 			</div>
 			<div class="item">		
 				<div class="title">Item</div>			

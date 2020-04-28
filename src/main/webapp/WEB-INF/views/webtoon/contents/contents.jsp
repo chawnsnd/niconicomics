@@ -282,6 +282,7 @@ main{
 }
 .chatroom{
 	border-left: 1px solid #a3a3a3;
+	width: 100%;
 	flex: 1;
 	overflow-y: hidden;
 }
