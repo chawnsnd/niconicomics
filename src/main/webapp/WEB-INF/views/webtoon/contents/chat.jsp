@@ -115,6 +115,9 @@ function hashStringToColor(str) {
 .send_form{
 	width: 100%;
 }
+#middle{
+	width: 100%;
+}
 </style>
 <div id="chat">
 <div id="top">
