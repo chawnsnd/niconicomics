@@ -5,7 +5,7 @@ body{
 	min-height: 100%;
 	display: grid;
 	grid-template-columns: 15vw auto;
-	grid-template-rows: 5vh auto 5vh;
+	grid-template-rows: 6vh auto 5vh;
 }
 header{
 	grid-column: 1 / 3;
