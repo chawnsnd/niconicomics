@@ -96,7 +96,7 @@ function clickImage(e){
   	'</button>'+
   	'</div>'+
 	'<input class="form-control" type="text" id="dotpleContents" placeholder="message" onkeyup="enterDotple()">'+
-	'<div class="input-group">'+
+	'<div class="input-group" style="display: flex;">'+
 		'<div class="input-group-prepend">'+
 			'<div class="input-group-text">'+
 			'<input type="checkbox" id="nicoCheckbox" onclick="toggleDotpleDonate()">'+
@@ -106,8 +106,8 @@ function clickImage(e){
 		'<div id="dotpleNico" class="input-group-append d-none">'+
 		'<span class="input-group-text">'+me.nico+'/ Nico</span>'+
 		'</div>'+
-		'<div id="noneCheck" class="input-group-append">'+
-			'<span class="input-group-text">Check donation</span>'+
+		'<div id="noneCheck" class="input-group-append" style="flex: 1;">'+
+			'<span class="input-group-text" style="width: 100%; text-align: center; display: inline-block;">Check donation</span>'+
 		'</div>'+
 	'</div>'+
 	'<button class="btn btn-primary btn-block" id="dotpleSubmit" onclick="submitDotple()" class="btn btn-primary btn-sm">Submit</button>'+
@@ -132,12 +132,10 @@ function clickImage(e){
 function toggleDotpleDonate(){
 	$("#inputNico").val(0);
 	if($("#dotpleNico").hasClass("d-none")){
-		$("#nicoCheckbox").removeAttr("checked");
 		$("#dotpleNico").removeClass("d-none")
 		$("#inputNico").removeClass("d-none")
 		$("#noneCheck").addClass("d-none")
 	}else{
-		$("#nicoCheckbox").attr("checked", "checked");
 		$("#dotpleNico").addClass("d-none")
 		$("#inputNico").addClass("d-none")
 		$("#noneCheck").removeClass("d-none")
