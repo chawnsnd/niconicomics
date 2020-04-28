@@ -22,8 +22,6 @@ public class JandiService {
 	private RestTemplate restTemplate;
 
 	public String accountMessage(Account account) {
-		log.debug(account.toString());
-		account.setAuthorId(1);
 		HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         headers.set("Accept", "application/vnd.tosslab.jandi-v2+json");
