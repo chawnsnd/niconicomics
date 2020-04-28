@@ -46,7 +46,7 @@ function insertWebtoon() {
 		strHashtags += "#"+$(hashtag).val();
 	})
 	if($("input[data-role='tagsinput']").val().trim()!=""){
-		strHashtags += "#"+$("input[data-role='tagsinput']").val();
+		strHashtags += "#"+replaceAll($("input[data-role='tagsinput']").val(), ",", "#");
 	}
 	$("#hashtag").val(strHashtags);
 	var form = $('#insertWebtoonForm')[0];
@@ -65,6 +65,10 @@ function insertWebtoon() {
 			console.log(err)
 		}
 	})
+}
+
+function replaceAll(str, searchStr, replaceStr) {
+	return str.split(searchStr).join(replaceStr);
 }
 
 function validate(){
