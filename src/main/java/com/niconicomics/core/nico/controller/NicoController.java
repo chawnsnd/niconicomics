@@ -47,7 +47,7 @@ public class NicoController {
 		KakaoPayApprove approve = kakaopayService.kakaoPayApprove(pg_token);
 		int nico = Integer.parseInt(approve.getAmount().get("total"));
 		nicoService.chargeNico(userId, nico);
-		return "redirect:/users/mypage/charge-nico";
+		return "redirect:/users/mypage/profile";
 	}
 	
 	@ResponseBody

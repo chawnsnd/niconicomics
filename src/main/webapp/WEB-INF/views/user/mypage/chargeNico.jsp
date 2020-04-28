@@ -20,8 +20,8 @@ function charge(){
 			userId: ${sessionScope.loginUser.userId},
 			item: item
 		},
-		success: function(){
-			location.href = "<c:url value='/users/mypage/profile'/>";
+		success: function(url){
+			location.href = url;
 		}
 	});
 }
