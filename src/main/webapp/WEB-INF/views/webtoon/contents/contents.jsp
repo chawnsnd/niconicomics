@@ -99,7 +99,7 @@ function clickImage(e){
 	'<div class="input-group">'+
 		'<div class="input-group-prepend">'+
 			'<div class="input-group-text">'+
-			'<input type="checkbox" onclick="toggleDotpleDonate()">'+
+			'<input type="checkbox" id="nicoCheckbox" onclick="toggleDotpleDonate()">'+
 			'</div>'+
 		'</div>'+
 		'<input id="inputNico" type="number" class="form-control d-none">'+
@@ -132,10 +132,12 @@ function clickImage(e){
 function toggleDotpleDonate(){
 	$("#inputNico").val(0);
 	if($("#dotpleNico").hasClass("d-none")){
+		$("#nicoCheckbox").removeAttr("checked");
 		$("#dotpleNico").removeClass("d-none")
 		$("#inputNico").removeClass("d-none")
 		$("#noneCheck").addClass("d-none")
 	}else{
+		$("#nicoCheckbox").attr("checked", "checked");
 		$("#dotpleNico").addClass("d-none")
 		$("#inputNico").addClass("d-none")
 		$("#noneCheck").removeClass("d-none")

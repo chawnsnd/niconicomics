@@ -38,14 +38,12 @@ function getDonateList(){
 	<table class="table">
 		<tr>
 			<th>Sponsor</th>
-			<th style="width: 50%;">Webtoon title</th>
 			<th>Nico</th>
 			<th>Donate date</th>
 		</tr>
 		{{#each .}}
 		<tr>
 			<td>{{sponserNickname}}</td>
-			<td>{{webtoonTitle}}</td>
 			<td>{{nico}} Nico</td>
 			<td>{{donateDate}}</td>
 		</tr>

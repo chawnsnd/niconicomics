@@ -205,6 +205,7 @@ function bannerSliderSetting(){
 	<span class="type" data-type="story">#story</span>
 </div>
 <script id="webtoonsTemplate" type="text/x-handlebars-template">
+ㅎ
 <div id="webtoons" class="row webtoons float-left">
 	{{#each .}}
 	<div class="card webtoon" onclick="location.href = '<c:url value='/webtoons/'/>{{webtoonId}}'">

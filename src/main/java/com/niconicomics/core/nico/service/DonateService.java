@@ -53,7 +53,6 @@ public class DonateService {
 		for (Donate donate : donateList) {
 			User sponser = userDao.selectUserByUserId(donate.getSponsorId());
 			donate.setSponserNickname(sponser.getNickname());
-			donate.setWebtoonTitle(webtoonDao.selectWebtoonByWebtoonId(donate.getWebtoonId()).getTitle());
 			resultList.add(donate);
 		}
 		return resultList;
