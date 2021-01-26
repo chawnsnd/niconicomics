@@ -34,7 +34,7 @@ public class OpenBankingService {
 	private final String CLIENT_SECRET = "tt2P8BVUWqUeYKa6laBrFKulf228gdKsoIEN3Nn8";
 	private final String HOST = "https://testapi.openbanking.or.kr";
 	private final String CODE = "T991617520";
-	
+
 	private DateFormat HHmmssSSS;
 	private DateFormat yyyyMMddHHmmss;
 	private DateFormat yyyyMMdd;
@@ -161,8 +161,7 @@ public class OpenBankingService {
         HttpEntity<TransferDepositReq> entity = new HttpEntity<TransferDepositReq>(req, headers);
 		TransferDepositRes res = (TransferDepositRes) restTemplate.postForObject(HOST+"/v2.0/transfer/deposit/acnt_num", entity, TransferDepositRes.class);
 		log.debug(res.toString());
-		transferResult(tranDtime, bankTranId, bankTranDate, tranAmt);
-		return false;
+		return transferResult(tranDtime, bankTranId, bankTranDate, tranAmt);
 	}
 	
 	private boolean transferResult(long tranDtime, String bankTranId, int bankTranDate, int tranAmt) {
@@ -178,8 +177,8 @@ public class OpenBankingService {
 		req.setTran_dtime(tranDtime);
 		TransferResultReqItem reqItem = new TransferResultReqItem();
 		reqItem.setTran_no(1);
-//		reqItem.setOrg_bank_tran_id(bankTranId);
-//		reqItem.setOrg_bank_tran_date(bankTranDate);
+		reqItem.setOrg_bank_tran_id(bankTranId);
+		reqItem.setOrg_bank_tran_date(bankTranDate);
 		reqItem.setOrg_bank_tran_id(bankTranIdTemp);
 		reqItem.setOrg_bank_tran_date(bankTranDateTemp);
 		reqItem.setOrg_tran_amt(tranAmt);
@@ -190,7 +189,6 @@ public class OpenBankingService {
 		HttpEntity<TransferResultReq> entity = new HttpEntity<TransferResultReq>(req, headers);
 		String res = (String) restTemplate.postForObject(HOST+"/v2.0/transfer/result", entity, String.class);
 		log.debug(res.toString());
-		
 		return false;
 	}
 	

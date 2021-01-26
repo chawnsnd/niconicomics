@@ -39,8 +39,9 @@ public class AccountService {
 		account.setIdCard(idCard);
 		account.setCopyOfBankbook(copyOfBankbook);
 		account.setInquiryName("TRUE");
-		accountDao.insertAccount(account);
-		jandiService.accountMessage(account);
+		if(accountDao.insertAccount(account)) {
+			jandiService.accountMessage(account);
+		}
 		return true;
 	}
 
@@ -52,8 +53,9 @@ public class AccountService {
 		account.setIdCard(idCard);
 		account.setCopyOfBankbook(copyOfBankbook);
 		account.setInquiryName("TRUE");
-		accountDao.updateAccount(account);
-		jandiService.accountMessage(account);
+		if(accountDao.updateAccount(account)) {
+			jandiService.accountMessage(account);
+		}
 		return true;
 	}
 

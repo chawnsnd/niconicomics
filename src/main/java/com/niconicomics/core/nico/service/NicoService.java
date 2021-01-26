@@ -48,7 +48,7 @@ public class NicoService {
 		if(account == null) return false;
 		int amount = (int) (nico * (1-FEES));
 		if(user.getNico()-amount < 0) return false;
-//		if(!openBankingService.transfer(account, amount)) return false;
+		if(!openBankingService.transfer(account, amount)) return false;
 		user.setNico(user.getNico()-nico);
 		Transfer transfer = new Transfer();
 		transfer.setAccountId(account.getAccountId());
